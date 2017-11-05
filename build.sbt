@@ -1,20 +1,17 @@
-import com.lihaoyi.workbench.Plugin._
 
 enablePlugins(ScalaJSPlugin)
 
-workbenchSettings
-
-name := "Scala.js+Vue.js example"
+name := "quizleague-vue"
 
 version := "2.2.4"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.2"
 
 libraryDependencies ++= Seq(
-  "org.scala-js" %%% "scalajs-dom" % "0.9.1"
+  "org.scala-js" %%% "scalajs-dom" % "0.9.1",
+  "com.github.lukajcb" %%% "rxscala-js" % "0.15.0"
 )
 
-bootSnippet := ""
+scalaJSUseMainModuleInitializer := true
 
-updateBrowsers <<= updateBrowsers.triggeredBy(fastOptJS in Compile)
 

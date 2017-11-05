@@ -1,0 +1,17 @@
+<classpath>
+  <classpathentry kind="src" path="src/main/scala"/>
+  <classpathentry kind="src" path="src/main/resources"/>
+  <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
+  <classpathentry kind="lib" path="/home/gumdrop/.ivy2/cache/org.scala-js/scalajs-library_2.12/jars/scalajs-library_2.12-0.6.20.jar"/>
+  <classpathentry kind="lib" path="/home/gumdrop/.ivy2/cache/org.scala-js/scalajs-dom_sjs0.6_2.12/jars/scalajs-dom_sjs0.6_2.12-0.9.1.jar"/>
+  <classpathentry kind="lib" path="/home/gumdrop/.ivy2/cache/com.github.lukajcb/rxscala-js_sjs0.6_2.12/jars/rxscala-js_sjs0.6_2.12-0.15.0.jar"/>
+  <classpathentry kind="lib" path="/home/gumdrop/.ivy2/cache/org.typelevel/cats-core_sjs0.6_2.12/jars/cats-core_sjs0.6_2.12-0.9.0.jar"/>
+  <classpathentry kind="lib" path="/home/gumdrop/.ivy2/cache/org.typelevel/cats-macros_sjs0.6_2.12/jars/cats-macros_sjs0.6_2.12-0.9.0.jar"/>
+  <classpathentry kind="lib" path="/home/gumdrop/.ivy2/cache/com.github.mpilquist/simulacrum_sjs0.6_2.12/jars/simulacrum_sjs0.6_2.12-0.10.0.jar"/>
+  <classpathentry kind="lib" path="/home/gumdrop/.ivy2/cache/org.typelevel/macro-compat_2.12/jars/macro-compat_2.12-1.1.1.jar"/>
+  <classpathentry kind="lib" path="/home/gumdrop/.ivy2/cache/org.typelevel/machinist_sjs0.6_2.12/jars/machinist_sjs0.6_2.12-0.6.1.jar"/>
+  <classpathentry kind="lib" path="/home/gumdrop/.ivy2/cache/org.typelevel/cats-kernel_sjs0.6_2.12/jars/cats-kernel_sjs0.6_2.12-0.9.0.jar"/>
+  <classpathentry kind="lib" path="/home/gumdrop/.ivy2/cache/org.scala-js/scalajs-test-interface_2.12/jars/scalajs-test-interface_2.12-0.6.20.jar"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="output" path="bin"/>
+</classpath>
