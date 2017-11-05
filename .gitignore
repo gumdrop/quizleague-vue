@@ -43,3 +43,6 @@ Temporary Items
 .apdisk
 /bin/
 /node_modules/
+/target/
+/.settings/
+/.cache-main
