@@ -6,10 +6,10 @@ import scalajs.js
 import quizleague.web.site.home.HomeModule
 import quizleague.web.core.Module
 import quizleague.web.site.team.TeamModule
-import firebase.firebase._
-import firebase.firebase.firestore._
 import rxscalajs.subjects.BehaviorSubject
 import rxscalajs.Observable
+import quizleague.web.store.Firestore
+import firebase.firebase.firestore._
 
 object SiteModule extends Module {
   
@@ -19,24 +19,12 @@ object SiteModule extends Module {
   
   val appData:BehaviorSubject[AppData] = BehaviorSubject(AppData(""))
   
-  val config = literal(      
-      apiKey = "AIzaSyDrTlMf77UN7iUVCLoyOwRTgJPgHMXRT1k",
-      authDomain = "quizleague-d02fe.firebaseapp.com",
-      databaseURL = "https://quizleague-d02fe.firebaseio.com",
-      projectId = "quizleague-d02fe",
-      storageBucket = "quizleague-d02fe.appspot.com",
-      messagingSenderId = "127835213248")
-  
-   Firebase.initializeApp(config)
-      
-   val db = Firebase.firestore()
+   val db = Firestore.db
    
    val appConfig = db.doc("ApplicationConfig/LyIBn4rYvEbYjtBHW72x")
    
-   appConfig.get().then((a) => {
-     val b = a.asInstanceOf[DocumentSnapshot].data();
-     println(s"b as json : ${js.JSON.stringify(b.asInstanceOf[js.Any])}")
-     appData.next(AppData(a.asInstanceOf[DocumentSnapshot].get("title").toString))
-     }, (t) => "")
+   appConfig.onSnapshot((a:DocumentSnapshot) => {
+     appData.next(AppData(a.data()("title").toString))
+     }, (e:Error) => "", () =>"")
   
 }
