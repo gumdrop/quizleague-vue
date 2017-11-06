@@ -7,6 +7,7 @@ import quizleague.web.names.ComponentNames
 import rxjs.Observable
 import quizleague.web.util.rx.RefObservable
 import io.circe.Json
+import io.circe.scalajs._
 import quizleague.web.util.Logging._
 
 trait PutService[T] {
@@ -21,7 +22,7 @@ trait PutService[T] {
   protected def save(item:U):Unit = saveDom(item)
   
   private[service] def saveDom(i:U) = {
-    http.put(s"$uriRoot/${i.id}", enc(i).noSpaces, requestOptions).subscribe(x=>x)
+    db.doc(s"$uriRoot/${i.id}").set(convertJsonToJs(enc(i)).asInstanceOf[js.Dictionary[js.Any]])
     log(i,s"saved $uriRoot/${i.id} to http")
     deCache(i)
   }

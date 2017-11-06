@@ -7,10 +7,12 @@ import scala.scalajs.js.JSConverters._
 import quizleague.domain.{ Entity, Ref }
 import quizleague.web.names.ComponentNames
 import quizleague.web.util.Logging._
-import rxjs.Observable
 import io.circe.Error
 import scala.collection.mutable._
 import quizleague.web.util.rx._
+import quizleague.web.store.Firestore
+import rxjs._
+import firebase.firebase.firestore._
 
 trait GetService[T] {
   this: ComponentNames =>
@@ -18,9 +20,9 @@ trait GetService[T] {
 
   val serviceRoot: String
 
-  lazy val uriRoot = s"rest/$serviceRoot/$typeName"
+  lazy val uriRoot = typeName
 
-  val http: Http
+  val db = Firestore.db
   private[service] val items: Map[String, U] = Map()
   val requestOptions = js.Dynamic.literal()
 
@@ -34,25 +36,35 @@ trait GetService[T] {
   
   protected final def list(path:Option[String]):Observable[js.Array[T]] = {
     
-    val p = path.fold("")(s => s"/$s")
     
-    http.get(s"$uriRoot$p", requestOptions)
-    .map((r, i) => decList(r.asInstanceOf[js.Dynamic].text().toString).merge.asInstanceOf[List[U]])
-    .map((a, i) => a.map(x => mapOutSparse(x)).toJSArray)
-    }
+    val subject = new BehaviorSubject(js.Array[T]())
+    
+    db.collection(uriRoot).onSnapshot(
+        onNext = (q:QuerySnapshot) => subject.next(q.docs.map(d => dec(d.data()).merge.asInstanceOf[U]).map(x => mapOutSparse(x))),
+        onError = (_) => Unit,
+        onCompletion = () => Unit)
+    
+    subject
+  }
     
   protected final def add(item: U) = { items += ((item.id, item)); mapOutSparse(item) }
   protected final def getFromHttp(id: String): Observable[U] = {
-
-    http.get(s"$uriRoot/$id", requestOptions).
-      map((r, i) => postProcess(dec(r.asInstanceOf[js.Dynamic].text().toString).merge.asInstanceOf[U]))
-      .onError((x, t) => { log(s"error in GET for path $uriRoot/$id : $x : $t"); Observable.of(null).asInstanceOf[Observable[U]] })
-
+    
+   val appData:BehaviorSubject[U] = new BehaviorSubject(null.asInstanceOf[U])
+  
+   val appConfig = db.doc(s"$uriRoot/$id")
+   
+   appConfig.onSnapshot((a:DocumentSnapshot) => {
+     appData.next(dec(a.data()).merge.asInstanceOf[U])
+     }, (e:java.lang.Error) => Unit, () => Unit)
+    
+     appData
+     
   }
   
   protected[service] def postProcess(u:U):U = u
   
-  protected def dec(json:String):Either[Error,U]
+  protected def dec(json:js.Any):Either[Error,U]
   protected def decList(json:String):Either[Error,List[U]]
 
   private[service] def getDom(id: String) = items(id)
@@ -71,6 +83,7 @@ trait GetService[T] {
   protected def mapOutSparse(domain: U): T
   
 
+  def wrap()
 }
 
 

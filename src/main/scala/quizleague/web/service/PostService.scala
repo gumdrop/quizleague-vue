@@ -15,9 +15,9 @@ trait PostService[T] {
     
     val path = pathParts.mkString("/")
     
-    http.post(s"$uriRoot/$path", i.fold("")(encoder(_).noSpaces))
-    .map((r, i) => decode[R](r.asInstanceOf[js.Dynamic]._body.toString).merge.asInstanceOf[R])
-      .onError((x, t) => { log(s"error in POST for path $uriRoot/$path"); Observable.of(null).asInstanceOf[Observable[U]] })
+//    http.post(s"$uriRoot/$path", i.fold("")(encoder(_).noSpaces))
+//    .map((r, i) => decode[R](r.asInstanceOf[js.Dynamic]._body.toString).merge.asInstanceOf[R])
+//      .onError((x, t) => { log(s"error in POST for path $uriRoot/$path"); Observable.of(null).asInstanceOf[Observable[U]] })
 
     
   }
