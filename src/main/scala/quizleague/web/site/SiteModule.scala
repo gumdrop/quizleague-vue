@@ -6,10 +6,10 @@ import scalajs.js
 import quizleague.web.site.home.HomeModule
 import quizleague.web.core.Module
 import quizleague.web.site.team.TeamModule
-import rxscalajs.subjects.BehaviorSubject
-import rxscalajs.Observable
+
 import quizleague.web.store.Firestore
 import firebase.firebase.firestore._
+import rxjs.BehaviorSubject
 
 object SiteModule extends Module {
   
@@ -17,7 +17,7 @@ object SiteModule extends Module {
   
   override val routes = js.Array(RouteConfig(path = "",redirect = "/home"))
   
-  val appData:BehaviorSubject[AppData] = BehaviorSubject(AppData(""))
+  val appData:BehaviorSubject[AppData] = new BehaviorSubject(AppData(""))
   
    val db = Firestore.db
    
@@ -25,6 +25,6 @@ object SiteModule extends Module {
    
    appConfig.onSnapshot((a:DocumentSnapshot) => {
      appData.next(AppData(a.data()("title").toString))
-     }, (e:Error) => "", () =>"")
+     }, (e:Error) => Unit, () => Unit)
   
 }

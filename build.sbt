@@ -13,7 +13,7 @@ addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.fu
 
 libraryDependencies ++= Seq(
   "org.scala-js" %%% "scalajs-dom" % "0.9.1",
-  "com.github.lukajcb" %%% "rxscala-js" % "0.15.0"
+  "de.surfice" %%% "scalajs-rxjs" % "0.0.4"
 )
 
  libraryDependencies ++= Seq(

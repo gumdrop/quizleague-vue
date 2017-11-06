@@ -24,7 +24,7 @@ object SiteApp{
                 drawer=true,
                 menu=true
                ),
-               subscriptions=() => literal(appData = SiteModule.appData.inner),
+               subscriptions=() => literal(appData = SiteModule.appData),
         template="""
   <v-app
     toolbar

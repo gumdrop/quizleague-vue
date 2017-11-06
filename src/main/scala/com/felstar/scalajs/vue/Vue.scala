@@ -118,6 +118,7 @@ class Directive extends js.Object {
 @JSExportAll
 object Component{
   
+  @JSExport("apply")
   def apply(
     template:String,
     data:js.Any = null,

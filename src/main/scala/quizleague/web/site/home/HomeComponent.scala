@@ -8,7 +8,7 @@ import quizleague.web.core.PageComponent
 import quizleague.web.site.SiteModule
 
 object HomeComponent extends RouteComponent{
-  override val component = Component(subscriptions=()=>literal(appData = SiteModule.appData.inner)
+  override val component = Component(subscriptions=()=>literal(appData = SiteModule.appData)
       ,template="""
    <v-container grid-list-md >
     <v-layout row>
