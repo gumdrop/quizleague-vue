@@ -1,26 +1,22 @@
 package quizleague.web.util.rx
 
 import quizleague.domain.Ref
-import rxjs.Observable
-import rxjs.core.Subscription
 import scala.scalajs.js
 import scala.scalajs.js.annotation._
 import quizleague.web.util.Logging._
+import rxscalajs.Observable
+import rxscalajs.subscription.Subscription
+import rxscalajs.facade.ObservableFacade
 
 @ScalaJSDefined
-class RefObservable[+T](val id: String, val obs: Observable[T]) extends js.Object {
+class RefObservable[+T](val id: String, val obs: Observable[T]) extends js.Object{
 
+  val inner = obs.inner
+  
   @JSName("subscribeScala")
-  def subscribe[R](f: T => R) = obs.subscribe(f)
+  def subscribe(f: T => Unit) = obs.subscribe(f, (x) => Unit, () => Unit)
 
-  @JSName("subscribe")
-  def subscribeJS(
-    next: js.UndefOr[js.Function1[T, _]],
-    error: js.UndefOr[js.Function1[js.Dynamic, _]],
-    complete: js.UndefOr[js.Function0[_]]): Subscription = {
-    
-    obs.subscribeJS(next, error, complete)
-  }
+  def subscribe(onNext:Function1[T,Unit],onError:Function1[scala.scalajs.js.Any,Unit],onComplete:Function0[Unit]) = inner.subscribe(onNext, onError, onComplete)
   
   def toJSON() = js.Dynamic.literal(("id",id))
 

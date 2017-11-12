@@ -24,7 +24,7 @@ object SiteApp{
                 drawer=true,
                 menu=true
                ),
-               subscriptions=() => literal(appData = SiteModule.appData),
+               subscriptions=() => literal(appData = SiteModule.appData.inner),
         template="""
   <v-app
     toolbar
@@ -45,7 +45,7 @@ object SiteApp{
 	  fixed >
       <v-toolbar-title class="white--text" >
         <v-toolbar-side-icon @click.stop="drawer = !drawer" v-show="menu"></v-toolbar-side-icon>
-        {{appData.title}}
+        {{appData.leagueName}}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon>
