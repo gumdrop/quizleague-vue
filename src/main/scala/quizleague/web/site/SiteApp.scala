@@ -24,47 +24,50 @@ object SiteApp{
                 drawer=true,
                 menu=true
                ),
-               subscriptions=() => literal(appData = SiteModule.appData.inner),
+               subscriptions = literal(appData = SiteModule.appData.inner),
         template="""
   <v-app
-    toolbar
+    toolbar 
   >
-    <v-navigation-drawer
-      persistent
+  <v-navigation-drawer
       clipped
+      fixed
       app
 	  v-model="drawer">
     <router-view name="sidenav"></router-view>
-   
-</v-navigation-drawer>
+  </v-navigation-drawer>
     <v-toolbar      
       color="blue darken-3"
       dark
-      app
-      clipped-left
-	  fixed >
+	    fixed 
+      app 
+      clipped-left>
       <v-toolbar-title class="white--text" >
         <v-toolbar-side-icon @click.stop="drawer = !drawer" v-show="menu"></v-toolbar-side-icon>
-        {{appData.leagueName}}
+        {{appData?appData.leagueName:''}}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon>
         <v-icon>more_vert</v-icon>
       </v-btn>
       <div slot="extension">
-      	<v-btn to="/home" flat ><v-icon left>home</v-icon><span>Home</span></v-btn>
-      	<v-btn to="/team" flat ><v-icon left>people</v-icon><span>Teams</span></v-btn>
-      	<v-btn to="/competition" flat ><v-icon left>people</v-icon><span>Competitions</span></v-btn>
+      	<v-btn to="/home" flat style="text-transform: none;"><v-icon left>home</v-icon><span>Home</span></v-btn>
+      	<v-btn to="/team" flat style="text-transform: none;"><v-icon left>people</v-icon><span>Teams</span></v-btn>
+      	<v-btn to="/competition" flat style="text-transform: none;"><v-icon left>people</v-icon><span>Competitions</span></v-btn>
+      	<v-btn to="/venue" flat style="text-transform: none;"><v-icon left>location_on</v-icon><span>Venue</span></v-btn>
       </div>
     </v-toolbar>
-    <main>
-      <v-content>
-		  <v-container fluid fill-height>
+    <v-content>
+		  <v-container fill-height fluid>
+        <v-layout justify-left align-top column>
+         <router-view name="title"></router-view>
          <router-view></router-view>
+        </v-layout>
       </v-container>
-      </v-content>
-    </main>
-  </v-app>"""))
+    </v-content>
+  </v-app>""",
+  
+       ))
    
   val demo = new Vue(
         literal(el="#app",

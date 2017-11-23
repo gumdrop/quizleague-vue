@@ -10,9 +10,9 @@ import quizleague.web.site.SiteModule
 object HomeComponent extends RouteComponent{
   override val component = Component(subscriptions=()=>literal(appData = SiteModule.appData.inner)
       ,template="""
-   <v-container grid-list-md >
-    <v-layout row>
-      <v-flex>
+   <v-container grid-list-md>
+     <v-layout row wrap>
+      <v-flex xs5>
         <v-carousel light dark>
           <v-carousel-item src="">
             <ql-home-page-table></ql-home-page-table>
@@ -22,8 +22,8 @@ object HomeComponent extends RouteComponent{
           <v-carousel-item src="">Next Fixtures</v-carousel-item>
         </v-carousel>
       </v-flex>
-      <v-flex>
-        Some Text
+      <v-flex xs7>
+        <ql-text id="016b153e-6ff4-4577-8c46-2e79dc5b66f3"></ql-text>
       </v-flex>
     </v-layout>
   </v-container>
