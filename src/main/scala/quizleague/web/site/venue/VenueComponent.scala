@@ -10,6 +10,9 @@ import quizleague.web.core._
 import rxscalajs.subjects.ReplaySubject
 import quizleague.web.model.Venue
 import rxscalajs.Observable
+import scala.scalajs.js.annotation.ScalaJSDefined
+import rxscalajs.Observable
+import rxscalajs.facade.ObservableFacade
 
 //@Component(
 //    template = s"""
@@ -100,6 +103,15 @@ object VenuePage extends RouteComponent {
     template = """<ql-venue :id="$route.params.id"></ql-venue>""")
 }
 
+@ScalaJSDefined
+trait Acomponent extends js.Object{
+  val template:String
+  val props:js.Array[String]
+  val watch:js.Dictionary[js.ThisFunction]
+  val subscriptions:js.Dictionary[ObservableFacade[_]]
+  val data:js.ThisFunction0[Vue,js.Any]
+}
+
 object VenueComponent extends PageComponent {
 
   override def apply() = {
@@ -118,7 +130,7 @@ object VenueComponent extends PageComponent {
               <v-card-text>
                  <div>
                    <div >
-                     <div >{{venue.address}}</div>
+                     <div v-html="lineBreaks(venue.address)"></div>
                       <div>email : <a :href="'mailto:' + venue.email">{{venue.email}}</a></div>
                      <div>website : <a :href="venue.website" target="_blank">{{venue.website}}</a></div>
                      <div>phone : {{venue.phone}}</div>
@@ -132,7 +144,10 @@ object VenueComponent extends PageComponent {
           </div>""",
       props = @@("id"),
       watch = literal(id = ((v: js.Dynamic) => update(v.id.toString)): js.ThisFunction),
-      subscriptions = ((v: js.Dynamic) => literal(venue = update(v.id.toString).inner)): js.ThisFunction))
+      subscriptions = ((v: js.Dynamic) => literal(venue = update(v.id.toString).inner)): js.ThisFunction,
+      methods = literal(lineBreaks = (s:String) => s.replaceAll("\\n", "<br>"))
+      
+    ))
   }
 }
 
