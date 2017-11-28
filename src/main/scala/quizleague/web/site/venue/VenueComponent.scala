@@ -3,6 +3,7 @@ package quizleague.web.site.venue
 import quizleague.web.core.RouteComponent
 import com.felstar.scalajs.vue.Component
 import scalajs.js
+import scala.scalajs.js.JSConverters._
 import js.Dynamic.literal
 import quizleague.web.service.venue._
 import com.felstar.scalajs.vue.Vue
@@ -13,6 +14,8 @@ import rxscalajs.Observable
 import scala.scalajs.js.annotation.ScalaJSDefined
 import rxscalajs.Observable
 import rxscalajs.facade.ObservableFacade
+import scala.scalajs.js.ThisFunction0
+import quizleague.web.core.Component
 
 //@Component(
 //    template = s"""
@@ -50,21 +53,21 @@ import rxscalajs.facade.ObservableFacade
 //class VenueComponent(
 //    route:ActivatedRoute,
 //    service:VenueService,
-//    sanitiser:DomSanitizer, 
+//    sanitiser:DomSanitizer,
 //    override val titleService:TitleService,
-//    override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent with TitledComponent{    
+//    override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent with TitledComponent{
 //
 //  val itemObs = route.params.switchMap( (params,i) => service.get(params("id")))
-//  
+//
 //  itemObs.subscribe(v => setTitle(v.name))
-//  
+//
 //  def embeddedUrl(venue:Venue) = sanitiser.bypassSecurityTrustResourceUrl(makeParts(venue).join(""))
-//  
+//
 //  def linkUrl(venue:Venue) = sanitiser.bypassSecurityTrustResourceUrl(makeParts(venue).take(2).join(""))
-//    
+//
 //  private def makeParts(venue:Venue) = {
 //    js.Array("https://maps.google.com/maps?&q=",js.URIUtils.encodeURIComponent(s"${venue.name} ${venue.address}".replaceAll("\\s", "+")), "&output=embed")
-//  } 
+//  }
 //}
 //
 //@Component(
@@ -80,8 +83,8 @@ import rxscalajs.facade.ObservableFacade
 //class VenueTitleComponent(
 //        route:ActivatedRoute,
 //    service:VenueService
-//    ){   
-//  
+//    ){
+//
 //  val itemObs = route.params.switchMap( (params,i) => service.get(params("id")))
 //}
 //
@@ -90,10 +93,10 @@ import rxscalajs.facade.ObservableFacade
 //  <div fxLayout="column" *ngFor="let item of items | async">
 //    <a fxFlexAlign="start" routerLink="/venue/{{item.id}}"  md-menu-item routerLinkActive="active" >{{item.name}}</a>
 //  </div>
-//  """    
+//  """
 //)
 //class VenueMenuComponent(service:VenueService){
-//  
+//
 //  val items = service.list()
 //
 //}
@@ -103,28 +106,10 @@ object VenuePage extends RouteComponent {
     template = """<ql-venue :id="$route.params.id"></ql-venue>""")
 }
 
-@ScalaJSDefined
-trait Acomponent extends js.Object{
-  val template:String
-  val props:js.Array[String]
-  val watch:js.Dictionary[js.ThisFunction]
-  val subscriptions:js.Dictionary[ObservableFacade[_]]
-  val data:js.ThisFunction0[Vue,js.Any]
-}
+object VenueComponent extends Component {
 
-object VenueComponent extends PageComponent {
-
-  override def apply() = {
-
-    val subj = ReplaySubject[Venue]
-
-    def update(id: String) = {
-      VenueService.get(id).subscribe(ve => subj.next(ve))
-      subj
-    }
-
-    Vue.component("ql-venue", literal(
-      template = """
+  override val name = "ql-venue"
+  override val template = """
           <div v-if="venue">
            <v-card>
               <v-card-text>
@@ -141,14 +126,18 @@ object VenueComponent extends PageComponent {
                  </div>
               </v-card-text>
             </v-card>
-          </div>""",
-      props = @@("id"),
-      watch = literal(id = ((v: js.Dynamic) => update(v.id.toString)): js.ThisFunction),
-      subscriptions = ((v: js.Dynamic) => literal(venue = update(v.id.toString).inner)): js.ThisFunction,
-      methods = literal(lineBreaks = (s:String) => s.replaceAll("\\n", "<br>"))
-      
-    ))
+          </div>"""
+  override val props = @@("id")
+  override val watch = Map("id" -> ((v: Vue) => update(v.$.id, v.$.subj)))
+  override val subscriptions = (v: Vue) => Map("venue" -> {println(s"ql-web : ${v}");update(v.$.id, v.$.subj).inner})
+  override val methods = Map("lineBreaks" -> ((s: String) => s.replaceAll("\\n", "<br>")))
+  override val data = (v:Vue) => Map("subj" -> ReplaySubject().asInstanceOf[js.Any])
+
+  def update(id: js.Dynamic, subj: js.Dynamic) = {
+    VenueService.get(id.toString).subscribe(ve => subj.next(ve.asInstanceOf[js.Any]))
+    subj
   }
+
 }
 
 object VenueTitleComponent extends RouteComponent {

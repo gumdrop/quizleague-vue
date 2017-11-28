@@ -14,6 +14,7 @@ import quizleague.web.site.text.TextModule
 import quizleague.web.core.Module
 import com.felstar.scalajs.vue.RouteConfig
 import quizleague.web.core._
+import quizleague.web.site.venue.VenueComponent
 
 //@NgModule(
 //  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, VenueRoutesModule, CommonAppModule, TextModule],
@@ -38,7 +39,8 @@ import quizleague.web.core._
 
 object VenueModule extends Module{
 
-  override val components = @@(VenueComponent,VenueTitle)
+  override val components = @@(VenueTitle)
+  override val newComponents = @@(VenueComponent)
 
   override val routes = @@(
       RouteConfig(path = "/venue", 
