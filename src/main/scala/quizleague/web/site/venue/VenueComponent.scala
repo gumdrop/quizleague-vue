@@ -128,14 +128,15 @@ object VenueComponent extends Component {
             </v-card>
           </div>"""
   override val props = @@("id")
-  override val watch = Map("id" -> ((v: Vue) => update(v.$.id, v.$.subj)))
-  override val subscriptions = (v: Vue) => Map("venue" -> {println(s"ql-web : ${v}");update(v.$.id, v.$.subj).inner})
+  override val watch = Map("id" -> ((v: js.Dynamic) => update(v.id, v.subj)))
+  override val subscriptions = (v: js.Dynamic) => Map("venue" -> update(v.id, v.subj).inner)
   override val methods = Map("lineBreaks" -> ((s: String) => s.replaceAll("\\n", "<br>")))
-  override val data = (v:Vue) => Map("subj" -> ReplaySubject().asInstanceOf[js.Any])
+  override val data = (v:js.Dynamic) => Map("subj" -> ReplaySubject().asInstanceOf[js.Any])
 
   def update(id: js.Dynamic, subj: js.Dynamic) = {
-    VenueService.get(id.toString).subscribe(ve => subj.next(ve.asInstanceOf[js.Any]))
-    subj
+    val s = subj.asInstanceOf[ReplaySubject[Any]]
+    VenueService.get(id.toString).subscribe(ve => s.next(ve))
+    s
   }
 
 }
@@ -159,7 +160,6 @@ object VenueTitle extends PageComponent {
     <v-toolbar      
       color="orange darken-3"
       dark
-	    
       clipped-left
       v-if="venue">
       <v-toolbar-title class="white--text" >
