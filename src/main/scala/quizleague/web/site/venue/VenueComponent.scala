@@ -102,8 +102,7 @@ import quizleague.web.core.Component
 //}
 
 object VenuePage extends RouteComponent {
-  override val component = Component(
-    template = """<ql-venue :id="$route.params.id"></ql-venue>""")
+  override val template = """<ql-venue :id="$route.params.id"></ql-venue>"""
 }
 
 object VenueComponent extends Component {
@@ -135,21 +134,13 @@ object VenueComponent extends Component {
 }
 
 object VenueTitleComponent extends RouteComponent {
-  override val component = Component(
-    template = """<ql-venue-title :id="$route.params.id"></ql-venue-title>    """)
+  override val template = """<ql-venue-title :id="$route.params.id"></ql-venue-title>"""
 }
 
-object VenueTitle extends PageComponent {
-  override def apply() = {
-    val subj = ReplaySubject[Venue]
-
-    def update(id: String) = {
-      VenueService.get(id).subscribe(ve => subj.next(ve))
-      subj
-    }
-
-    Vue.component("ql-venue-title", literal(
-      template = """
+object VenueTitle extends Component {
+  
+  override val name = "ql-venue-title"
+  override val template = """
     <v-toolbar      
       color="orange darken-3"
       dark
@@ -158,20 +149,22 @@ object VenueTitle extends PageComponent {
       <v-toolbar-title class="white--text" >
         {{venue.name}}
       </v-toolbar-title>
-    </v-toolbar>""",
-      props = @@("id"),
-      watch = literal(id = ((v: js.Dynamic) => update(v.id.toString)): js.ThisFunction),
-      subscriptions = ((v: js.Dynamic) => literal(venue = update(v.id.toString).inner)): js.ThisFunction))
-  }
+    </v-toolbar>"""
+  
+   override val props = @@("id")
+   override val subParams = Map("id"->"venue")
+   override val subscriptions = Map("venue" -> ((v: js.Dynamic) => VenueService.get(v.id.toString)))
 
 }
 
-object VenueMenuComponent extends RouteComponent {
-  override val component = Component(
-    template = """<v-list dense>
+object VenueMenuComponent extends Component {
+
+  override val name = ""  
+  
+  override val template = """<v-list dense>
                     <v-list-tile v-for="venue in venues " :key="venue.id">
                     <v-btn v-bind:to="'/venue/' + venue.id" flat style="text-transform: none;">{{venue.name}}</v-btn>
                     </v-list-tile>
-                   </v-list>""",
-    subscriptions = literal(venues = VenueService.list.inner))
+                   </v-list>"""
+    override val subscriptions = Map("venues" -> ((v: js.Dynamic) => VenueService.list))
 }

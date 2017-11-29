@@ -4,12 +4,12 @@ import com.felstar.scalajs.vue._
 import scalajs.js.Dynamic.literal
 import scalajs.js
 import quizleague.web.core.RouteComponent
-import quizleague.web.core.PageComponent
 import quizleague.web.site.SiteModule
+import quizleague.web.core.Component
 
 object HomeComponent extends RouteComponent{
-  override val component = Component(subscriptions=()=>literal(appData = SiteModule.appData.inner)
-      ,template="""
+  override val subscriptions=Map("appData" -> ((v:js.Dynamic) => SiteModule.appData))
+  override val template="""
    <v-container grid-list-md>
      <v-layout row wrap>
       <v-flex xs5>
@@ -27,29 +27,26 @@ object HomeComponent extends RouteComponent{
       </v-flex>
     </v-layout>
   </v-container>
-""")
+"""
 }
 
 object HomeSidenavComponent extends RouteComponent{
-   override val component = Component(
-       template="""
+   override val template="""
   <v-list dense>
     <v-list-tile>Home Menu1</v-list-tile>
     <v-list-tile>Home Menu2</v-list-tile>
   </v-list>"""
        
-   )
+  
 
 }
 
-object HomePageLeagueTable extends PageComponent{
-  override def apply() = {
-      Vue.component("ql-home-page-table", 
-       literal(template=
-         """<v-card>
+object HomePageLeagueTable extends Component{
+  
+  override val name = "ql-home-page-table"
+  
+  override val template =          """<v-card>
               <v-card-title primary-title><h4>League Table</h4></v-card-title>
               <v-card-text>League Table Text</v-card-text>
-            </v-card>"""))
-
-  }
+            </v-card>"""
 }

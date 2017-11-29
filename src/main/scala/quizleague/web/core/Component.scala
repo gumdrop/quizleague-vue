@@ -9,17 +9,12 @@ import rxscalajs.Observable
 import rxscalajs.Subject
 import rxscalajs.subjects.ReplaySubject
 
-trait RouteComponent {
+trait RouteComponent extends Component{
 
-  def component: js.Dynamic
-
-  def apply() = component
+  val name = ""
 
 }
 
-trait PageComponent {
-  def apply(): js.Any
-}
 
 trait Component {
 
@@ -46,7 +41,6 @@ trait Component {
     val subwatches = subParams.map { case (k, v) => (k, subs(v): js.ThisFunction) }
 
     literal(
-
       template = template,
       props = props,
       watch = (watch.map { case (k, v) => (k, v: js.ThisFunction) } ++ subwatches).toJSDictionary,

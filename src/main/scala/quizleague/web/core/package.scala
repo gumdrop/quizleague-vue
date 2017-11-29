@@ -6,4 +6,6 @@ package object core {
   object @@{
     def apply[T](items:T*) = items.toJSArray
   }
+  
+ 
 }

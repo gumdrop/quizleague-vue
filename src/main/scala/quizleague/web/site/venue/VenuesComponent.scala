@@ -22,14 +22,12 @@ import com.felstar.scalajs.vue.Component
 //}
 
 object VenuesComponent extends RouteComponent{
-   override val component = Component(
-       template="""<span>Venues</span>"""
+   override val template="""<span>Venues</span>"""
        
-)
+
 }
 object VenuesTitleComponent extends RouteComponent{
-   override val component = Component(
-       template="""<v-toolbar      
+   override val  template="""<v-toolbar      
       color="orange darken-3"
       dark
 	    
@@ -39,5 +37,5 @@ object VenuesTitleComponent extends RouteComponent{
       </v-toolbar-title>
     </v-toolbar>"""
        
-)
+
 }
