@@ -128,16 +128,9 @@ object VenueComponent extends Component {
             </v-card>
           </div>"""
   override val props = @@("id")
-  override val watch = Map("id" -> ((v: js.Dynamic) => update(v.id, v.subj)))
-  override val subscriptions = (v: js.Dynamic) => Map("venue" -> update(v.id, v.subj).inner)
+  override val subParams = Map("id"->"venue")
+  override val subscriptions = Map("venue" -> ((v: js.Dynamic) => VenueService.get(v.id.toString)))
   override val methods = Map("lineBreaks" -> ((s: String) => s.replaceAll("\\n", "<br>")))
-  override val data = (v:js.Dynamic) => Map("subj" -> ReplaySubject().asInstanceOf[js.Any])
-
-  def update(id: js.Dynamic, subj: js.Dynamic) = {
-    val s = subj.asInstanceOf[ReplaySubject[Any]]
-    VenueService.get(id.toString).subscribe(ve => s.next(ve))
-    s
-  }
 
 }
 
