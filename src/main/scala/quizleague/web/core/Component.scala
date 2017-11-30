@@ -29,15 +29,20 @@ trait Component {
   def methods: Map[String, js.Function] = Map()
 
   private val commonMethods:Map[String, js.Function] = Map("async" -> ((obs:RefObservable[js.Dynamic]) => {
-    val a = js.Dictionary[Any].empty
+    val a = js.Dictionary[Any]()
     obs.subscribe(b =>  mergeJSObjects(a, b))
     a
   }))
   
   private def mergeJSObjects(primary:js.Dictionary[Any], obj: js.Dynamic): js.Dynamic = {
-  val result = primary
-    for (key <- js.Dictionary.propertiesOf(obj))
-      result.update(key, obj.selectDynamic(key))
+  
+    println(s"ql-web : ${js.JSON.stringify(obj)}")
+    
+    val result = primary
+    for ((key, value ) <- obj.asInstanceOf[js.Dictionary[Any]])
+      result.update(key.toString(), value)
+      
+      println(s"ql-web : ${js.JSON.stringify(result)}")
 
   result.asInstanceOf[js.Dynamic]
 }

@@ -25,6 +25,7 @@ libraryDependencies ++= Seq(
 libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M12"
 
 scalaJSUseMainModuleInitializer := true
+scalacOptions += "-P:scalajs:sjsDefinedByDefault"
 //scalaJSModuleKind := ModuleKind.CommonJSModule
 
 

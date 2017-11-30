@@ -2,10 +2,10 @@ package quizleague.web.model
 
 import quizleague.web.util.rx.RefObservable
 import scalajs.js
-import scala.scalajs.js.annotation.JSExportAll
+import scala.scalajs.js.annotation._
 
 @JSExportAll
-case class Team(
+case class Team (
     id:String,
     name:String,
     shortName:String,
