@@ -22,12 +22,12 @@ import com.felstar.scalajs.vue.Component
 //}
 
 object TeamsComponent extends RouteComponent{
-   override val template="""<span>Teams</span>"""
+    val template="""<span>Teams</span>"""
        
 
 }
 object TeamsTitleComponent extends RouteComponent{
-   override val  template="""<v-toolbar      
+   val  template="""<v-toolbar      
       color="orange darken-3"
       dark
 	    
@@ -37,5 +37,6 @@ object TeamsTitleComponent extends RouteComponent{
       </v-toolbar-title>
     </v-toolbar>"""
        
+
 
 }

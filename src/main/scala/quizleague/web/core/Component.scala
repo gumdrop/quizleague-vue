@@ -8,6 +8,7 @@ import rxscalajs.facade.ObservableFacade
 import rxscalajs.Observable
 import rxscalajs.Subject
 import rxscalajs.subjects.ReplaySubject
+import quizleague.web.util.rx.RefObservable
 
 trait RouteComponent extends Component{
 
@@ -25,8 +26,22 @@ trait Component {
   def subParams: Map[String, String] = Map()
   def subscriptions: Map[String, js.Dynamic => Observable[Any]] = Map()
   def data: js.Dynamic => Map[String, js.Any] = Map()
-  def methods: Map[String, js.Any] = Map()
+  def methods: Map[String, js.Function] = Map()
 
+  private val commonMethods:Map[String, js.Function] = Map("async" -> ((obs:RefObservable[js.Dynamic]) => {
+    val a = js.Dictionary[Any].empty
+    obs.subscribe(b =>  mergeJSObjects(a, b))
+    a
+  }))
+  
+  private def mergeJSObjects(primary:js.Dictionary[Any], obj: js.Dynamic): js.Dynamic = {
+  val result = primary
+    for (key <- js.Dictionary.propertiesOf(obj))
+      result.update(key, obj.selectDynamic(key))
+
+  result.asInstanceOf[js.Dynamic]
+}
+  
   def apply() = {
 
     def update(subject: Subject[Any])(fn: js.Dynamic => Observable[Any])(c: js.Dynamic) = {
@@ -46,7 +61,9 @@ trait Component {
       watch = (watch.map { case (k, v) => (k, v: js.ThisFunction) } ++ subwatches).toJSDictionary,
       subscriptions = ((c: js.Dynamic) => subs.map { case (k, v) => (k, v(c)) }.toJSDictionary): js.ThisFunction,
       data = ((v: js.Dynamic) => data(v).toJSDictionary): js.ThisFunction,
-      methods = methods.toJSDictionary)
+      methods = (commonMethods ++ methods).toJSDictionary
+      
+    )
   }
 
 }

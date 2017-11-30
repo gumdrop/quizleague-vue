@@ -162,9 +162,10 @@ object VenueMenuComponent extends Component {
   override val name = ""  
   
   override val template = """<v-list dense>
-                    <v-list-tile v-for="venue in venues " :key="venue.id">
+                    <v-list-tile v-for="venue in sort(venues) " :key="venue.id">
                     <v-btn v-bind:to="'/venue/' + venue.id" flat style="text-transform: none;">{{venue.name}}</v-btn>
                     </v-list-tile>
                    </v-list>"""
     override val subscriptions = Map("venues" -> ((v: js.Dynamic) => VenueService.list))
+    override val methods = Map("sort" -> ((venues:js.Array[Venue]) => venues.sortBy(_.name)))
 }
