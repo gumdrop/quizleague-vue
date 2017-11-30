@@ -16,27 +16,6 @@ import com.felstar.scalajs.vue.RouteConfig
 import quizleague.web.core._
 
 
-//@NgModule(
-//  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, VenueRoutesModule, CommonAppModule, TextModule],
-//  declarations = @@[VenueComponent, VenueTitleComponent, VenueMenuComponent, VenuesComponent, VenuesTitleComponent],
-//  providers = @@[VenueService])
-//class VenueModule
-//
-//@Routes(
-//  root = false,
-//  Route(
-//    path = "venue",
-//    children = @@@(
-//      Route(path = ":id", children = @@@(
-//        Route(path = "", children = @@@(
-//          Route(path = "", component = %%[VenueComponent]),
-//          Route(path = "", component = %%[VenueTitleComponent], outlet = "title"))))),
-//      Route("", children = @@@(
-//        Route(path = "", component = %%[VenuesComponent]),
-//        Route(path = "", component = %%[VenuesTitleComponent], outlet = "title"))),
-//      Route(path = "", component = %%[VenueMenuComponent], outlet = "sidemenu"))))
-//class VenueRoutesModule
-
 object VenueModule extends Module{
 
   override val components = @@(VenueComponent,VenueTitle)

@@ -3,11 +3,29 @@ package quizleague.web.site.team
 import quizleague.web.core._
 import com.felstar.scalajs.vue.RouteConfig
 import scalajs.js
+import quizleague.web.service.team.TeamGetService
+import quizleague.web.site.text.TextService
+import quizleague.web.site.venue.VenueService
+import quizleague.web.site.user.UserService
+
 
 object TeamModule extends Module{
   
-  override val routes = @@(RouteConfig(path = "/team", components = Map(
-      "default" -> TeamsComponent(), 
-      "sidenav" -> TeamSidenavComponent())))
+  override val components = @@(TeamComponent,TeamTitle)
+  
+  override val routes = @@(      
+      RouteConfig(path = "/team", 
+          components = Map("default" -> TeamsComponent(), "title" -> TeamsTitleComponent(),"sidenav" -> TeamMenuComponent())),
+      RouteConfig(path = "/team/:id", 
+          components = Map("default" -> TeamPage(), "title" -> TeamTitleComponent(),"sidenav" -> TeamMenuComponent())))
+
       
+}
+
+object TeamService extends TeamGetService{
+  
+  override val textService = TextService
+  override val userService = UserService
+  override val venueService = VenueService
+  
 }

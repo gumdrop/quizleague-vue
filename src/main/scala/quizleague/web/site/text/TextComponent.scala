@@ -16,6 +16,7 @@ object TextComponent extends Component {
             <div v-if="text.mimeType=='text/plain'" v-text="text.text"></div>
           </div>"""
      override val props = @@("id")
+     override val subParams = Map("id" -> "text")
      override val  subscriptions = Map("text" -> ((v:js.Dynamic) => TextService.get(v.id.toString)))
 
 
