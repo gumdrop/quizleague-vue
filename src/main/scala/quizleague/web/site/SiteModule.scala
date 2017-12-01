@@ -18,11 +18,14 @@ import rxscalajs.subjects.ReplaySubject
 import quizleague.web.site.text.TextModule
 import quizleague.web.site.venue.VenueModule
 
+
 object SiteModule extends Module {
   
   override val modules = @@(HomeModule, TeamModule, TextModule, VenueModule)
   
   override val routes = @@(RouteConfig(path = "",redirect = "/home"))
+  
+  override val components = @@(SiteComponent)
   
   val appData:Subject[ApplicationContext] = ReplaySubject()
   

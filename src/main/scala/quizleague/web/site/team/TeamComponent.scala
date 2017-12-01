@@ -73,7 +73,7 @@ object TeamTitle extends Component {
 
 object TeamMenuComponent extends RouteComponent {
   
-  override val template = """<v-list dense>
+  override val template = """<v-list dense v-if="teams">
                     <v-list-tile v-for="team in sort(teams) " :key="team.id">
                     <v-btn v-bind:to="'/team/' + team.id" flat style="text-transform: none;">{{team.name}}</v-btn>
                     </v-list-tile>

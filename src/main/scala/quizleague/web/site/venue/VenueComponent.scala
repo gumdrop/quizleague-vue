@@ -1,7 +1,6 @@
 package quizleague.web.site.venue
 
 import quizleague.web.core.RouteComponent
-import com.felstar.scalajs.vue.Component
 import scalajs.js
 import scala.scalajs.js.JSConverters._
 import js.Dynamic.literal
@@ -161,7 +160,7 @@ object VenueMenuComponent extends Component {
 
   override val name = ""  
   
-  override val template = """<v-list dense>
+  override val template = """<v-list dense v-if="venues">
                     <v-list-tile v-for="venue in sort(venues) " :key="venue.id">
                     <v-btn v-bind:to="'/venue/' + venue.id" flat style="text-transform: none;">{{venue.name}}</v-btn>
                     </v-list-tile>

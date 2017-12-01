@@ -66,6 +66,7 @@ class Vue extends js.Object {
   def $addChild(constructor: js.Function): Unit = js.native
 }
 
+
 @JSGlobal
 @js.native
 class Unwatch extends js.Object {
@@ -95,6 +96,7 @@ object Vue extends js.Object {
   def use(plugin: js.Any, args: js.Any*): js.Any = js.native
   def set(target: js.Any, key: js.Any, value: js.Any): Unit = js.native
   def delete(target: js.Any, key: js.Any): Unit = js.native
+  def util:js.Dynamic = js.native
 }
 
 @JSGlobal

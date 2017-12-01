@@ -25,32 +25,39 @@ trait Component {
   def watch: Map[String, js.Dynamic => Unit] = Map()
   def subParams: Map[String, String] = Map()
   def subscriptions: Map[String, js.Dynamic => Observable[Any]] = Map()
-  def data: js.Dynamic => Map[String, js.Any] = Map()
+  def data: js.Dynamic => Map[String, js.Any] = c => Map()
   def methods: Map[String, js.Function] = Map()
 
-  private val commonMethods:Map[String, js.Function] = Map("async" -> ((obs:RefObservable[js.Dynamic]) => {
-    val a = js.Dictionary[Any]()
-    obs.subscribe(b =>  mergeJSObjects(a, b))
-    a
-  }))
+  var observables = Map[RefObservable[js.Dynamic], js.Dictionary[Any]]() 
   
-  private def mergeJSObjects(primary:js.Dictionary[Any], obj: js.Dynamic): js.Dynamic = {
-  
-    println(s"ql-web : ${js.JSON.stringify(obj)}")
+  private val commonMethods:Map[String, js.Function] = Map("async" -> (((c:js.Dynamic, obs:RefObservable[js.Dynamic]) => {
     
-    val result = primary
-    for ((key, value ) <- obj.asInstanceOf[js.Dictionary[Any]])
-      result.update(key.toString(), value)
-      
-      println(s"ql-web : ${js.JSON.stringify(result)}")
+    println("ql-web : entering async")
+    
+    val retval = observables.get(obs)
+    
+    println(s"ql-web : retval : $retval")
+    
+    //retval.foreach(v => {observables = observables + (obs,v)})
+    
+    def sub() = {
+      println("ql-web : entering sub")
+      val a = js.Dictionary[Any]()
+      c.$subscribeTo(obs.inner, (b:js.Dynamic) => {val r:js.Any = Vue.util.extend(a,b);c.$forceUpdate()})
+      observables = observables + ((obs,a))
+      a
+    }
+    
+    if(retval.isEmpty) sub() else retval.get
 
-  result.asInstanceOf[js.Dynamic]
-}
+  }):js.ThisFunction))
+  
+
   
   def apply() = {
 
     def update(subject: Subject[Any])(fn: js.Dynamic => Observable[Any])(c: js.Dynamic) = {
-      fn(c).subscribe(ve => subject.next(ve))
+      c.$subscribeTo(fn(c).inner, (ve:Any) => subject.next(ve))
       subject.inner
     }
 
