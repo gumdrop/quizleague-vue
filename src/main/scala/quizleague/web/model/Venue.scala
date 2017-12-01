@@ -3,7 +3,6 @@ package quizleague.web.model
 import scala.scalajs.js
 import scala.scalajs.js.annotation.ScalaJSDefined
 
-@ScalaJSDefined
  class Venue(
     val id:String,
     val name:String,

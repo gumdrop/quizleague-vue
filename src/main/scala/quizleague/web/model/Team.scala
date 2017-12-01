@@ -4,7 +4,6 @@ import quizleague.web.util.rx.RefObservable
 import scalajs.js
 import scala.scalajs.js.annotation._
 
-@ScalaJSDefined
 class Team (
     val id:String,
     val name:String,
