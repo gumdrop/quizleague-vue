@@ -10,6 +10,9 @@ import rxscalajs.Subject
 import rxscalajs.subjects.ReplaySubject
 import quizleague.web.util.rx.RefObservable
 import scala.scalajs.js.UndefOr
+import com.felstar.scalajs.vue.VueComponent
+import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.util.Logging._
 
 trait RouteComponent extends Component{
 
@@ -20,19 +23,21 @@ trait RouteComponent extends Component{
 
 trait Component {
 
+  type facade <: VueComponent with VueRxComponent
+  
   val name: String
   def template: String
   def props: js.Array[String] = @@()
-  def watch: Map[String, js.Dynamic => Unit] = Map()
+  def watch: Map[String, facade => Unit] = Map()
   def subParams: Map[String, String] = Map()
-  def subscriptions: Map[String, js.Dynamic => Observable[Any]] = Map()
-  def data: js.Dynamic => Map[String, js.Any] = c => Map()
+  def subscriptions: Map[String, facade => Observable[Any]] = Map()
+  def data: facade => Map[String, js.Any] = c => Map()
   def methods: Map[String, js.Function] = Map()
 
   var observables = js.Dictionary[js.Dictionary[Any]]() 
   val empty = new js.Object
   
-  private val commonMethods:Map[String, js.Function] = Map("async" -> (((c:js.Dynamic, in:UndefOr[RefObservable[js.Dynamic]]) => {
+  private val commonMethods:Map[String, js.Function] = Map("async" -> (((c:facade, in:UndefOr[RefObservable[js.Dynamic]]) => {
     
     println("ql-web : entering async")
     if(in.isDefined){
@@ -63,26 +68,36 @@ trait Component {
   
   def apply() = {
 
-    def update(subject: Subject[Any])(fn: js.Dynamic => Observable[Any])(c: js.Dynamic) = {
+    def update(subject: Subject[Any])(fn: facade => Observable[Any])(c: facade) = {
       c.$subscribeTo(fn(c).inner, (ve:Any) => subject.next(ve))
       subject.inner
     }
 
-    def sw(fn: js.Dynamic => Observable[Any]) = update(ReplaySubject())(fn) _
+    def sw(fn: facade => Observable[Any]) = update(ReplaySubject())(fn) _
 
     val subs = subscriptions.map { case (k, v) => (k, sw(v)) }
 
     val subwatches = subParams.map { case (k, v) => (k, subs(v): js.ThisFunction) }
+    
+    val ss = ((c: facade) => log(subs.map { case (k, v) => (k, v(c)) }.toJSDictionary, "ql-web : subscriptions")): js.ThisFunction
 
-    literal(
+    val retval = literal(
       template = template,
       props = props,
       watch = (watch.map { case (k, v) => (k, v: js.ThisFunction) } ++ subwatches).toJSDictionary,
-      subscriptions = ((c: js.Dynamic) => subs.map { case (k, v) => (k, v(c)) }.toJSDictionary): js.ThisFunction,
-      data = ((v: js.Dynamic) => data(v).toJSDictionary): js.ThisFunction,
+      subscriptions = ss,//((c: facade) => subs.map { case (k, v) => (k, v(log(c, "ql-web : facade",false))) }.toJSDictionary): js.ThisFunction,
+      data = ((v: facade) => data(v).toJSDictionary): js.ThisFunction,
       methods = (commonMethods ++ methods).toJSDictionary
       
     )
+    
+    retval
   }
 
 }
+
+@js.native
+trait IdComponent extends VueComponent with VueRxComponent{
+  val id:String = js.native  
+}
+

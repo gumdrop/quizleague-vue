@@ -15,6 +15,7 @@ import rxscalajs.Observable
 import rxscalajs.facade.ObservableFacade
 import scala.scalajs.js.ThisFunction0
 import quizleague.web.core.Component
+import quizleague.web.core.IdComponent
 
 //@Component(
 //    template = s"""
@@ -106,6 +107,8 @@ object VenuePage extends RouteComponent {
 
 object VenueComponent extends Component {
 
+  override type facade = IdComponent
+  
   override val name = "ql-venue"
   override val template = """
           <div v-if="venue">
@@ -127,7 +130,7 @@ object VenueComponent extends Component {
           </div>"""
   override val props = @@("id")
   override val subParams = Map("id"->"venue")
-  override val subscriptions = Map("venue" -> ((v: js.Dynamic) => VenueService.get(v.id.toString)))
+  override val subscriptions = Map("venue" -> (v => VenueService.get(v.id)))
   override val methods = Map("lineBreaks" -> ((s: String) => s.replaceAll("\\n", "<br>")))
 
 }
@@ -137,6 +140,8 @@ object VenueTitleComponent extends RouteComponent {
 }
 
 object VenueTitle extends Component {
+  
+  type facade = IdComponent
   
   val name = "ql-venue-title"
   val template = """
@@ -152,7 +157,7 @@ object VenueTitle extends Component {
   
    override val props = @@("id")
    override val subParams = Map("id"->"venue")
-   override val subscriptions = Map("venue" -> ((v: js.Dynamic) => VenueService.get(v.id.toString)))
+   override val subscriptions = Map("venue" -> (v => VenueService.get(v.id)))
 
 }
 
@@ -165,6 +170,6 @@ object VenueMenuComponent extends Component {
                     <v-btn v-bind:to="'/venue/' + venue.id" flat style="text-transform: none;">{{venue.name}}</v-btn>
                     </v-list-tile>
                    </v-list>"""
-    override val subscriptions = Map("venues" -> ((v: js.Dynamic) => VenueService.list))
+    override val subscriptions = Map("venues" -> (v => VenueService.list))
     override val methods = Map("sort" -> ((venues:js.Array[Venue]) => venues.sortBy(_.name)))
 }

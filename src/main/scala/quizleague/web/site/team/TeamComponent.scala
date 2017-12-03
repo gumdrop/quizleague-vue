@@ -15,6 +15,8 @@ object TeamPage extends RouteComponent {
 
 object TeamComponent extends Component {
 
+  type facade = IdComponent
+  
   override val name = "ql-team"
   override val template = """
           <div v-if="team">
@@ -43,7 +45,7 @@ object TeamComponent extends Component {
           </div>"""
   override val props = @@("id")
   override val subParams = Map("id"->"team")
-  override val subscriptions = Map("team" -> ((v: js.Dynamic) => TeamService.get(v.id.toString)))
+  override val subscriptions = Map("team" -> (v => TeamService.get(v.id)))
 
 }
 
@@ -52,6 +54,8 @@ object TeamTitleComponent extends RouteComponent {
 }
 
 object TeamTitle extends Component {
+  
+  type facade = IdComponent
   
   override val name = "ql-team-title"
   override val template = """
@@ -67,7 +71,7 @@ object TeamTitle extends Component {
   
    override val props = @@("id")
    override val subParams = Map("id"->"team")
-   override val subscriptions = Map("team" -> ((v: js.Dynamic) => TeamService.get(v.id.toString)))
+   override val subscriptions = Map("team" -> (v => TeamService.get(v.id)))
 
 }
 
@@ -75,9 +79,9 @@ object TeamMenuComponent extends RouteComponent {
   
   override val template = """<v-list dense v-if="teams">
                     <v-list-tile v-for="team in sort(teams) " :key="team.id">
-                    <v-btn v-bind:to="'/team/' + team.id" flat style="text-transform: none;">{{team.name}}</v-btn>
+                    <v-btn :to="'/team/' + team.id" flat style="text-transform: none;">{{team.name}}</v-btn>
                     </v-list-tile>
                    </v-list>"""
-    override val subscriptions = Map("teams" -> ((v: js.Dynamic) => TeamService.list))
+    override val subscriptions = Map("teams" -> (c => TeamService.list))
     override val methods = Map("sort" -> ((teams:js.Array[Team]) => teams.sortBy(_.shortName)))
 }

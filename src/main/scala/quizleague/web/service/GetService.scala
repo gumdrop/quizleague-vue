@@ -53,7 +53,7 @@ trait GetService[T] {
    val appConfig = db.doc(s"$uriRoot/$id")
    
    appConfig.onSnapshot(
-       onNext = a => appData.next(dec(a.data()).merge.asInstanceOf[U]), 
+       onNext = a => appData.next(dec(log(a.data(),"ql-web")).merge.asInstanceOf[U]), 
        onError = (_) => Unit, 
        onCompletion = () => Unit)
     
@@ -79,7 +79,7 @@ trait GetService[T] {
   def ref(ro:RefObservable[T]):Ref[U] = if(ro == null) null else Ref(typeName,ro.id)
   def ref(dom:U):Ref[U] = ref(dom.id)
   
-  protected final def mapOut(domain: U): Observable[T] = Observable.of(mapOutSparse(domain))
+  protected final def mapOut(domain: U): Observable[T] = Observable.of(log(mapOutSparse(domain), "ql-web : mapOut"))
   protected def mapOutSparse(domain: U): T
   
 

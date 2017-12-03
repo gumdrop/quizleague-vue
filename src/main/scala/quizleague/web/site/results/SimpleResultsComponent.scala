@@ -8,6 +8,7 @@ import quizleague.web.util.rx._
 import quizleague.web.util.Logging.log
 import quizleague.web.core._
 import rxscalajs.Observable
+import com.felstar.scalajs.vue._
 
 //@Component(
 //  selector = "ql-results-simple",
@@ -86,7 +87,15 @@ import rxscalajs.Observable
 //    
 //}
 
+@js.native
+trait This extends VueComponent with VueRxComponent{
+  val results:Observable[js.Array[Result]] = js.native
+}
+
 object SimpleResultsComponent extends Component with TableUtils{
+  
+  type facade = This
+  
   val name = "ql-results-simple"
   val template = """
       <table v-if="rs">
@@ -105,7 +114,7 @@ object SimpleResultsComponent extends Component with TableUtils{
   """
   override val props = @@("results")
   override val subParams = Map("results" -> "rs")
-  override val subscriptions = Map("rs" -> (c => c.results.asInstanceOf[Observable[Any]]))
+  override val subscriptions = Map("rs" -> (c => c.results))
   override val methods = Map("nameClass" -> nameClass _ )
   
   

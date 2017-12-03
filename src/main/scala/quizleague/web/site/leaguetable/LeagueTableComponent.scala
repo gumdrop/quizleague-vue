@@ -58,6 +58,8 @@ import quizleague.web.core._
 //)
 object LeagueTableComponent extends Component{
     
+  type facade = IdComponent
+  
   val name = "ql-league-table"
   val template = """
       <table v-if="table" class="mat-elevation-z3 ql-league-table elevation-3">
@@ -74,7 +76,7 @@ object LeagueTableComponent extends Component{
 """
   override val props = @@("id")
   override val subParams = Map("id" -> "table")
-  override val subscriptions = Map("table" -> (c => LeagueTableService.get(c.id.toString)))
+  override val subscriptions = Map("table" -> (c => LeagueTableService.get(c.id)))
   
   
 }

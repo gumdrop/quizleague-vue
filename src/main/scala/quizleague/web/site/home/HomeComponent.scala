@@ -6,9 +6,11 @@ import scalajs.js
 import quizleague.web.core.RouteComponent
 import quizleague.web.site.SiteModule
 import quizleague.web.core.Component
+import com.felstar.scalajs.vue.VueRxComponent
 
 object HomeComponent extends RouteComponent{
-  override val subscriptions=Map("appData" -> ((v:js.Dynamic) => SiteModule.appData))
+  type facade = VueComponent with VueRxComponent
+  override val subscriptions = Map("appData" -> (v => SiteModule.appData))
   override val template="""
    <v-container grid-list-md>
      <v-layout row wrap>

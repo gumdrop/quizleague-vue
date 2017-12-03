@@ -5,10 +5,19 @@ import quizleague.web.model._
 import com.felstar.scalajs.vue.Vue
 import scalajs.js
 import scala.scalajs.js.annotation.JSExportAll
+import quizleague.web.model.Text
+
+
+@js.native
+trait This extends IdComponent{
+  val text:Text = js.native
+}
 
 object TextComponent extends Component {
   
-    override val name = "ql-text"
+  type facade = This
+  
+  override val name = "ql-text"
     
     override val template =  """
           <div v-if="text">
@@ -17,7 +26,7 @@ object TextComponent extends Component {
           </div>"""
      override val props = @@("id")
      override val subParams = Map("id" -> "text")
-     override val  subscriptions = Map("text" -> ((v:js.Dynamic) => TextService.get(v.id.toString)))
+     override val subscriptions = Map("text" -> (v => TextService.get(v.id)))
 
 
 }

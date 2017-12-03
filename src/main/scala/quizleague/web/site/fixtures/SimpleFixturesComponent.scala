@@ -2,7 +2,6 @@ package quizleague.web.site.fixtures
 
 import scala.scalajs.js
 
-
 import quizleague.web.model.Fixture
 import quizleague.web.util.rx._
 
@@ -10,6 +9,9 @@ import quizleague.web.util.rx._
 //import ComponentUtils._
 import quizleague.web.core._
 import rxscalajs.Observable
+import quizleague.web.core.IdComponent
+import com.felstar.scalajs.vue.VueComponent
+import com.felstar.scalajs.vue.VueRxComponent
 
 //@Component(
 //  selector = "ql-fixtures-simple",
@@ -22,12 +24,12 @@ import rxscalajs.Observable
 //        <td *ngIf="inlineDetails" class="inline-details" >{{fixture.date | date : "d MMM yyyy"}} : {{fixture.parentDescription}} {{fixture.description}}</td>
 //        <td class="home">{{(fixture.home | async)?.name}}</td>
 //        <td> - </td>
-//        <td class="away">{{(fixture.away | async)?.name}}</td> 
+//        <td class="away">{{(fixture.away | async)?.name}}</td>
 //      </tr>
 //    </table>
-//    </div> 
 //    </div>
-//    $loadingTemplate     
+//    </div>
+//    $loadingTemplate
 //  """,
 //    styles = js.Array(
 //  """
@@ -45,10 +47,18 @@ import rxscalajs.Observable
 //      padding-left:1em;
 //    }""")
 //)
-object SimpleFixturesComponent extends Component{  
-  
+
+@js.native
+trait This extends VueComponent with VueRxComponent {
+  def fixtures: Observable[js.Array[Fixture]] = js.native
+}
+
+object SimpleFixturesComponent extends Component {
+
+  type facade = This
+
   val name = "ql-fixtures-simple"
-  
+
   val template = """
    <div>
     &nbsp;
@@ -65,29 +75,28 @@ object SimpleFixturesComponent extends Component{
     </div>
 
 """
-  
-  override val props = @@("fixtures","list","inlineDetails")
+
+  override val props = @@("fixtures", "list", "inlineDetails")
   override val subParams = Map("fixtures" -> "fixts")
-  override val subscriptions = Map("fixts" -> ((c:js.Dynamic) => c.fixtures.asInstanceOf[Observable[Any]]))
-  
-  
-//  
-//  var inView = false
-//  
-//  @Input
-//  var loadIfHidden = false
-//  
-//  @Input
-//  var fixtures:Observable[js.Array[Fixture]] = _
-//  
-//  @Input
-//  def list_= (list:js.Array[RefObservable[Fixture]]) = fixtures = zip(list)
-//  
-//  @Input
-//  var inlineDetails = false  
-//  
-//  def load(event:Boolean){
-//    inView = event || inView || loadIfHidden
-//  }
-  
+  override val subscriptions = Map("fixts" -> (c => c.fixtures))
+
+  //
+  //  var inView = false
+  //
+  //  @Input
+  //  var loadIfHidden = false
+  //
+  //  @Input
+  //  var fixtures:Observable[js.Array[Fixture]] = _
+  //
+  //  @Input
+  //  def list_= (list:js.Array[RefObservable[Fixture]]) = fixtures = zip(list)
+  //
+  //  @Input
+  //  var inlineDetails = false
+  //
+  //  def load(event:Boolean){
+  //    inView = event || inView || loadIfHidden
+  //  }
+
 }

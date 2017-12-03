@@ -1,11 +1,14 @@
 package com.felstar.scalajs.vue
 
 import scala.scalajs.js
+import scala.scalajs.js.JSConverters._
 import js.Dynamic.literal
 import org.scalajs.dom
 import org.scalajs.dom._
 
 import js.annotation._
+import rxscalajs.Observable
+import rxscalajs.facade.ObservableFacade
 
 @JSGlobal
 @js.native
@@ -110,27 +113,20 @@ class Directive extends js.Object {
   val `def`: js.Any = js.native
 }
 
-//@JSExportAll
-//class Component{
-//  def this(obj: js.Any) = this()
-//  val template:String = js.native
-//  val data:js.Any = js.native
-//}
 
-@JSExportAll
-object Component{
+@js.native
+trait VueComponent extends js.Object {
+  def $forceUpdate():Unit = js.native
+}
+
+
+@js.native
+trait VueRxComponent extends js.Object {
   
-  @JSExport("apply")
-  def apply(
-    template:String,
-    data:js.Any = null,
-    subscriptions:js.Any = null,
-  ) = literal(
-    template = template,
-    data = data,
-    subscriptions = subscriptions
-  )
+  def $subscribeTo[T](obs:ObservableFacade[T], fn:(T) => Unit):Unit = js.native
   
+  
+
 }
   
 

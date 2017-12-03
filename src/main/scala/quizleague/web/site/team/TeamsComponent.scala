@@ -1,7 +1,6 @@
 package quizleague.web.site.team
 
 import quizleague.web.core.RouteComponent
-import com.felstar.scalajs.vue.Component
 
 //@Component(
 //  template = """<ql-named-text name="venues-front-page"></ql-named-text>"""    

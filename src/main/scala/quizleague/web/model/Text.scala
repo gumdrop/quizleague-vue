@@ -1,12 +1,18 @@
 package quizleague.web.model
 
-import scala.scalajs.js.annotation.JSExportAll
+import scala.scalajs.js
 
 
 
-@JSExportAll
-case class Text(
-    id:String,
+
+class Text(
+    val id:String,
+    val text:String,
+    val mimeType:String
+) extends js.Object
+
+object Text{
+  def apply(id:String,
     text:String,
-    mimeType:String
-)
+    mimeType:String) = new Text(id,text,mimeType)
+}

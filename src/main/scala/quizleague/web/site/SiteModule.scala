@@ -38,7 +38,7 @@ object SiteModule extends Module {
   appConfig.onSnapshot(a => {
     
     if (a.exists){
-      println(s"incoming ${a.data}")
+      println(s"incoming ${a.data} ${js.JSON.stringify(a.data)}")
           appData.next(decodeJson[ApplicationContext](convertJsToJson(a.data).merge.asInstanceOf[Json]).merge.asInstanceOf[ApplicationContext])
 
     }
