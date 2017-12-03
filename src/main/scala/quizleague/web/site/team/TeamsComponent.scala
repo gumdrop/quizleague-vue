@@ -28,7 +28,7 @@ object TeamsComponent extends RouteComponent{
 }
 object TeamsTitleComponent extends RouteComponent{
    val  template="""<v-toolbar      
-      color="orange darken-3"
+      color="amber darken-3"
       dark
 	    
       clipped-left>

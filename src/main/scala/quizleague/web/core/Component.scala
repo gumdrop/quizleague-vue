@@ -9,6 +9,7 @@ import rxscalajs.Observable
 import rxscalajs.Subject
 import rxscalajs.subjects.ReplaySubject
 import quizleague.web.util.rx.RefObservable
+import scala.scalajs.js.UndefOr
 
 trait RouteComponent extends Component{
 
@@ -28,13 +29,17 @@ trait Component {
   def data: js.Dynamic => Map[String, js.Any] = c => Map()
   def methods: Map[String, js.Function] = Map()
 
-  var observables = Map[RefObservable[js.Dynamic], js.Dictionary[Any]]() 
+  var observables = js.Dictionary[js.Dictionary[Any]]() 
+  val empty = new js.Object
   
-  private val commonMethods:Map[String, js.Function] = Map("async" -> (((c:js.Dynamic, obs:RefObservable[js.Dynamic]) => {
+  private val commonMethods:Map[String, js.Function] = Map("async" -> (((c:js.Dynamic, in:UndefOr[RefObservable[js.Dynamic]]) => {
     
     println("ql-web : entering async")
+    if(in.isDefined){
     
-    val retval = observables.get(obs)
+    val obs = in.get
+    
+    val retval = observables.get(obs.id)
     
     println(s"ql-web : retval : $retval")
     
@@ -44,11 +49,13 @@ trait Component {
       println("ql-web : entering sub")
       val a = js.Dictionary[Any]()
       c.$subscribeTo(obs.inner, (b:js.Dynamic) => {val r:js.Any = Vue.util.extend(a,b);c.$forceUpdate()})
-      observables = observables + ((obs,a))
+      observables += ((obs.id,a))
       a
     }
     
     if(retval.isEmpty) sub() else retval.get
+    }
+    else empty
 
   }):js.ThisFunction))
   

@@ -12,6 +12,7 @@ import scala.collection.mutable._
 import quizleague.web.util.rx._
 import quizleague.web.store.Firestore
 import rxscalajs._, rxscalajs.subjects._
+import quizleague.web.util.Logging._
 
 
 trait GetService[T] {

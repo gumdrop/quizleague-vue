@@ -56,12 +56,12 @@ object TeamTitle extends Component {
   override val name = "ql-team-title"
   override val template = """
     <v-toolbar      
-      color="orange darken-3"
+      color="amber darken-3"
       dark
       clipped-left
       v-if="team">
       <v-toolbar-title class="white--text" >
-        {{team.name}}  : Venue {{async(team.venue).name}}
+        {{team.name}}
       </v-toolbar-title>
     </v-toolbar>"""
   

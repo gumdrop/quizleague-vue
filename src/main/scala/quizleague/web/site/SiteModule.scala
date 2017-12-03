@@ -17,11 +17,13 @@ import rxscalajs.Subject
 import rxscalajs.subjects.ReplaySubject
 import quizleague.web.site.text.TextModule
 import quizleague.web.site.venue.VenueModule
+import quizleague.web.site.fixtures.FixturesModule
+import quizleague.web.site.leaguetable.LeagueTableModule
 
 
 object SiteModule extends Module {
   
-  override val modules = @@(HomeModule, TeamModule, TextModule, VenueModule)
+  override val modules = @@(HomeModule, TeamModule, TextModule, VenueModule, FixturesModule, LeagueTableModule)
   
   override val routes = @@(RouteConfig(path = "",redirect = "/home"))
   

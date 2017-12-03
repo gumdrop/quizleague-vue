@@ -47,6 +47,8 @@ object HomePageLeagueTable extends Component{
   
   override val template =          """<v-card>
               <v-card-title primary-title><h4>League Table</h4></v-card-title>
-              <v-card-text>League Table Text</v-card-text>
+              <v-card-text>
+              <ql-league-table id="1986e8d1-6058-44ba-9086-a375de8d6087"></ql-league-table>
+              </v-card-text>
             </v-card>"""
 }
