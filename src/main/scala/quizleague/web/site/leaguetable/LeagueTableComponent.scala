@@ -68,9 +68,7 @@ object LeagueTableComponent extends Component{
           <th>Pos.</th><th>Team</th><th>Pl.</th><th>W</th><th>D</th><th>L</th><th>S</th><th>Pts</th>
         </thead>
         <tbody>
-          <tr v-for="row in table.rows" :key="row.team.id">
-            <td>{{row.position}}</td><td><router-link :to="'/team/' + row.team.id">{{async(row.team).shortName}}</router-link></a></td><td class="num">{{row.played}}</td><td class="num">{{row.won}}</td><td class="num">{{row.lost}}</td><td class="num">{{row.drawn}}</td><td class="num">{{row.matchPointsFor}}</td><td class="num">{{row.leaguePoints}}</td>
-          </tr>
+          <ql-league-table-row :row="row" v-for="row in table.rows" :key="row.team.id"></ql-league-table-row>
         </tbody>
       </table>
 """
@@ -78,5 +76,17 @@ object LeagueTableComponent extends Component{
   override val subParams = Map("id" -> "table")
   override val subscriptions = Map("table" -> (c => LeagueTableService.get(c.id)))
   
+  
+}
+
+object LeagueTableRowComponent extends Component{
+  
+  val name = "ql-league-table-row"
+  val template = """
+        <tr >
+            <td>{{row.position}}</td><td><router-link :to="'/team/' + row.team.id">{{async(row.team).shortName}}</router-link></a></td><td class="num">{{row.played}}</td><td class="num">{{row.won}}</td><td class="num">{{row.lost}}</td><td class="num">{{row.drawn}}</td><td class="num">{{row.matchPointsFor}}</td><td class="num">{{row.leaguePoints}}</td>
+          </tr>"""
+  
+  override val props = @@("row")
   
 }

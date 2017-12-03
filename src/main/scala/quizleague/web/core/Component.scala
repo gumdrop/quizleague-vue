@@ -46,14 +46,10 @@ trait Component {
     
     val retval = observables.get(obs.id)
     
-    println(s"ql-web : retval : $retval")
-    
-    //retval.foreach(v => {observables = observables + (obs,v)})
     
     def sub() = {
-      println("ql-web : entering sub")
       val a = js.Dictionary[Any]()
-      c.$subscribeTo(obs.inner, (b:js.Dynamic) => {val r:js.Any = Vue.util.extend(a,b);c.$forceUpdate()})
+      c.asInstanceOf[js.Dynamic].$subscribeTo(obs.inner, (b:js.Dynamic) => {val r:js.Any = Vue.util.extend(a,b);c.$forceUpdate()})
       observables += ((obs.id,a))
       a
     }
@@ -69,7 +65,7 @@ trait Component {
   def apply() = {
 
     def update(subject: Subject[Any])(fn: facade => Observable[Any])(c: facade) = {
-      c.$subscribeTo(fn(c).inner, (ve:Any) => subject.next(ve))
+      c.asInstanceOf[js.Dynamic].$subscribeTo(fn(c).inner, (ve:Any) => subject.next(ve))
       subject.inner
     }
 
@@ -79,13 +75,11 @@ trait Component {
 
     val subwatches = subParams.map { case (k, v) => (k, subs(v): js.ThisFunction) }
     
-    val ss = ((c: facade) => log(subs.map { case (k, v) => (k, v(c)) }.toJSDictionary, "ql-web : subscriptions")): js.ThisFunction
-
     val retval = literal(
       template = template,
       props = props,
       watch = (watch.map { case (k, v) => (k, v: js.ThisFunction) } ++ subwatches).toJSDictionary,
-      subscriptions = ss,//((c: facade) => subs.map { case (k, v) => (k, v(log(c, "ql-web : facade",false))) }.toJSDictionary): js.ThisFunction,
+      subscriptions = ((c: facade) => subs.map { case (k, v) => (k, v(c)) }.toJSDictionary): js.ThisFunction,
       data = ((v: facade) => data(v).toJSDictionary): js.ThisFunction,
       methods = (commonMethods ++ methods).toJSDictionary
       

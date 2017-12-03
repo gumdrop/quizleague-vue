@@ -5,9 +5,8 @@ import quizleague.web.site.team.TeamService
 import quizleague.web.core._
 
 
-
 object LeagueTableModule extends Module{
-  override val components = @@(LeagueTableComponent)
+  override val components = @@(LeagueTableComponent,LeagueTableRowComponent)
 }
 
 
