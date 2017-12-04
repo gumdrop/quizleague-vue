@@ -123,7 +123,8 @@ trait VueComponent extends js.Object {
 @js.native
 trait VueRxComponent extends js.Object {
   
-  //def $subscribeTo[T](obs:ObservableFacade[T], fn:(T) => Unit):Unit = js.native
+  @JSName("$subscribeTo")
+  def subscribeTo[_](obs:ObservableFacade[_], fn:(_) => Unit):Unit = js.native
   
   
 

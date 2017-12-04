@@ -1,6 +1,7 @@
 package quizleague.web.site
 
 import quizleague.web.core.Component
+import quizleague.web.site.ApplicationContextService
 
 object SiteComponent extends Component {
      val name = "ql-app"
@@ -48,6 +49,6 @@ object SiteComponent extends Component {
   </v-app>"""
   
   override val data = c => Map("drawer" -> true,"menu" -> true)
-  override val subscriptions = Map("appData" -> (c => SiteModule.appData))
+  override val subscriptions = Map("appData" -> (c => ApplicationContextService.get()))
 
 }

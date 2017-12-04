@@ -7,10 +7,10 @@ import quizleague.web.core.RouteComponent
 import quizleague.web.site.SiteModule
 import quizleague.web.core.Component
 import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.site.ApplicationContextService
 
 object HomeComponent extends RouteComponent{
-  type facade = VueComponent with VueRxComponent
-  override val subscriptions = Map("appData" -> (v => SiteModule.appData))
+  override val subscriptions = Map("appData" -> (v => ApplicationContextService.get()))
   override val template="""
    <v-container grid-list-md>
      <v-layout row wrap>
@@ -25,7 +25,7 @@ object HomeComponent extends RouteComponent{
         </v-carousel>
       </v-flex>
       <v-flex xs7>
-        <ql-text id="016b153e-6ff4-4577-8c46-2e79dc5b66f3"></ql-text>
+        <ql-named-text name="front-page-suppl"></ql-named-text>
       </v-flex>
     </v-layout>
   </v-container>

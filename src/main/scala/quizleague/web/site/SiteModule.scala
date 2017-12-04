@@ -19,6 +19,12 @@ import quizleague.web.site.text.TextModule
 import quizleague.web.site.venue.VenueModule
 import quizleague.web.site.fixtures.FixturesModule
 import quizleague.web.site.leaguetable.LeagueTableModule
+import quizleague.web.service.applicationcontext.ApplicationContextGetService
+import quizleague.web.service.globaltext.GlobalTextGetService
+import quizleague.web.site.text.TextService
+import quizleague.web.site.season.SeasonService
+import quizleague.web.site.user.UserService
+import quizleague.web.site.text.GlobalTextService
 
 
 object SiteModule extends Module {
@@ -28,25 +34,15 @@ object SiteModule extends Module {
   override val routes = @@(RouteConfig(path = "",redirect = "/home"))
   
   override val components = @@(SiteComponent)
-  
-  val appData:Subject[ApplicationContext] = ReplaySubject()
-  
-   val db = Firestore.db
    
-   val appConfig = db.doc("applicationcontext/5659313586569216")
+}
 
-  appConfig.onSnapshot(a => {
-    
-    if (a.exists){
-      println(s"incoming ${a.data} ${js.JSON.stringify(a.data)}")
-          appData.next(decodeJson[ApplicationContext](convertJsToJson(a.data).merge.asInstanceOf[Json]).merge.asInstanceOf[ApplicationContext])
 
-    }
-     else println(s"no data")
-  }, (e: java.lang.Error) => Unit, () => Unit)
-     
-     
-     
-   def decodeJson[T](obj:Json)(implicit dec:Decoder[T]) = dec.decodeJson(obj)
+
+object ApplicationContextService extends ApplicationContextGetService{
+  
+  override val globalTextService = GlobalTextService
+  override val seasonService = SeasonService
+  override val userService = UserService
   
 }

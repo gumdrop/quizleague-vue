@@ -1,4 +1,12 @@
 package quizleague.web.site.text
+
+import quizleague.web.core._
+import quizleague.web.model.GlobalText
+import quizleague.web.model.TextEntry
+import quizleague.web.site.ApplicationContextService
+import com.felstar.scalajs.vue._
+import scalajs.js
+
 //
 //import angulate2.std._
 //import quizleague.web.site.global.ApplicationContextService
@@ -30,3 +38,23 @@ package quizleague.web.site.text
 //  }
 //  
 //}
+
+@js.native
+trait NamedText extends VueComponent with VueRxComponent{
+  val name:String = js.native
+}
+
+object NamedTextComponent extends Component{
+  
+  type facade = NamedText
+  val name = "ql-named-text"
+  val template = """
+        <ql-text v-if="textId" :id="textId"></ql-text>
+    """
+  
+  
+  
+  override val subscriptions = Map("textId" -> (c => ApplicationContextService.get.switchMap(ac => ac.textSet.obs).map(t => get(c.name,t).map(e => e.text.id).getOrElse(null))))
+  
+   def get(name:String, globalText:GlobalText):Option[TextEntry] = globalText.text.find(e => e.name == name)
+}
