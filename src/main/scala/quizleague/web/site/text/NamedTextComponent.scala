@@ -51,7 +51,7 @@ object NamedTextComponent extends Component{
   val template = """
         <ql-text v-if="textId" :id="textId"></ql-text>
     """
-  
+  override val props = @@("name")
   
   
   override val subscriptions = Map("textId" -> (c => ApplicationContextService.get.switchMap(ac => ac.textSet.obs).map(t => get(c.name,t).map(e => e.text.id).getOrElse(null))))
