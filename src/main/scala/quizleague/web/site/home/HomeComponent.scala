@@ -1,18 +1,15 @@
 package quizleague.web.site.home
 
-import com.felstar.scalajs.vue._
-import scalajs.js.Dynamic.literal
-import scalajs.js
-import quizleague.web.core.RouteComponent
-import quizleague.web.site.SiteModule
+
+
 import quizleague.web.core.Component
-import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.core.RouteComponent
 import quizleague.web.site.ApplicationContextService
 
 object HomeComponent extends RouteComponent{
   override val subscriptions = Map("appData" -> (v => ApplicationContextService.get()))
   override val template="""
-   <v-container grid-list-md>
+   <v-container grid-list-md v-if="appData">
      <v-layout row wrap>
       <v-flex xs5>
         <v-carousel light dark>
@@ -24,8 +21,8 @@ object HomeComponent extends RouteComponent{
           <v-carousel-item src="">Next Fixtures</v-carousel-item>
         </v-carousel>
       </v-flex>
-      <v-flex xs7>
-        <ql-named-text name="front-page-suppl"></ql-named-text>
+      <v-flex xs7 v-if="async(appData.currentSeason).text">
+        <ql-text :id="async(appData.currentSeason).text.id"></ql-text>
       </v-flex>
     </v-layout>
   </v-container>
@@ -47,7 +44,7 @@ object HomePageLeagueTable extends Component{
   
   override val name = "ql-home-page-table"
   
-  override val template =          """<v-card>
+  override val template ="""<v-card>
               <v-card-title primary-title><h4>League Table</h4></v-card-title>
               <v-card-text>
               <ql-league-table id="1986e8d1-6058-44ba-9086-a375de8d6087"></ql-league-table>

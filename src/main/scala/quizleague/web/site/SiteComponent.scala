@@ -1,7 +1,7 @@
 package quizleague.web.site
 
 import quizleague.web.core.Component
-import quizleague.web.site.ApplicationContextService
+
 
 object SiteComponent extends Component {
      val name = "ql-app"
