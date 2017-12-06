@@ -16,7 +16,7 @@ object HomeComponent extends RouteComponent{
           <v-carousel-item src="">
             <ql-home-page-table></ql-home-page-table>
           </v-carousel-item>
-          <v-carousel-item src="">Latest Results
+          <v-carousel-item src="">Latest Results {{'2012-04-01' | date('dd MMM yyyy')}}
           </v-carousel-item>
           <v-carousel-item src="">Next Fixtures</v-carousel-item>
         </v-carousel>

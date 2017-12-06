@@ -11,6 +11,8 @@ import com.felstar.scalajs.vue._
 import org.scalajs.dom.raw.HTMLElement
 
 import js.annotation.JSName
+import java.time.DateTimeUtils
+import org.threeten.bp.format.DateTimeFormatter
 
 @JSExportAll
 object SiteApp{
@@ -25,7 +27,7 @@ object SiteApp{
           data=literal(),
           methods=literal(),
           computed=literal(),
-          filters=literal(),
+          filters=literal(date = ((date:String, format:String) => DateTimeFormatter.ofPattern(format).format(DateTimeFormatter.ISO_LOCAL_DATE.parse(date)))),
           router = Router(SiteModule())
       )
     )
