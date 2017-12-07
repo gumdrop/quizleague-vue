@@ -21,13 +21,10 @@ object SiteApp{
   def main(args:Array[String]):Unit = {
 
 
+  Vue.filter("date", (date:String, format:String) => DateTimeFormatter.ofPattern(format).format(DateTimeFormatter.ISO_LOCAL_DATE.parse(date)))
    
   val demo = new Vue(
         literal(el="#app",
-          data=literal(),
-          methods=literal(),
-          computed=literal(),
-          filters=literal(date = ((date:String, format:String) => DateTimeFormatter.ofPattern(format).format(DateTimeFormatter.ISO_LOCAL_DATE.parse(date)))),
           router = Router(SiteModule())
       )
     )
