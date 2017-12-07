@@ -65,7 +65,10 @@ trait Component {
   def apply() = {
 
     def update(subject: Subject[Any])(fn: facade => Observable[Any])(c: facade) = {
-      c.asInstanceOf[js.Dynamic].$subscribeTo(fn(c).inner, (ve:Any) => subject.next(ve))
+      c.asInstanceOf[js.Dynamic]
+      .$subscribeTo(
+          fn(c).inner, 
+          (ve:Any) => subject.next(ve))
       subject.inner
     }
 

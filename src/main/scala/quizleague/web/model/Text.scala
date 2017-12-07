@@ -3,8 +3,6 @@ package quizleague.web.model
 import scala.scalajs.js
 
 
-
-
 class Text(
     val id:String,
     val text:String,

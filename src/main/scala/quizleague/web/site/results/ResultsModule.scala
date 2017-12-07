@@ -84,7 +84,7 @@ object ResultService extends ResultGetService {
     override val userService = UserService
     override val fixtureService = FixtureService
     override val teamService = TeamService
-    val reportsService = ReportsService
+    override val reportsService = ReportsService
 
   //def teamResults(season:Season,team:Team, take:Int = Integer.MAX_VALUE) = list(Some(s"season/${season.id}/team/${team.id}?take=$take"))
 }

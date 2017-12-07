@@ -7,26 +7,44 @@ import quizleague.web.site.venue.VenueService
 import quizleague.web.model._
 import quizleague.web.site.team.TeamService
 import quizleague.web.core._
+import scalajs.js
+import js.JSConverters._
+import rxscalajs.Observable
+import rxscalajs.Observable._
+import quizleague.web.model.CompetitionType
+import org.threeten.bp.LocalDate
+import quizleague.web.util.Logging._
 
+object FixturesModule extends Module {
 
-
-object FixturesModule extends Module{
-  
-  override val components = @@(SimpleFixturesComponent)
+  override val components = @@(SimpleFixturesComponent, FixtureLineComponent)
 }
 
-
-object FixturesService extends FixturesGetService{
+object FixturesService extends FixturesGetService {
   override val fixtureService = FixtureService
 
+  def nextFixtures(season: Season): Observable[js.Array[Fixtures]] = {
+   
+    val cs = season.competitions.map(_.obs).toSeq
 
-  // def nextFixtures(season:Season) = list(Some(s"next/${season.id}"))
+    val today = LocalDate.now.toString()
+
+    val competitions = combineLatest(cs)
+    
+    val fx = competitions.map(c => c
+        .filter(_.typeName != CompetitionType.subsidiary.toString())
+        .flatMap(_.fixtures.map(_.obs)))
+
+        
+     val fxs = fx.switchMap(o => combineLatest(o))
+
+    fxs.map(_.filter(_.date >= today).sortBy(_.date).take(1).toJSArray)
+  }
 }
 
-
 object FixtureService extends FixtureGetService {
-    override val venueService = VenueService
-    override val teamService = TeamService
+  override val venueService = VenueService
+  override val teamService = TeamService
 
   //def teamFixtures(season:Season,team:Team, take:Int = Integer.MAX_VALUE) = list(Some(s"season/${season.id}/team/${team.id}?take=$take"))
 }

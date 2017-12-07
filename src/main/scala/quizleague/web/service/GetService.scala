@@ -27,20 +27,20 @@ trait GetService[T] {
   def get(id: String): Observable[T] = getFromHttp(id).switchMap(mapOut _)
   def getRO(id:String):RefObservable[T] = RefObservable(id,get(id))
 
-  def list(): Observable[js.Array[T]] = list(None)
+  def list(): Observable[js.Array[T]] = listFromStorage.map(c => c.map(u => mapOutSparse(u)))
     
   def flush() = items.clear()
 
   
-  protected final def list(path:Option[String]):Observable[js.Array[T]] = {
+  protected final def listFromStorage():Observable[js.Array[U]] = {
     
     
-    val subject = ReplaySubject[js.Array[T]]
+    val subject = ReplaySubject[js.Array[U]]
     
     db.collection(uriRoot).onSnapshot(
-        onNext = q => subject.next(q.docs.map(d => dec(d.data()).merge.asInstanceOf[U]).map(x => mapOutSparse(x))),
-        onError = (_) => Unit,
-        onCompletion = () => Unit)
+        onNext = q => subject.next(q.docs.map(d => dec(d.data()).merge.asInstanceOf[U])),
+        onError = e => subject.error(s"$uriRoot not found : ${e.getMessage}"),
+        onCompletion = () => subject.complete())
     
     subject
   }
@@ -48,16 +48,16 @@ trait GetService[T] {
   protected final def add(item: U) = { items += ((item.id, item)); mapOutSparse(item) }
   protected final def getFromHttp(id: String): Observable[U] = {
     
-   val appData:Subject[U] = ReplaySubject[U]
+   val subject:Subject[U] = ReplaySubject[U]
   
    val appConfig = db.doc(s"$uriRoot/$id")
    
    appConfig.onSnapshot(
-       onNext = a => appData.next(dec(a.data()).merge.asInstanceOf[U]), 
-       onError = (_) => Unit, 
-       onCompletion = () => Unit)
+       onNext = a => subject.next(dec(a.data()).merge.asInstanceOf[U]), 
+       onError = e => subject.error(s"$uriRoot/$id not found : ${e.getMessage}"), 
+       onCompletion = () => subject.complete())
     
-     appData
+     subject
      
   }
   

@@ -60,16 +60,10 @@ object SimpleFixturesComponent extends Component {
   val name = "ql-fixtures-simple"
 
   val template = """
-   <div>
-    &nbsp;
+   <div v-if="fixts">
     <div>
-    <table v-if="fixts)">
-      <tr *ngFor="let fixture of fixts">
-        <td v-if="inlineDetails" class="inline-details" >{{fixture.date"}} : {{fixture.parentDescription}} {{fixture.description}}</td>
-        <td class="home">{{async(fixture.home).name}}</td>
-        <td> - </td>
-        <td class="away">{{async(fixture.away).name}}</td> 
-      </tr>
+    <table >
+      <ql-fixture-line v-for="fixture in fixts" :key="fixture.id" :fixture="fixture"></ql-fixture-line>
     </table>
     </div> 
     </div>
@@ -80,23 +74,17 @@ object SimpleFixturesComponent extends Component {
   override val subParams = Map("fixtures" -> "fixts")
   override val subscriptions = Map("fixts" -> (c => c.fixtures))
 
-  //
-  //  var inView = false
-  //
-  //  @Input
-  //  var loadIfHidden = false
-  //
-  //  @Input
-  //  var fixtures:Observable[js.Array[Fixture]] = _
-  //
-  //  @Input
-  //  def list_= (list:js.Array[RefObservable[Fixture]]) = fixtures = zip(list)
-  //
-  //  @Input
-  //  var inlineDetails = false
-  //
-  //  def load(event:Boolean){
-  //    inView = event || inView || loadIfHidden
-  //  }
 
+}
+
+object FixtureLineComponent extends Component{
+  val name = "ql-fixture-line"
+  val template = """<tr>
+        <td v-if="inlineDetails" class="inline-details" >{{fixture.date| date("d MMM yyyy")}} : {{fixture.parentDescription}} {{fixture.description}}</td>
+        <td class="home">{{async(fixture.home).name}}</td>
+        <td> - </td>
+        <td class="away">{{async(fixture.away).name}}</td> 
+      </tr>"""
+  
+  override val props = @@("fixture","inlineDetails")
 }
