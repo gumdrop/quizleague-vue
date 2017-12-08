@@ -9,35 +9,38 @@ import com.felstar.scalajs.vue.VueComponent
 import quizleague.web.model.Season
 import scalajs.js
 import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.site.season.SeasonService
+import quizleague.web.site.leaguetable.LeagueTableService
 
 object HomeComponent extends RouteComponent{
   override val subscriptions = Map(
       "appData" -> (c => ApplicationContextService.get()),
   )
   override val template="""
-   <v-container grid-list-md v-if="appData && async(appData.currentSeason).id">
+   <v-container grid-list-md v-if="appData">
      <v-layout row wrap>
       <v-flex xs5>
         <v-carousel light dark>
           <v-carousel-item src="">
-            <ql-home-page-table></ql-home-page-table>
+            <ql-home-page-table :seasonId="appData.currentSeason.id"></ql-home-page-table>
           </v-carousel-item>
           <v-carousel-item src="">Latest Results {{'2012-04-01' | date('dd MMM yyyy')}}
           </v-carousel-item>
-          <v-carousel-item src=""><ql-next-fixtures :season="async(appData.currentSeason)"></ql-next-fixtures></v-carousel-item>
+          <v-carousel-item src=""><ql-next-fixtures :seasonId="appData.currentSeason.id"></ql-next-fixtures></v-carousel-item>
         </v-carousel>
       </v-flex>
       <v-flex xs7>
-        <ql-text :id="async(appData.currentSeason).text.id"></ql-text>
+        <ql-text v-if="async(appData.currentSeason).id" :id="async(appData.currentSeason).text.id"></ql-text>
       </v-flex>
     </v-layout>
   </v-container>
 """
+    override val components = @@(HomePageLeagueTable, NextFixturesComponent)
 }
 
 @js.native
 trait NextFixturesComponent extends VueComponent with VueRxComponent{
-  val season:Season
+  val seasonId:String
 }
 
 
@@ -60,9 +63,9 @@ object NextFixturesComponent extends Component{
 
 """
   
-  override val props = @@("season")
-  override val subParams = Map("season" -> "fixtures")
-  override val subscriptions = Map("fixtures" -> (c => FixturesService.nextFixtures(c.season)))
+  override val props = @@("seasonId")
+  override val subParams = Map("seasonId"-> "fixtures")
+  override val subscriptions = Map("fixtures" -> (c => FixturesService.nextFixtures(c.seasonId)))
 }
 
 object HomeSidenavComponent extends RouteComponent{
@@ -76,14 +79,26 @@ object HomeSidenavComponent extends RouteComponent{
 
 }
 
+@js.native
+trait HomePageLeagueTable extends VueComponent with VueRxComponent{
+  val seasonId:String
+}
+
+
 object HomePageLeagueTable extends Component{
+  
+  type facade = HomePageLeagueTable
   
   override val name = "ql-home-page-table"
   
-  override val template ="""<v-card>
+  override val template ="""<v-card v-if="tables">
               <v-card-title primary-title><h4>League Table</h4></v-card-title>
               <v-card-text>
-              <ql-league-table id="1986e8d1-6058-44ba-9086-a375de8d6087"></ql-league-table>
+              <ql-league-table v-for="table in tables"  :key="table.id" :id="table.id"></ql-league-table>
               </v-card-text>
             </v-card>"""
+  
+  override val props = @@("seasonId")
+  override val subParams = Map("seasonId"-> "tables")
+  override val subscriptions = Map("tables" -> (c => LeagueTableService.leagueTables(c.seasonId)))
 }

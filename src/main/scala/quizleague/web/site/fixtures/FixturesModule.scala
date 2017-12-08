@@ -14,6 +14,7 @@ import rxscalajs.Observable._
 import quizleague.web.model.CompetitionType
 import org.threeten.bp.LocalDate
 import quizleague.web.util.Logging._
+import quizleague.web.site.season.SeasonService
 
 object FixturesModule extends Module {
 
@@ -23,13 +24,13 @@ object FixturesModule extends Module {
 object FixturesService extends FixturesGetService {
   override val fixtureService = FixtureService
 
-  def nextFixtures(season: Season): Observable[js.Array[Fixtures]] = {
+  def nextFixtures(seasonId: String): Observable[js.Array[Fixtures]] = {
    
-    val cs = season.competitions.map(_.obs).toSeq
+    val competitions = SeasonService.get(seasonId).map(_.competitions.map(_.obs).toSeq).map(cs => combineLatest(cs)).flatten
 
     val today = LocalDate.now.toString()
 
-    val competitions = combineLatest(cs)
+    //val competitions = combineLatest(cs)
     
     val fx = competitions.map(c => c
         .filter(_.typeName != CompetitionType.subsidiary.toString())

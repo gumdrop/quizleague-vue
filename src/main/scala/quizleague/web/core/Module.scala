@@ -9,7 +9,11 @@ trait Module {
   def components:Array[Component] = Array()
   
   def apply():Array[Any] = {
-    components.foreach(c => Vue.component(c.name, c()))
+    components.foreach(c => {
+      
+      val vue:Dynamic = Vue.component(c.name, c()).asInstanceOf[Dynamic]
+      c.components.foreach(s => vue.component(s.name,s()))
+    })
     modules.flatMap(_()) ++ routes
   }
 }

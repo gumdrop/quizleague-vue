@@ -33,6 +33,7 @@ trait Component {
   def subscriptions: Map[String, facade => Observable[Any]] = Map()
   def data: facade => Map[String, js.Any] = c => Map()
   def methods: Map[String, js.Function] = Map()
+  def components: js.Array[Component] = @@()
 
   var observables = js.Dictionary[js.Dictionary[Any]]() 
   val empty = new js.Object
@@ -62,7 +63,7 @@ trait Component {
   
 
   
-  def apply() = {
+  def apply():js.Dynamic = {
 
     def update(subject: Subject[Any])(fn: facade => Observable[Any])(c: facade) = {
       c.asInstanceOf[js.Dynamic]
@@ -84,8 +85,8 @@ trait Component {
       watch = (watch.map { case (k, v) => (k, v: js.ThisFunction) } ++ subwatches).toJSDictionary,
       subscriptions = ((c: facade) => subs.map { case (k, v) => (k, v(c)) }.toJSDictionary): js.ThisFunction,
       data = ((v: facade) => data(v).toJSDictionary): js.ThisFunction,
-      methods = (commonMethods ++ methods).toJSDictionary
-      
+      methods = (commonMethods ++ methods).toJSDictionary,
+           
     )
     
     retval
