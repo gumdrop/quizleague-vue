@@ -68,7 +68,7 @@ trait Component {
       c.asInstanceOf[js.Dynamic]
       .$subscribeTo(
           fn(c).inner, 
-          (ve:Any) => subject.next(ve))
+          subject.inner)
       subject.inner
     }
 
