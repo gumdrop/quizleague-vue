@@ -63,7 +63,7 @@ object SimpleFixturesComponent extends Component {
    <div v-if="fixts">
     <div>
     <table >
-      <ql-fixture-line v-for="fixture in fixts" :key="fixture.id" :fixture="fixture"></ql-fixture-line>
+      <ql-fixture-line v-for="fixture in fixts" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
     </table>
     </div> 
     </div>

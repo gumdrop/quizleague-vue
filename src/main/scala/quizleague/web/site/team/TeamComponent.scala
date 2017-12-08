@@ -8,18 +8,26 @@ import quizleague.web.core.Component
 import quizleague.web.site.text.TextService
 import quizleague.web.core._
 import quizleague.web.model.Team
+import quizleague.web.site.ApplicationContextService
+import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.model.ApplicationContext
+import quizleague.web.site.fixtures.FixtureService
 
 object TeamPage extends RouteComponent {
   override val template = """<ql-team :id="$route.params.id"></ql-team>"""
 }
 
+@js.native
+trait TeamComponent extends IdComponent{
+  val appConfig:ApplicationContext
+}
 object TeamComponent extends Component {
 
   type facade = IdComponent
   
   override val name = "ql-team"
   override val template = """
-          <div v-if="team">
+          <div v-if="team && appConfig">
            <ql-text :id="team.text.id"></ql-text>
             <v-card>
               <v-card-title primary-title><h3 class="headline mb-0">Results</h3></v-card-title>
@@ -35,6 +43,7 @@ object TeamComponent extends Component {
               <v-card-title primary-title><h3 class="headline mb-0">Fixtures</h3></v-card-title>
               <v-card-title >Next few fixtures</v-card-title>
               <v-card-text>
+                <ql-fixtures-simple :fixtures="fixtures(id, appConfig.currentSeason.id)" :inlineDetails="true"></ql-fixtures-simple>
               </v-card-text>
               <v-card-actions>
                 <v-btn flat>Show All</v-btn>
@@ -45,8 +54,8 @@ object TeamComponent extends Component {
           </div>"""
   override val props = @@("id")
   override val subParams = Map("id"->"team")
-  override val subscriptions = Map("team" -> (v => TeamService.get(v.id)))
-
+  override val subscriptions = Map("team" -> (v => TeamService.get(v.id)), "appConfig" -> (c => ApplicationContextService.get))
+  override val methods = Map("fixtures" -> ((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,seasonId,5)))
 }
 
 object TeamTitleComponent extends RouteComponent {
