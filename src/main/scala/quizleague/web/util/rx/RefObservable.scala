@@ -8,11 +8,11 @@ import rxscalajs.Observable
 import rxscalajs.subscription.Subscription
 import rxscalajs.facade.ObservableFacade
 
-@ScalaJSDefined
-class RefObservable[+T](val id: String, val obs: Observable[T]) extends js.Object{
-
-  val inner = obs.inner
-  
+class RefObservable[+T](val id: String, obsf: () => Observable[T]) extends js.Object{
+ 
+  def obs = obsf()
+  def inner = obs.inner
+   
   @JSName("subscribeScala")
   def subscribe(f: T => Unit) = obs.subscribe(f, (x) => Unit, () => Unit)
 
@@ -24,6 +24,8 @@ class RefObservable[+T](val id: String, val obs: Observable[T]) extends js.Objec
 
 object RefObservable {
 
-  def apply[T](ref: Ref[_], obs: Observable[T]) = new RefObservable(ref.id, obs)
-  def apply[T](id: String, obs: Observable[T]) = new RefObservable(id, obs)
+  def apply[T](ref: Ref[_], obs: Observable[T]) = new RefObservable(ref.id, () => obs)
+  def apply[T](id: String, obs: Observable[T]) = new RefObservable(id, () => obs)
+  def apply[T](ref: Ref[_], obsf: () => Observable[T]) = new RefObservable(ref.id, obsf)
+  def apply[T](id: String, obsf: () => Observable[T]) = new RefObservable(id, obsf)
 }

@@ -40,7 +40,7 @@ trait GetService[T] {
 
       db.collection(uriRoot).onSnapshot(subject.inner)
 
-      subject.map(q => q.docs.map(d => dec(d.data()).merge.asInstanceOf[U]))
+      subject.map(q => q.docs.map(d => dec(d.data()).fold(e => {throw e}, u => u)))
     })
 
     listObservable = Option(obs)
@@ -55,7 +55,7 @@ trait GetService[T] {
 
       db.doc(s"$uriRoot/$id").onSnapshot(subject.inner)
 
-      subject.map(a => dec(a.data()).merge.asInstanceOf[U])
+      subject.map(a => dec(a.data()).fold(e => {throw e}, u => u))
     })
 
   }
@@ -68,9 +68,9 @@ trait GetService[T] {
 
   protected def decodeJson[T](obj: js.Any)(implicit dec: Decoder[T]) = convertJsToJson(obj).fold(t => null, dec.decodeJson(_))
 
-  final def refObs(id: String): RefObservable[T] = RefObservable(id, get(id))
+  final def refObs(id: String): RefObservable[T] = RefObservable(id, () => get(id))
   final def refObs(opt: Option[Ref[U]]): RefObservable[T] = opt.fold[RefObservable[T]](null)(ref => refObs[U, T](ref, this))
-  protected final def refObs[A <: Entity, B](ref: Ref[A], service: GetService[B]): RefObservable[B] = RefObservable(ref, service.get(ref.id))
+  protected final def refObs[A <: Entity, B](ref: Ref[A], service: GetService[B]): RefObservable[B] = RefObservable(ref, () => service.get(ref.id))
   protected final def refObsList[A <: Entity, B](refs: List[Ref[A]], service: GetService[B]): js.Array[RefObservable[B]] = refs.map(refObs(_, service)).toJSArray
 
   def ref(id: String): Ref[U] = Ref(typeName, id)
