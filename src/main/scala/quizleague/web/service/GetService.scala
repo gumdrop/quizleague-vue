@@ -26,7 +26,7 @@ trait GetService[T] {
   private var listObservable: Option[Observable[js.Array[U]]] = None
 
   def get(id: String): Observable[T] = getFromStorage(id).map(mapOutSparse _)
-  def getRO(id: String): RefObservable[T] = RefObservable(id, get(id))
+  def getRO(id: String): RefObservable[T] = RefObservable(id, () => get(id))
 
   def list(): Observable[js.Array[T]] = listFromStorage.map(c => c.map(u => mapOutSparse(u)))
 

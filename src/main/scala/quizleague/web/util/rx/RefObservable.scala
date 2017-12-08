@@ -24,8 +24,8 @@ class RefObservable[+T](val id: String, obsf: () => Observable[T]) extends js.Ob
 
 object RefObservable {
 
-  def apply[T](ref: Ref[_], obs: Observable[T]) = new RefObservable(ref.id, () => obs)
-  def apply[T](id: String, obs: Observable[T]) = new RefObservable(id, () => obs)
+  //def apply[T](ref: Ref[_], obs: Observable[T]) = new RefObservable(ref.id, () => obs)
+  //def apply[T](id: String, obs: Observable[T]) = new RefObservable(id, () => obs)
   def apply[T](ref: Ref[_], obsf: () => Observable[T]) = new RefObservable(ref.id, obsf)
   def apply[T](id: String, obsf: () => Observable[T]) = new RefObservable(id, obsf)
 }
