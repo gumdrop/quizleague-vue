@@ -60,7 +60,7 @@ object SimpleFixturesComponent extends Component {
   val name = "ql-fixtures-simple"
 
   val template = """
-   <div v-if="fixts">
+   <div v-if="fixts" class="ql-fixtures-simple">
     <div>
     <table >
       <ql-fixture-line v-for="fixture in fixts" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
@@ -81,9 +81,9 @@ object FixtureLineComponent extends Component{
   val name = "ql-fixture-line"
   val template = """<tr>
         <td v-if="inlineDetails" class="inline-details" >{{fixture.date| date("d MMM yyyy")}} : {{fixture.parentDescription}} {{fixture.description}}</td>
-        <td class="home">{{async(fixture.home).name}}</td>
+        <td class="home"><ql-team-name :team="fixture.home"></ql-team-name></td>
         <td> - </td>
-        <td class="away">{{async(fixture.away).name}}</td> 
+        <td class="away"><ql-team-name :team="fixture.away"></ql-team-name></td> 
       </tr>"""
   
   override val props = @@("fixture","inlineDetails")

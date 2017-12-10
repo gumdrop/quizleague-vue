@@ -50,7 +50,7 @@ trait Component {
     
     def sub() = {
       val a = js.Dictionary[Any]()
-      c.asInstanceOf[js.Dynamic].$subscribeTo(obs.inner, (b:js.Dynamic) => {val r:js.Any = Vue.util.extend(a,b);c.$forceUpdate()})
+      c.$subscribeTo(obs.inner, (b:js.Dynamic) => {val r:js.Any = Vue.util.extend(a,b);c.$forceUpdate()})
       observables += ((obs.id,a))
       a
     }
@@ -66,24 +66,39 @@ trait Component {
   def apply():js.Dynamic = {
 
     def update(subject: Subject[Any])(fn: facade => Observable[Any])(c: facade) = {
-      c.asInstanceOf[js.Dynamic]
-      .$subscribeTo(
+       c.$subscribeTo(
           fn(c).inner, 
           subject.inner)
       subject.inner
     }
 
-    def sw(fn: facade => Observable[Any]) = update(ReplaySubject())(fn) _
+    
+    def makeSubscriptions(c:facade) = {
+      
 
-    val subs = subscriptions.map { case (k, v) => (k, sw(v)) }
-
-    val subwatches = subParams.map { case (k, v) => (k, subs(v): js.ThisFunction) }
+      val watchSubs = subParams.map{case (k, v) => {
+        val subject = ReplaySubject[Any]()
+        
+        val subscription = update(subject)(subscriptions(v)) _
+        val watch = c.$watchAsObservable(k).subscribe( x=> subscription(c))
+        
+        (v, subscription)
+        
+      }}
+      
+      val subs = subscriptions.filterKeys(k => !subParams.values.exists(_ == k)).map{
+        case (k,v) => ((k, (c:facade) => v(c).inner))
+      }
+      
+      watchSubs ++ subs
+      
+    }
     
     val retval = literal(
       template = template,
       props = props,
-      watch = (watch.map { case (k, v) => (k, v: js.ThisFunction) } ++ subwatches).toJSDictionary,
-      subscriptions = ((c: facade) => subs.map { case (k, v) => (k, v(c)) }.toJSDictionary): js.ThisFunction,
+      watch = (watch.map { case (k, v) => (k, v: js.ThisFunction) }).toJSDictionary,
+      subscriptions = ((c: facade) => makeSubscriptions(c).map { case (k, v) => (k, v(c)) }.toJSDictionary): js.ThisFunction,
       data = ((v: facade) => data(v).toJSDictionary): js.ThisFunction,
       methods = (commonMethods ++ methods).toJSDictionary,
            

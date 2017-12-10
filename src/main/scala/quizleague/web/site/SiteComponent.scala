@@ -32,16 +32,18 @@ object SiteComponent extends Component {
         <v-icon>more_vert</v-icon>
       </v-btn>
       <div slot="extension">
-      	<v-btn to="/home" flat style="text-transform: none;"><v-icon left>home</v-icon><span>Home</span></v-btn>
-      	<v-btn to="/team" flat style="text-transform: none;"><v-icon left>people</v-icon><span>Teams</span></v-btn>
-      	<v-btn to="/competition" flat style="text-transform: none;"><v-icon left>people</v-icon><span>Competitions</span></v-btn>
-      	<v-btn to="/venue" flat style="text-transform: none;"><v-icon left>location_on</v-icon><span>Venue</span></v-btn>
+      	<v-btn to="/home" flat ><v-icon left>home</v-icon><span>Home</span></v-btn>
+      	<v-btn to="/team" flat ><v-icon left>people</v-icon><span>Teams</span></v-btn>
+      	<v-btn to="/competition" flat ><v-icon left>pie_chart</v-icon><span>Competitions</span></v-btn>
+      	<v-btn to="/results" flat ><v-icon left>check</v-icon><span>Results</span></v-btn>
+      	<v-btn to="/venue" flat ><v-icon left>location_on</v-icon><span>Venue</span></v-btn>
       </div>
     </v-toolbar>
     <v-content>
 		  <v-container fill-height fluid>
         <v-layout justify-left align-top column>
          <router-view name="title"  style="z-index:2"></router-view>
+         <br>
          <router-view></router-view>
         </v-layout>
       </v-container>

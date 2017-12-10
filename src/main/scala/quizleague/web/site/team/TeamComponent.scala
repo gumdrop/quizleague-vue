@@ -46,7 +46,7 @@ object TeamComponent extends Component {
                 <ql-fixtures-simple :fixtures="fixtures(id, appConfig.currentSeason.id)" :inlineDetails="true"></ql-fixtures-simple>
               </v-card-text>
               <v-card-actions>
-                <v-btn flat>Show All</v-btn>
+                <v-btn flat :to="id + '/fixtures'">Show All</v-btn>
                 <v-btn flat >Calendar URL</v-btn>
                 <v-btn flat>Download Calendar</v-btn>
               </v-card-actions>
