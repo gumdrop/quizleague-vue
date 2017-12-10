@@ -33,7 +33,8 @@ class Fixture(
   val away:RefObservable[Team],
   val date: String,
   val time: String,
-  val duration : Float
+  val duration : Float,
+  val result: Result
 ) extends js.Object
 
 object Fixture{
@@ -45,5 +46,44 @@ object Fixture{
   away:RefObservable[Team],
   date: String,
   time: String,
-  duration : Float) = new Fixture(id,description,parentDescription, venue, home, away,date,time,duration)
+  duration : Float,
+  result:Result) = new Fixture(id,description,parentDescription, venue, home, away,date,time,duration, result)
 }
+
+class Result(
+    val homeScore:Int,
+    val awayScore:Int,
+    val submitter:RefObservable[User],
+    val note:String,
+    val reports:RefObservable[Reports]) extends js.Object
+    
+object Result{
+  def apply(    homeScore:Int,
+    awayScore:Int,
+    submitter:RefObservable[User],
+    note:String,
+    reports:RefObservable[Reports]) = new Result(homeScore, awayScore, submitter, note, reports) 
+}
+    
+
+class Reports(
+    val id:String,
+    val reports:js.Array[Report],
+    val isEmpty:Boolean) extends js.Object
+    
+object Reports{
+  def apply(id:String,
+    reports:js.Array[Report],
+    isEmpty:Boolean) = new Reports(id, reports, isEmpty)
+}
+    
+
+class Report(
+    val team:RefObservable[Team],
+    val text:RefObservable[Text])
+    
+object Report{
+  def apply(    team:RefObservable[Team],
+    text:RefObservable[Text]) = new Report(team,text)
+}
+    

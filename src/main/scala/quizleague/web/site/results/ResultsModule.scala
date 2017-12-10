@@ -1,7 +1,7 @@
 package quizleague.web.site.results
 
 
-import quizleague.web.service.results.{ ResultGetService, ResultsGetService, ReportsGetService }
+import quizleague.web.service.results.{ReportsGetService }
 import quizleague.web.site.fixtures.{ FixtureService, FixturesService }
 import quizleague.web.site.team.TeamService
 import quizleague.web.site.text.TextService
@@ -70,24 +70,6 @@ object ResultsModule extends Module {
   
 }
 
-
-object ResultsService extends ResultsGetService {
-    override val resultService = ResultService
-    override val fixturesService = FixturesService
-  
-  //def latestResults(season:Season) = list(Some(s"latest/${season.id}"))
-
-    }
-
-
-object ResultService extends ResultGetService {
-    override val userService = UserService
-    override val fixtureService = FixtureService
-    override val teamService = TeamService
-    override val reportsService = ReportsService
-
-  //def teamResults(season:Season,team:Team, take:Int = Integer.MAX_VALUE) = list(Some(s"season/${season.id}/team/${team.id}?take=$take"))
-}
 
 
 object ReportsService extends ReportsGetService {

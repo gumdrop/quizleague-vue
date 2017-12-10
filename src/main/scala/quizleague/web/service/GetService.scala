@@ -76,6 +76,7 @@ trait GetService[T] {
   def ref(id: String): Ref[U] = Ref(typeName, id)
   def ref(list: js.Array[RefObservable[T]]): List[Ref[U]] = list.map(ref _).toList
   def ref(ro: RefObservable[T]): Ref[U] = if (ro == null) null else Ref(typeName, ro.id)
+  def refOption(ro: RefObservable[T]): Option[Ref[U]] = if (ro == null) None else Some(Ref(typeName, ro.id))
   def ref(dom: U): Ref[U] = ref(dom.id)
 
   protected final def mapOut(domain: U): Observable[T] = Observable.of(mapOutSparse(domain))

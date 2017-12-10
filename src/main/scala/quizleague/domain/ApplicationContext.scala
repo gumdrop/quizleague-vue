@@ -2,7 +2,6 @@ package quizleague.domain
 
 import scala.scalajs.js.annotation.JSExportAll
 
-@JSExportAll
 case class ApplicationContext(
   id: String,
   leagueName: String,

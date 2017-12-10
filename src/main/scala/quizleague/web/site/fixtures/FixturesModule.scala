@@ -17,6 +17,8 @@ import quizleague.web.util.Logging._
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.competition.CompetitionService
 import quizleague.util.collection.Desc
+import quizleague.web.site.user.UserService
+import quizleague.web.site.results.ReportsService
 
 object FixturesModule extends Module {
 
@@ -44,6 +46,8 @@ object FixturesService extends FixturesGetService {
 object FixtureService extends FixtureGetService {
   override val venueService = VenueService
   override val teamService = TeamService
+  override val userService = UserService
+  override val reportsService = ReportsService
 
   //def teamFixtures(season:Season,team:Team, take:Int = Integer.MAX_VALUE) = list(Some(s"season/${season.id}/team/${team.id}?take=$take"))
   

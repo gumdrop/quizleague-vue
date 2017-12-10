@@ -24,7 +24,6 @@ import quizleague.web.service.text.TextPutService
 import quizleague.web.service.team.TeamPutService
 import quizleague.web.service.DirtyListService
 import quizleague.web.names.LeagueTableNames
-import quizleague.web.service.results.ResultsGetService
 import io.circe.parser._,io.circe.syntax._
 import quizleague.util.json.codecs.DomainCodecs._
 
@@ -49,7 +48,6 @@ trait LeagueTableGetService extends GetService[Model] with LeagueTableNames {
 trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService with DirtyListService[Model] {
 
   override val teamService: TeamPutService
-  val resultsService:ResultsGetService
 
   override protected def mapIn(model: Model) = Dom(
     model.id,
