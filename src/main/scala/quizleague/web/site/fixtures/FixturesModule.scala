@@ -22,13 +22,14 @@ import quizleague.web.site.results.ReportsService
 
 object FixturesModule extends Module {
 
-  override val components = @@(SimpleFixturesComponent, FixtureLineComponent)
+  override val components = @@(SimpleFixturesComponent, FixtureLineComponent, AllFixturesComponent)
 }
 
 object FixturesService extends FixturesGetService {
   override val fixtureService = FixtureService
 
   def nextFixtures(seasonId: String): Observable[js.Array[Fixtures]] = activeFixtures(seasonId,1)
+  def latestResults(seasonId:String): Observable[js.Array[Fixtures]] = spentFixtures(seasonId,1)
   
   def activeFixtures(seasonId: String, take:Int = Integer.MAX_VALUE) = {
     val today = LocalDate.now.toString()

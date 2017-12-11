@@ -19,7 +19,13 @@ package quizleague.web.site.fixtures
 //import quizleague.web.util.Logging._
 //import quizleague.web.site.common.ComponentUtils
 import quizleague.web.core.RouteComponent
-import quizleague.web.core.RouteComponent
+
+import quizleague.web.core._
+import quizleague.web.site.season.SeasonIdComponent
+import quizleague.web.site.ApplicationContextService
+import rxscalajs.Observable
+import scalajs.js
+
 
 //@Component(
 //  template = s"""
@@ -59,10 +65,39 @@ import quizleague.web.core.RouteComponent
 //object AllFixturesTitleComponent extends RouteComponent
 //  val viewService:ResultsViewService
 //)
-object AllFixturesComponent extends RouteComponent{
-  val template = ""
+
+object AllFixturesPage extends RouteComponent{
+  val template = """<div>
+                      <ql-all-fixtures v-if="appData" :seasonId="appData.currentSeason.id"></ql-all-fixtures>
+                    </div>"""
+    override val subscriptions = Map("appData" -> (c => ApplicationContextService.get))
+}
+
+
+object AllFixturesComponent extends Component{
+  val name = "ql-all-fixtures"
+  type facade = SeasonIdComponent
+  val template = """
+    <div v-if="fixtures">
+    <v-card v-for="fixs in fixtures" :key="fixs.id">
+      <v-card-title primary-title><h3 class="headline mb-0">{{fixs.date | date('d MMM yyyy')}} {{fixs.description}}</h3></v-card-title>
+      <v-card-text>
+        <ql-fixtures-simple :fixtures="fixs.fixtures| combine"></ql-fixtures-simple>
+      </v-card-text>
+    </v-card>
+    </div>"""
+  override val subscriptions = Map("fixtures" -> (c => FixturesService.activeFixtures(c.seasonId)))
+  override val props = @@("seasonId")
+  
 }
 
 object AllFixturesTitleComponent extends RouteComponent{
-  val template = ""
+  val template = """<v-toolbar      
+      color="red darken-3"
+      dark
+      clipped-left>
+      <v-toolbar-title class="white--text" >
+        All Fixtures
+      </v-toolbar-title>
+    </v-toolbar>"""
 }

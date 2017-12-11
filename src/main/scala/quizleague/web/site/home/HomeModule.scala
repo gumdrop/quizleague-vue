@@ -7,7 +7,7 @@ import scalajs.js
 object HomeModule extends Module{
   
   
-  override val components = @@(HomePageLeagueTable, NextFixturesComponent)
+  override val components = @@(HomePageLeagueTable, NextFixturesComponent, LatestResultsComponent)
   
   override val routes = @@(RouteConfig(path = "/home", components = Map(
       "default" -> HomeComponent())))

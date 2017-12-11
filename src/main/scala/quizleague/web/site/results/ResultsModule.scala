@@ -10,6 +10,11 @@ import quizleague.web.site.fixtures.AllFixturesComponent
 import quizleague.web.site.fixtures.AllFixturesTitleComponent
 import quizleague.web.site.fixtures.FixturesModule
 import quizleague.web.core._
+import com.felstar.scalajs.vue.RouteConfig
+import quizleague.web.site.fixtures.AllFixturesTitleComponent
+import quizleague.web.site.fixtures.AllFixturesPage
+import quizleague.web.site.results.AllResultsComponent
+
 //import quizleague.web.site.global.ApplicationContextService
 
 //import quizleague.web.model.Season
@@ -63,9 +68,14 @@ import quizleague.web.core._
 
 object ResultsModule extends Module {
   
-  override val components = @@(SimpleResultsComponent, ResultLineComponent)
-  override val routes = @@(
-        
+  override val components = @@(SimpleResultsComponent, ResultLineComponent, AllResultsComponent)
+  override val routes = @@(      
+      RouteConfig(path = "/results/all", 
+          components = Map("default" -> AllResultsPage(), "title" -> AllResultsTitleComponent(),"sidenav" -> ResultsMenuComponent())),
+      RouteConfig(path = "/fixtures/all", 
+          components = Map("default" -> AllFixturesPage(), "title" -> AllFixturesTitleComponent(),"sidenav" -> ResultsMenuComponent())),
+
+       RouteConfig(path = "/results",redirect = "/results/all") 
   )
   
 }

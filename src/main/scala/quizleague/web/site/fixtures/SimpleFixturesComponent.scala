@@ -49,13 +49,13 @@ import com.felstar.scalajs.vue.VueRxComponent
 //)
 
 @js.native
-trait This extends VueComponent with VueRxComponent {
+trait SimpleFixturesComponent extends VueRxComponent {
   def fixtures: Observable[js.Array[Fixture]] = js.native
 }
 
 object SimpleFixturesComponent extends Component {
 
-  type facade = This
+  type facade = SimpleFixturesComponent
 
   val name = "ql-fixtures-simple"
 

@@ -36,7 +36,7 @@ object TeamComponent extends Component {
                 <ql-results-simple :results="results(id, appConfig.currentSeason.id)" :inlineDetails="true"></ql-results-simple>
               </v-card-text>
               <v-card-actions>
-                <v-btn flat>Show All</v-btn>
+                <v-btn flat :to="id + '/results'">Show All</v-btn>
                 <v-btn flat>Graphs & Stats</v-btn>
               </v-card-actions>
             </v-card>

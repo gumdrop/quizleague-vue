@@ -24,7 +24,7 @@ object HomeComponent extends RouteComponent{
           <v-carousel-item src="">
             <ql-home-page-table :seasonId="appData.currentSeason.id"></ql-home-page-table>
           </v-carousel-item>
-          <v-carousel-item src="">Latest Results {{'2012-04-01' | date('dd MMM yyyy')}}
+          <v-carousel-item src=""><ql-latest-results :seasonId="appData.currentSeason.id"></ql-latest-results>
           </v-carousel-item>
           <v-carousel-item src=""><ql-next-fixtures :seasonId="appData.currentSeason.id"></ql-next-fixtures></v-carousel-item>
         </v-carousel>
@@ -66,6 +66,30 @@ object NextFixturesComponent extends Component{
   override val props = @@("seasonId")
   override val subParams = Map("seasonId"-> "fixtures")
   override val subscriptions = Map("fixtures" -> (c => FixturesService.nextFixtures(c.seasonId)))
+}
+
+object LatestResultsComponent extends Component{
+  type facade = NextFixturesComponent
+  
+  val name = "ql-latest-results"
+  val template = 
+    
+    """
+   <v-card>
+   <v-card-title primary-title><h3>Latest Results</h3></v-card-title>
+   <v-card-text v-if="fixtures">
+      <div v-for="f in fixtures" :key="f.id">
+      <h4>{{f.description}} {{f.date | date("d MMM yyyy")}}</h4>
+      <ql-results-simple :results="f.fixtures | combine"></ql-results-simple>
+      </div>
+   </v-card-text>
+   </v-card>
+
+"""
+  
+  override val props = @@("seasonId")
+  override val subParams = Map("seasonId"-> "fixtures")
+  override val subscriptions = Map("fixtures" -> (c => FixturesService.latestResults(c.seasonId)))
 }
 
 object HomeSidenavComponent extends RouteComponent{

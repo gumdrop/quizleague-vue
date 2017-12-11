@@ -11,7 +11,7 @@ import quizleague.web.site.user.UserService
 
 object TeamModule extends Module{
   
-  override val components = @@(TeamComponent,TeamTitle, TeamFixturesComponent, TeamNameComponent)
+  override val components = @@(TeamComponent,TeamTitle, TeamFixturesComponent, TeamNameComponent, TeamResultsComponent)
   
   override val routes = @@(      
       RouteConfig(path = "/team", 
@@ -19,7 +19,10 @@ object TeamModule extends Module{
       RouteConfig(path = "/team/:id", 
           components = Map("default" -> TeamPage(), "title" -> TeamTitleComponent(),"sidenav" -> TeamMenuComponent())),
       RouteConfig(path = "/team/:id/fixtures", 
-          components = Map("default" -> TeamFixturesPage(), "title" -> TeamTitleComponent(),"sidenav" -> TeamMenuComponent()))
+          components = Map("default" -> TeamFixturesPage(), "title" -> TeamTitleComponent(),"sidenav" -> TeamMenuComponent())),
+      RouteConfig(path = "/team/:id/results", 
+          components = Map("default" -> TeamResultsPage(), "title" -> TeamTitleComponent(),"sidenav" -> TeamMenuComponent()))
+
   )
 
       

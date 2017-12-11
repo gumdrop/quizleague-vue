@@ -6,9 +6,13 @@ import quizleague.web.core.RouteComponent
 
 object ResultsMenuComponent extends RouteComponent{
   val template = """
-  <div fxLayout="column">
-   <a fxFlexAlign="start" routerLink="/results/all"  md-menu-item routerLinkActive="active" >All Results</a>
-   <a fxFlexAlign="start" routerLink="/results/fixtures"  md-menu-item routerLinkActive="active" >All Fixtures</a>
-  </div>
+  <v-list dense >
+    <v-list-tile >
+      <v-btn to="/results/all" flat style="text-transform: none;">All Results</v-btn>
+    </v-list-tile>
+    <v-list-tile >
+      <v-btn to="/fixtures/all" flat style="text-transform: none;">All Fixtures</v-btn>
+    </v-list-tile>
+   </v-list>
   """    
 }
