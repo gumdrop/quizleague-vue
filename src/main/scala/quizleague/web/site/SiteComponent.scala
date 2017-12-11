@@ -34,7 +34,7 @@ object SiteComponent extends Component {
       <div slot="extension">
       	<v-btn to="/home" flat ><v-icon left>home</v-icon><span>Home</span></v-btn>
       	<v-btn to="/team" flat ><v-icon left>people</v-icon><span>Teams</span></v-btn>
-      	<v-btn to="/competition" flat ><v-icon left>pie_chart</v-icon><span>Competitions</span></v-btn>
+      	<v-btn to="/competition" flat ><v-icon left>mdi-trophy</v-icon><span>Competitions</span></v-btn>
       	<v-btn to="/results" flat ><v-icon left>check</v-icon><span>Results</span></v-btn>
       	<v-btn to="/venue" flat ><v-icon left>location_on</v-icon><span>Venue</span></v-btn>
       </div>

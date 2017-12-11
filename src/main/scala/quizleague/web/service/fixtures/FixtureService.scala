@@ -41,7 +41,7 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
   
   private def mapResult(dom:Option[DomResult]):Result = {
        
-      dom.fold[Result](null)(r => Result(r.homeScore, r.awayScore, userService.refObs(r.submitter), r.note, reportsService.refObs(r.reports))) 
+      dom.fold[Result](null)(r => Result(r.homeScore, r.awayScore, userService.refObs(r.submitter), r.note.orNull, reportsService.refObs(r.reports))) 
     }
 
 }
@@ -60,7 +60,7 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService with 
   
   private def mapInResult(r:Result):Option[DomResult]  = {
     if(r != null) {
-      Some(DomResult(r.homeScore, r.awayScore, Option(userService.ref(r.submitter)), r.note, reportsService.refOption(r.reports)))
+      Some(DomResult(r.homeScore, r.awayScore, Option(userService.ref(r.submitter)), Option(r.note), reportsService.refOption(r.reports)))
     }
     else None
   }
