@@ -25,11 +25,12 @@ import quizleague.web.site.text.TextService
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.user.UserService
 import quizleague.web.site.text.GlobalTextService
+import quizleague.web.site.results.ResultsModule
 
 
 object SiteModule extends Module {
   
-  override val modules = @@(HomeModule, TeamModule, TextModule, VenueModule, FixturesModule, LeagueTableModule)
+  override val modules = @@(HomeModule, TeamModule, TextModule, VenueModule, FixturesModule, ResultsModule, LeagueTableModule)
   
   override val routes = @@(RouteConfig(path = "",redirect = "/home"))
   

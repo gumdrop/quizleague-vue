@@ -31,15 +31,22 @@ object FixturesService extends FixturesGetService {
   def nextFixtures(seasonId: String): Observable[js.Array[Fixtures]] = activeFixtures(seasonId,1)
   
   def activeFixtures(seasonId: String, take:Int = Integer.MAX_VALUE) = {
-        val today = LocalDate.now.toString()
+    val today = LocalDate.now.toString()
 
-    val competitions = CompetitionService.firstClassCompetitions(seasonId)
+    seasonFixtures(seasonId).map(_.filter(_.date >= today).sortBy(_.date).take(take).toJSArray)
+  }
+  
+  def spentFixtures(seasonId: String, take:Int = Integer.MAX_VALUE) = {
+    val today = LocalDate.now.toString()
 
-    val fxs = competitions.map(_.flatMap(_.fixtures.map(_.obs))).switchMap(o => combineLatest(o))
-
-    fxs.map(_.filter(_.date >= today).sortBy(_.date).take(take).toJSArray)
+    seasonFixtures(seasonId).map(_.filter(_.date <= today).sortBy(_.date)(Desc).take(take).toJSArray)
   }
 
+  private def seasonFixtures(seasonId:String) = {
+    val competitions = CompetitionService.firstClassCompetitions(seasonId)
+
+    competitions.map(_.flatMap(_.fixtures.map(_.obs))).switchMap(o => combineLatest(o))
+  }
 
 }
 
@@ -58,6 +65,17 @@ object FixtureService extends FixtureGetService {
     
     val tf = fixtures.switchMap(fx => combineLatest(fx.flatMap(_.fixtures).map(_.obs)))
     .map(_.filter(f => f.home.id == teamId || f.away.id == teamId).sortBy(_.date))
+      
+    tf.map(_.take(take).toJSArray)
+  }
+  
+  def teamResults(teamId: String, seasonId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
+
+    
+    val fixtures = FixturesService.spentFixtures(seasonId)
+    
+    val tf = fixtures.switchMap(fx => combineLatest(fx.flatMap(_.fixtures).map(_.obs)))
+    .map(_.filter(f => f.result != null && (f.home.id == teamId || f.away.id == teamId)).sortBy(_.date))
       
     tf.map(_.take(take).toJSArray)
   }

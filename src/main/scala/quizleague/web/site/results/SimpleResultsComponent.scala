@@ -92,30 +92,37 @@ trait This extends VueComponent with VueRxComponent{
   val results:Observable[js.Array[Result]] = js.native
 }
 
-object SimpleResultsComponent extends Component with TableUtils{
+object SimpleResultsComponent extends Component{
   
   type facade = This
   
   val name = "ql-results-simple"
   val template = """
-      <table v-if="rs">
-          <tr v-for="result in rs" :key="result.id">
-            <td v-if="inlineDetails" class="inline-details" >{{async(result.fixture).date}} : {{async(result.fixture).parentDescription}} {{async(result.fixture).description}}</td>
-            <td class="home" :class="nameClass(result.homeScore, result.awayScore)">{{async(async(result.fixture).home).name}}</td>
-            <td class="score">{{result.homeScore}}</td><td> - </td><td class="score">{{result.awayScore}}</td>
-            <td class="away" :class="nameClass(result.awayScore, result.homeScore)">{{async(async(result.fixture).away).name}}</td>
-            <td>
-              <v-btn flat icon v-if="!async(result.reports).isEmpty" :to="['/results',result.id,'/reports']">
-                <v-icon style="transform:scale(0.75)">description</v-icon>
-              </a>
-            </td> 
-          </tr>
+      <table v-if="rs" class="ql-results-simple ql-fixtures-simple">
+          <ql-result-line :fixture="f" v-for="f in rs" :key="f.id" :inlineDetails="inlineDetails"></ql-result-line>
       </table>   
   """
-  override val props = @@("results")
+  override val props = @@("results","inlineDetails")
   override val subParams = Map("results" -> "rs")
   override val subscriptions = Map("rs" -> (c => c.results))
+
+}  
+
+object ResultLineComponent extends Component with TableUtils{
+  val name = "ql-result-line"
+  val template = """
+          <tr>
+            <td v-if="inlineDetails" class="inline-details" >{{fixture.date | date('d MMM yyyy')}} : {{fixture.parentDescription}} {{fixture.description}}</td>
+            <td class="home" :class="nameClass(fixture.result.homeScore, fixture.result.awayScore)"><ql-team-name :team="fixture.home"></ql-team-name></td>
+            <td class="score">{{fixture.result.homeScore}}</td><td> - </td><td class="score">{{fixture.result.awayScore}}</td>
+            <td class="away" :class="nameClass(fixture.result.awayScore, fixture.result.homeScore)"><ql-team-name :team="fixture.away"></ql-team-name></td>
+            <td>
+              <v-btn flat icon v-if="fixture.result.reports" :to="'/results/report/' + fixture.result.reports.id">
+                <v-icon style="transform:scale(0.75)">description</v-icon>
+              </v-btn>
+            </td> 
+          </tr>"""
+  
+  override val props = @@("fixture","inlineDetails")
   override val methods = Map("nameClass" -> nameClass _ )
-  
-  
 }

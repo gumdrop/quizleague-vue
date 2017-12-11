@@ -33,6 +33,7 @@ object TeamComponent extends Component {
               <v-card-title primary-title><h3 class="headline mb-0">Results</h3></v-card-title>
               <v-card-title >Last few results</v-card-title>
               <v-card-text>
+                <ql-results-simple :results="results(id, appConfig.currentSeason.id)" :inlineDetails="true"></ql-results-simple>
               </v-card-text>
               <v-card-actions>
                 <v-btn flat>Show All</v-btn>
@@ -55,7 +56,10 @@ object TeamComponent extends Component {
   override val props = @@("id")
   override val subParams = Map("id"->"team")
   override val subscriptions = Map("team" -> (v => TeamService.get(v.id)), "appConfig" -> (c => ApplicationContextService.get))
-  override val methods = Map("fixtures" -> ((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,seasonId,5)))
+  override val methods = Map(
+      "fixtures" -> ((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,seasonId,5)),
+      "results" ->  ((teamId:String, seasonId:String) => FixtureService.teamResults(teamId,seasonId,5))   
+  )
 }
 
 object TeamTitleComponent extends RouteComponent {

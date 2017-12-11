@@ -63,7 +63,7 @@ import quizleague.web.core._
 
 object ResultsModule extends Module {
   
-  override val components = @@(SimpleResultsComponent)
+  override val components = @@(SimpleResultsComponent, ResultLineComponent)
   override val routes = @@(
         
   )
