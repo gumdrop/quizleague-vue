@@ -56,10 +56,7 @@ object FixtureService extends FixtureGetService {
   override val userService = UserService
   override val reportsService = ReportsService
 
-  //def teamFixtures(season:Season,team:Team, take:Int = Integer.MAX_VALUE) = list(Some(s"season/${season.id}/team/${team.id}?take=$take"))
-  
-    def teamFixtures(teamId: String, seasonId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
-
+  def teamFixtures(teamId: String, seasonId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
     
     val fixtures = FixturesService.activeFixtures(seasonId)
     
@@ -70,12 +67,11 @@ object FixtureService extends FixtureGetService {
   }
   
   def teamResults(teamId: String, seasonId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
-
     
     val fixtures = FixturesService.spentFixtures(seasonId)
     
     val tf = fixtures.switchMap(fx => combineLatest(fx.flatMap(_.fixtures).map(_.obs)))
-    .map(_.filter(f => f.result != null && (f.home.id == teamId || f.away.id == teamId)).sortBy(_.date))
+    .map(_.filter(f => f.result != null && (f.home.id == teamId || f.away.id == teamId)).sortBy(_.date)(Desc))
       
     tf.map(_.take(take).toJSArray)
   }
