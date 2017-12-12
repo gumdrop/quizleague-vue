@@ -14,6 +14,7 @@ import com.felstar.scalajs.vue.Router
 import com.felstar.scalajs.vue.RouteConfig
 import quizleague.web.model.Competition
 import scalajs.js
+import js.JSConverters._
 
 //@Routes(
 //    root = false,
@@ -84,5 +85,5 @@ object CompetitionService extends CompetitionGetService{
   def firstClassCompetitions(seasonId:String) = competitions(seasonId).map(c => c.filter(_.typeName != CompetitionType.subsidiary.toString()))
   
   
-  def competitions(seasonId:String) = SeasonService.get(seasonId).map(_.competitions.map(_.obs).toSeq).map(cs => combineLatest(cs)).flatten
+  def competitions(seasonId:String) = SeasonService.get(seasonId).map(_.competitions.map(_.obs).toSeq).map(cs => combineLatest(cs)).flatten.map(_.toJSArray)
 }

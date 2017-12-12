@@ -92,7 +92,7 @@ object TeamMenuComponent extends RouteComponent {
   
   override val template = """<v-list dense v-if="teams">
                     <v-list-tile v-for="team in sort(teams) " :key="team.id">
-                    <v-btn :to="'/team/' + team.id" flat style="text-transform: none;">{{team.name}}</v-btn>
+                    <v-btn :to="'/team/' + team.id" flat >{{team.name}}</v-btn>
                     </v-list-tile>
                    </v-list>"""
     override val subscriptions = Map("teams" -> (c => TeamService.list))

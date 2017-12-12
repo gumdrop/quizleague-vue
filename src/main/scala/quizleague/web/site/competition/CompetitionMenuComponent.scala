@@ -39,12 +39,12 @@ object CompetitionMenuComponent extends Component{
   val template = """
     <v-list dense v-if="competitions">
        <v-list-tile v-for="competition in sort(competitions)" :key="competition.id">
-          {{competitions.length}} <v-btn :to="'/competition/' + competition.id +'/' + competition.typeName" flat style="text-transform: none;">{{competition.name}}</v-btn>
+          <v-btn :to="'/competition/' + competition.id +'/' + competition.typeName" flat style="text-transform: none;">{{competition.name}}</v-btn>
       </v-list-tile>
     </v-list>
     """
   override val props = @@("seasonId")
   override val subParams = Map("seasonId" -> "competitions")
   override val subscriptions = Map("competitions" -> (c => CompetitionService.competitions(c.seasonId)))
-  override val methods = Map("sort" -> ((comps:js.Array[Competition]) => comps.sortBy(_.name)))
+  override val methods = Map("sort" -> ((comps:js.Array[Competition]) => comps.filter(_ != null).sortBy(_.name)))
 }
