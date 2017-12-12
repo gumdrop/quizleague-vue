@@ -45,6 +45,6 @@ object CompetitionMenuComponent extends Component{
     """
   override val props = @@("seasonId")
   override val subParams = Map("seasonId" -> "competitions")
-  override val subscriptions = Map("competitions" -> (c => CompetitionService.competitions(c.seasonId)))
-  override val methods = Map("sort" -> ((comps:js.Array[Competition]) => comps.filter(_ != null).sortBy(_.name)))
+  override val subscriptions = Map("competitions" -> (c => CompetitionViewService.competitions()))
+  override val methods = Map("sort" -> ((comps:js.Array[Competition]) => comps.sortBy(_.name)))
 }

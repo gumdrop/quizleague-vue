@@ -15,6 +15,10 @@ import com.felstar.scalajs.vue.RouteConfig
 import quizleague.web.model.Competition
 import scalajs.js
 import js.JSConverters._
+import rxscalajs.Subject
+import rxscalajs.subjects.ReplaySubject
+import quizleague.web.model.Season
+import quizleague.web.site.ApplicationContextService
 
 //@Routes(
 //    root = false,
@@ -70,7 +74,7 @@ object CompetitionModule extends Module {
   
   override val routes = @@(
 //        RouteConfig(path="/competition/:id/league", components=Map("default" -> LeagueCompetitionComponent(), "title" -> CompetitionTitleComponent(), "sidenav" -> CompetitionMenu()),
-        RouteConfig(path="/competition", components=Map(/*"default" -> CompetitionsComponent(), "title" -> CompetitionsTitleComponent(),*/ "sidenav" -> CompetitionMenu())
+        RouteConfig(path="/competition", components=Map(/*"default" -> CompetitionsComponent(), */"title" -> CompetitionTitleComponent(), "sidenav" -> CompetitionMenu())
   ))
   
 }
@@ -86,4 +90,15 @@ object CompetitionService extends CompetitionGetService{
   
   
   def competitions(seasonId:String) = SeasonService.get(seasonId).map(_.competitions.map(_.obs).toSeq).map(cs => combineLatest(cs)).flatten.map(_.toJSArray)
+}
+
+object CompetitionViewService {
+  
+  private val seasonSubj:Subject[Season] = ReplaySubject()
+  
+  ApplicationContextService.get().subscribe(_.currentSeason.subscribe(s => seasonSubj.next(s)))
+  
+  def competitions() = seasonSubj.flatMap(s => CompetitionService.competitions(s.id))
+  def setSeason(season:Season) = seasonSubj.next(season)
+  def season = seasonSubj
 }
