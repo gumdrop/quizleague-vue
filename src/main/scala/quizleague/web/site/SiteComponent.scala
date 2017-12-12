@@ -43,7 +43,7 @@ object SiteComponent extends Component {
 		  <v-container fill-height fluid>
         <v-layout justify-left align-top column>
          <router-view name="title"  style="z-index:2"></router-view>
-         <br>
+         <p></p>
          <router-view></router-view>
         </v-layout>
       </v-container>

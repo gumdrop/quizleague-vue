@@ -21,7 +21,7 @@ import quizleague.web.core.RouteComponent
 //}
 
 object VenuesComponent extends RouteComponent{
-   override val template="""<span>Venues</span>"""
+   override val template="""<ql-named-text name="venues-front-page"></ql-named-text>"""
        
 
 }

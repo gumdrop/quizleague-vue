@@ -1,7 +1,16 @@
 package quizleague.web.util
 
 package object rx {
-  def dummy = {}
+  import scala.language.implicitConversions
+  import scalajs.js
+  import rxscalajs.Observable._
+  import scalajs.js.JSConverters._
+  import quizleague.web.util.Logging._
+
+  implicit def refObsToObs[T](refObs: RefObservable[T]) = refObs.obs
+
+//  implicit def zip[A](list: js.Array[RefObservable[A]]) = if(list.isEmpty) just(js.Array[A]()) else combineLatest(list.map(_.obs).toSeq)
+//  implicit def zipRO[A](list: js.Array[RefObservable[A]]) = RefObservable("dummy",zip(list))
 }
 
 //  import scala.language.implicitConversions
