@@ -79,9 +79,8 @@ object CompetitionModule extends Module {
         RouteConfig(path="/competition/:id/subsidiary", components=Map("default" -> BeerCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
         RouteConfig(path="/competition/:id/cup", components=Map("default" -> CupCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
         RouteConfig(path="/competition/:id/plate", components=Map("default" -> PlateCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
-        RouteConfig(path="/competition/:id/buzzer", components=Map("default" -> BuzzerCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
-        RouteConfig(path="/competition/:id/individual", components=Map("default" -> IndividualCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
-
+        RouteConfig(path="/competition/:id/singleton", components=Map("default" -> SingletonCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
+ 
         RouteConfig(path="/competition", components=Map(/*"default" -> CompetitionsComponent(), */"title" -> CompetitionsTitleComponent(), "sidenav" -> CompetitionMenu())
   ))
   

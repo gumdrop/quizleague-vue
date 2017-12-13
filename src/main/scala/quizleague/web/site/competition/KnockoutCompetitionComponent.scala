@@ -82,7 +82,7 @@ object KnockoutCompetitionComponent extends Component{
   val template = """
   <div v-if="item" >
     {{text}}
-    <ql-named-text :name="textName"></ql-named-text>
+    <ql-named-text :name="item.textName"></ql-named-text>
     <ql-text :id="item.text.id"></ql-text>
     <latest-results :id="id"></latest-results>
     <next-fixtures :id="id"></next-fixtures>
