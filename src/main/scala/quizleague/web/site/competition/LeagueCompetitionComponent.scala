@@ -17,7 +17,7 @@ import quizleague.web.core.IdComponent
 //////    </v-card>
 ////////    <v-card>
 //////      <v-card-title>Results</v-card-title>
-//////      <v-card-subtitle>Latest results</v-card-subtitle>
+//////      <v-card-title>Latest results</v-card-title>
 //////      <v-card-text>
 ////        <div *ngFor="let results of latestResults | async">
 //          <div>{{(results.fixtures | async)?.date | date:"d MMM yyyy"}}</div>
@@ -25,12 +25,12 @@ import quizleague.web.core.IdComponent
 //        </div>
 ////      </v-card-text>
 //////      <v-card-actions>
-////        <v-btn md-button to="results">Show All</a>
+////        <v-btn flat to="results">Show All</a>
 ////      </v-card-actions>
 //////    </v-card>
 ////////    <v-card>
 //////      <v-card-title>Fixtures</v-card-title>
-//////      <v-card-subtitle>Next fixtures</v-card-subtitle>
+//////      <v-card-title>Next fixtures</v-card-title>
 //////      <v-card-text>
 ////        <div *ngFor="let fixtures of nextFixtures | async">
 //          <div>{{fixtures.date | date:"d MMM yyyy"}}</div>
@@ -39,7 +39,7 @@ import quizleague.web.core.IdComponent
 //        </div>
 ////      </v-card-text>
 //////      <v-card-actions>
-////        <v-btn md-button to="fixtures">Show All</a>
+////        <v-btn flat to="fixtures">Show All</a>
 ////      </v-card-actions>
 //////    </v-card>
 //  </div>
@@ -78,37 +78,13 @@ object LeagueCompetitionComponent extends Component{
     <ql-named-text name="league-comp"></ql-named-text>
     <ql-text :id="item.text.id"></ql-text>
     <v-card>
-      <v-card-title>League Table</v-card-title>
+      <v-card-title primary-title><h3 class="headline mb-0">League Table</h3></v-card-title>
       <v-card-text>
         <ql-league-table v-for="table in item.tables" :key="table.id" :id="table.id"></ql-league-table>
       </v-card-text>
     </v-card>
-    <v-card>
-      <v-card-title>Results</v-card-title>
-      <v-card-subtitle>Latest results</v-card-subtitle>
-      <v-card-text>
-        <div v-for="results in latestResults" :key="results.id">
-          <div>{{results.date | date("d MMM yyyy")}}</div>
-          <ql-results-simple :results="results.fixtures | combine" ></ql-results-simple>
-        </div>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn md-button to="results">Show All</v-btn>
-      </v-card-actions>
-    </v-card>
-    <v-card>
-      <v-card-title>Fixtures</v-card-title>
-      <v-card-subtitle>Next fixtures</v-card-subtitle>
-      <v-card-text>
-        <div v-for="fixtures in nextFixtures" :key="fixtures.id">
-          <div>{{fixtures.date | date("d MMM yyyy")}}</div>
-          <ql-fixtures-simple :fixtures="fixtures.fixtures | combine" ></ql-fixtures-simple>
-        </div>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn md-button to="fixtures">Show All</v-btn>
-      </v-card-actions>
-    </v-card>
+      <latest-results :id="id"></latest-results>
+      <next-fixtures :id="id"></next-fixtures>
   </div>"""
   
   override val props = @@("id")
@@ -120,4 +96,6 @@ object LeagueCompetitionComponent extends Component{
       "nextFixtures" -> (c => CompetitionViewService.nextFixtures(c.id,1)),
       "latestResults" -> (c => CompetitionViewService.latestResults(c.id,1))
       )
+      
+  override val components = @@(LatestResults,NextFixtures)
 }
