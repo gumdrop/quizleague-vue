@@ -4,6 +4,7 @@ import quizleague.web.core.@@
 import quizleague.web.core.Component
 import quizleague.web.core.IdComponent
 import quizleague.web.core.IdComponent
+import quizleague.web.core.RouteComponent
 
 object LeagueTables extends Component{
   type facade = IdComponent
@@ -71,3 +72,28 @@ object NextFixtures extends Component{
       "nextFixtures" -> (c => CompetitionViewService.nextFixtures(c.id,1))
       )
 }
+
+
+object CompetitionTitle extends RouteComponent{
+  val template = """<competition-title :id="$route.params.id"></competition-title>"""
+  override val components = @@(CompetitionTitleComponent)
+}
+  
+object CompetitionTitleComponent extends Component{
+  type facade = IdComponent
+  val name = "competition-title"
+  val template = """<v-toolbar      
+      color="purple darken-3"
+      dark
+      clipped-left>
+      <v-toolbar-title class="white--text" >
+        {{item.name}}
+      </v-toolbar-title>
+    </v-toolbar>"""
+  
+  override val props = @@("id")
+  override val subParams = Map("id" -> "item")
+  override val subscriptions = Map("item" -> (c => CompetitionService.get(c.id)))
+}
+
+

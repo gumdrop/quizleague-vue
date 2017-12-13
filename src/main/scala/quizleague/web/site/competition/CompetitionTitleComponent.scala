@@ -36,7 +36,7 @@ import quizleague.web.core.RouteComponent
 //  
 //}
 
-object CompetitionTitleComponent extends RouteComponent{
+object CompetitionsTitleComponent extends RouteComponent{
   val template = """<v-toolbar      
       color="purple darken-3"
       dark

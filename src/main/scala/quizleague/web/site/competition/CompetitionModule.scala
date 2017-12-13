@@ -75,10 +75,10 @@ import quizleague.util.collection._
 object CompetitionModule extends Module {
   
   override val routes = @@(
-        RouteConfig(path="/competition/:id/league", components=Map("default" -> LeagueCompetitionPage(), "title" -> CompetitionTitleComponent(), "sidenav" -> CompetitionMenu())),
-        RouteConfig(path="/competition/:id/subsidiary", components=Map("default" -> BeerCompetitionPage(), "title" -> CompetitionTitleComponent(), "sidenav" -> CompetitionMenu())),
+        RouteConfig(path="/competition/:id/league", components=Map("default" -> LeagueCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
+        RouteConfig(path="/competition/:id/subsidiary", components=Map("default" -> BeerCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
 
-        RouteConfig(path="/competition", components=Map(/*"default" -> CompetitionsComponent(), */"title" -> CompetitionTitleComponent(), "sidenav" -> CompetitionMenu())
+        RouteConfig(path="/competition", components=Map(/*"default" -> CompetitionsComponent(), */"title" -> CompetitionsTitleComponent(), "sidenav" -> CompetitionMenu())
   ))
   
 }
