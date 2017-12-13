@@ -52,6 +52,7 @@ object NamedTextComponent extends Component{
         <ql-text v-if="textId" :id="textId"></ql-text>
     """
   override val props = @@("name")
+  override val subParams = Map("name" -> "textId")
   
   
   override val subscriptions = Map("textId" -> (c => ApplicationContextService.get.switchMap(ac => ac.textSet.obs).map(t => get(c.name,t).map(e => e.text.id).getOrElse(null))))

@@ -86,7 +86,7 @@ object CompetitionTitleComponent extends Component{
       color="purple darken-3"
       dark
       clipped-left>
-      <v-toolbar-title class="white--text" >
+      <v-toolbar-title class="white--text" v-if="item" >
         {{item.name}}
       </v-toolbar-title>
     </v-toolbar>"""
