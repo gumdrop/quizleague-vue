@@ -3,6 +3,23 @@ package quizleague.web.site.competition
 import quizleague.web.core.@@
 import quizleague.web.core.Component
 import quizleague.web.core.IdComponent
+import quizleague.web.core.IdComponent
+
+object LeagueTables extends Component{
+  type facade = IdComponent
+  val name = "league-tables"
+  val template = """
+    <v-card>
+      <v-card-title primary-title><h3 class="headline mb-0">League Table</h3></v-card-title>
+      <v-card-text>
+        <ql-league-table v-for="table in item.tables" :key="table.id" :id="table.id"></ql-league-table>
+      </v-card-text>
+    </v-card>"""
+  
+  override val props = @@("id")
+  override val subParams = Map("id" -> "item")
+  override val subscriptions = Map("item" -> (c => CompetitionService.get(c.id)))
+}
 
 object LatestResults extends Component{
   type facade = IdComponent

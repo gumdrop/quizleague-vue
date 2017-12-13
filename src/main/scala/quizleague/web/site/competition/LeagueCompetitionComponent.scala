@@ -74,28 +74,20 @@ object LeagueCompetitionPage extends RouteComponent{
 object LeagueCompetitionComponent extends Component{
   type facade = IdComponent
   val name = "ql-league-competition"
-  val template = """<div v-if="item" >
+  val template = """
+  <div v-if="item" >
     <ql-named-text name="league-comp"></ql-named-text>
     <ql-text :id="item.text.id"></ql-text>
-    <v-card>
-      <v-card-title primary-title><h3 class="headline mb-0">League Table</h3></v-card-title>
-      <v-card-text>
-        <ql-league-table v-for="table in item.tables" :key="table.id" :id="table.id"></ql-league-table>
-      </v-card-text>
-    </v-card>
-      <latest-results :id="id"></latest-results>
-      <next-fixtures :id="id"></next-fixtures>
+    <league-tables :id="id"></league-tables>
+    <latest-results :id="id"></latest-results>
+    <next-fixtures :id="id"></next-fixtures>
   </div>"""
   
   override val props = @@("id")
-  override val subParams = Map("id" -> "item", "id" -> "nextFixtures", "id" -> "latestResults")
+  override val subParams = Map("id" -> "item")
  
   
-  override val subscriptions = Map(
-      "item" -> (c => CompetitionService.get(c.id)),
-      "nextFixtures" -> (c => CompetitionViewService.nextFixtures(c.id,1)),
-      "latestResults" -> (c => CompetitionViewService.latestResults(c.id,1))
-      )
+  override val subscriptions = Map("item" -> (c => CompetitionService.get(c.id)))
       
-  override val components = @@(LatestResults,NextFixtures)
+  override val components = @@(LatestResults,NextFixtures, LeagueTables)
 }

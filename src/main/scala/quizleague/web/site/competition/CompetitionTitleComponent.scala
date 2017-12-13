@@ -1,7 +1,7 @@
 package quizleague.web.site.competition
 
 import quizleague.web.core.RouteComponent
-import quizleague.web.site.competition.CompetitionViewService
+
 
 //import angulate2.ext.classModeScala
 //import angulate2.std.Component
@@ -44,7 +44,7 @@ object CompetitionTitleComponent extends RouteComponent{
       <v-toolbar-title class="white--text" >
         Competitions
       </v-toolbar-title>
-      <ql-season-select :season="season"></ql-season-select>
+      &nbsp;<h3><ql-season-select :season="season"></ql-season-select></h3>
     </v-toolbar>"""
   
   override val data = c => Map("season" -> CompetitionViewService.season)

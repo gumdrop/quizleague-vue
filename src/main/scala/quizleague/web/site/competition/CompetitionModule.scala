@@ -76,6 +76,8 @@ object CompetitionModule extends Module {
   
   override val routes = @@(
         RouteConfig(path="/competition/:id/league", components=Map("default" -> LeagueCompetitionPage(), "title" -> CompetitionTitleComponent(), "sidenav" -> CompetitionMenu())),
+        RouteConfig(path="/competition/:id/subsidiary", components=Map("default" -> BeerCompetitionPage(), "title" -> CompetitionTitleComponent(), "sidenav" -> CompetitionMenu())),
+
         RouteConfig(path="/competition", components=Map(/*"default" -> CompetitionsComponent(), */"title" -> CompetitionTitleComponent(), "sidenav" -> CompetitionMenu())
   ))
   
