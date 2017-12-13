@@ -73,6 +73,7 @@ object SimpleFixturesComponent extends Component {
   override val props = @@("fixtures", "list", "inlineDetails")
   override val subParams = Map("fixtures" -> "fixts")
   override val subscriptions = Map("fixts" -> (c => c.fixtures))
+  override val components = @@(FixtureLineComponent)
 
 
 }

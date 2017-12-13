@@ -105,13 +105,14 @@ object SimpleResultsComponent extends Component{
   override val props = @@("results","inlineDetails")
   override val subParams = Map("results" -> "rs")
   override val subscriptions = Map("rs" -> (c => c.results))
+  override val components = @@(ResultLineComponent)
 
 }  
 
 object ResultLineComponent extends Component with TableUtils{
   val name = "ql-result-line"
   val template = """
-          <tr>
+          <tr v-if="fixture.result">
             <td v-if="inlineDetails" class="inline-details" >{{fixture.date | date('d MMM yyyy')}} : {{fixture.parentDescription}} {{fixture.description}}</td>
             <td class="home" :class="nameClass(fixture.result.homeScore, fixture.result.awayScore)"><ql-team-name :team="fixture.home"></ql-team-name></td>
             <td class="score">{{fixture.result.homeScore}}</td><td> - </td><td class="score">{{fixture.result.awayScore}}</td>

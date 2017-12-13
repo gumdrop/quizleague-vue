@@ -22,7 +22,7 @@ import quizleague.web.site.results.ReportsService
 
 object FixturesModule extends Module {
 
-  override val components = @@(SimpleFixturesComponent, FixtureLineComponent, AllFixturesComponent)
+  override val components = @@(SimpleFixturesComponent, AllFixturesComponent)
 }
 
 object FixturesService extends FixturesGetService {

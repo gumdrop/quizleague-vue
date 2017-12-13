@@ -1,7 +1,6 @@
 package quizleague.web.site.results
 
-
-import quizleague.web.service.results.{ReportsGetService }
+import quizleague.web.service.results.{ ReportsGetService }
 import quizleague.web.site.fixtures.{ FixtureService, FixturesService }
 import quizleague.web.site.team.TeamService
 import quizleague.web.site.text.TextService
@@ -13,7 +12,8 @@ import quizleague.web.core._
 import com.felstar.scalajs.vue.RouteConfig
 import quizleague.web.site.fixtures.AllFixturesTitleComponent
 import quizleague.web.site.fixtures.AllFixturesPage
-
+import quizleague.web.site.season.SeasonWatchService
+import quizleague.web.site.fixtures.FixturesService
 
 //import quizleague.web.site.global.ApplicationContextService
 
@@ -52,9 +52,9 @@ import quizleague.web.site.fixtures.AllFixturesPage
 //            Route("", component = %%[ReportComponent]),
 //            Route("", component = %%[ReportTitleComponent], outlet="title")
 //          )))),
-//      Route(path = "",   redirectTo = "all", pathMatch = "full" )  
+//      Route(path = "",   redirectTo = "all", pathMatch = "full" )
 //    ))
-// 
+//
 //)
 //@classModeScala
 //class ResultsRoutesModule
@@ -67,27 +67,29 @@ import quizleague.web.site.fixtures.AllFixturesPage
 //class ResultsComponentsModule
 
 object ResultsModule extends Module {
-  
-  override val components = @@(SimpleResultsComponent, ResultLineComponent, AllResultsComponent)
-  
-  override val routes = @@(      
-      RouteConfig(path = "/results/all", 
-          components = Map("default" -> AllResultsPage(), "title" -> AllResultsTitleComponent(),"sidenav" -> ResultsMenuComponent())),
-      RouteConfig(path = "/fixtures/all", 
-          components = Map("default" -> AllFixturesPage(), "title" -> AllFixturesTitleComponent(),"sidenav" -> ResultsMenuComponent())),
 
-       RouteConfig(path = "/results",redirect = "/results/all") 
-  )
-  
+  override val components = @@(SimpleResultsComponent)
+
+  override val routes = @@(
+    RouteConfig(
+      path = "/results/all",
+      components = Map("default" -> AllResultsPage(), "title" -> AllResultsTitleComponent(), "sidenav" -> ResultsMenuComponent())),
+    RouteConfig(
+      path = "/fixtures/all",
+      components = Map("default" -> AllFixturesPage(), "title" -> AllFixturesTitleComponent(), "sidenav" -> ResultsMenuComponent())),
+
+    RouteConfig(path = "/results", redirect = "/results/all"))
+
 }
-
-
 
 object ReportsService extends ReportsGetService {
-    val textService = TextService
-    val teamService = TeamService
+  val textService = TextService
+  val teamService = TeamService
 }
 
+object ResultsViewService extends SeasonWatchService{
+  def results = season.flatMap(s => FixturesService.spentFixtures(s.id))
+}
 
 
 //object ResultsViewService (

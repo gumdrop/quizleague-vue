@@ -19,6 +19,10 @@ import rxscalajs.Subject
 import rxscalajs.subjects.ReplaySubject
 import quizleague.web.model.Season
 import quizleague.web.site.ApplicationContextService
+import quizleague.web.site.season.SeasonWatchService
+import org.threeten.bp.LocalDate
+import quizleague.web.model.Fixtures
+import quizleague.util.collection._
 
 //@Routes(
 //    root = false,
@@ -70,10 +74,8 @@ import quizleague.web.site.ApplicationContextService
 
 object CompetitionModule extends Module {
   
-  override val components = @@(CompetitionMenuComponent)
-  
   override val routes = @@(
-//        RouteConfig(path="/competition/:id/league", components=Map("default" -> LeagueCompetitionComponent(), "title" -> CompetitionTitleComponent(), "sidenav" -> CompetitionMenu()),
+        RouteConfig(path="/competition/:id/league", components=Map("default" -> LeagueCompetitionPage(), "title" -> CompetitionTitleComponent(), "sidenav" -> CompetitionMenu())),
         RouteConfig(path="/competition", components=Map(/*"default" -> CompetitionsComponent(), */"title" -> CompetitionTitleComponent(), "sidenav" -> CompetitionMenu())
   ))
   
@@ -92,13 +94,17 @@ object CompetitionService extends CompetitionGetService{
   def competitions(seasonId:String) = SeasonService.get(seasonId).map(_.competitions.map(_.obs).toSeq).map(cs => combineLatest(cs)).flatten.map(_.toJSArray)
 }
 
-object CompetitionViewService {
+object CompetitionViewService extends SeasonWatchService {
   
-  private val seasonSubj:Subject[Season] = ReplaySubject()
+  def competitions() = season.flatMap(s => CompetitionService.competitions(s.id))
   
-  ApplicationContextService.get().subscribe(_.currentSeason.subscribe(s => seasonSubj.next(s)))
-  
-  def competitions() = seasonSubj.flatMap(s => CompetitionService.competitions(s.id))
-  def setSeason(season:Season) = seasonSubj.next(season)
-  def season = seasonSubj
+  def nextFixtures(competitionId:String, take:Integer = Integer.MAX_VALUE):Observable[js.Array[Fixtures]] = {
+    val today = LocalDate.now.toString
+    CompetitionService.get(competitionId).flatMap(c => Observable.combineLatest(c.fixtures.map(_.obs).toSeq)).map(_.filter(_.date >= today).sortBy(_.date).take(take).toJSArray)
+  }
+
+  def latestResults(competitionId:String, take:Integer = Integer.MAX_VALUE):Observable[js.Array[Fixtures]] = {
+    val today = LocalDate.now.toString
+    CompetitionService.get(competitionId).flatMap(c => Observable.combineLatest(c.fixtures.map(_.obs).toSeq)).map(_.filter(_.date <= today).sortBy(_.date)(Desc).take(take).toJSArray)
+  }
 }

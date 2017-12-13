@@ -28,10 +28,10 @@ trait Component {
   val name: String
   def template: String
   def props: js.Array[String] = @@()
-  def watch: Map[String, facade => Unit] = Map()
+  def watch: Map[String, ((facade,js.Any) => Unit)] = Map()
   def subParams: Map[String, String] = Map()
   def subscriptions: Map[String, facade => Observable[Any]] = Map()
-  def data: facade => Map[String, js.Any] = c => Map()
+  def data: facade => Map[String, Any] = c => Map()
   def methods: Map[String, js.Function] = Map()
   def components: js.Array[Component] = @@()
 
@@ -74,7 +74,6 @@ trait Component {
 
     
     def makeSubscriptions(c:facade) = {
-      
 
       val watchSubs = subParams.map{case (k, v) => {
         val subject = ReplaySubject[Any]()
@@ -94,13 +93,17 @@ trait Component {
       
     }
     
+
+    
     val retval = literal(
       template = template,
       props = props,
+      data = ((v: facade) => data(v).toJSDictionary): js.ThisFunction,
       watch = (watch.map { case (k, v) => (k, v: js.ThisFunction) }).toJSDictionary,
       subscriptions = ((c: facade) => makeSubscriptions(c).map { case (k, v) => (k, v(c)) }.toJSDictionary): js.ThisFunction,
-      data = ((v: facade) => data(v).toJSDictionary): js.ThisFunction,
+
       methods = (commonMethods ++ methods).toJSDictionary,
+      components = components.map(c => ((c.name, c()))).toMap.toJSDictionary
            
     )
     

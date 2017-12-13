@@ -62,9 +62,10 @@ import quizleague.web.site.season.SeasonIdComponent
 
 object AllResultsPage extends RouteComponent{
   val template = """<div>
-                      <ql-all-results v-if="appData" :seasonId="appData.currentSeason.id"></ql-all-results>
+                      <ql-all-results></ql-all-results>
                     </div>"""
-    override val subscriptions = Map("appData" -> (c => ApplicationContextService.get))
+  
+  override val components = @@(AllResultsComponent)
 }
 
 
@@ -80,8 +81,7 @@ object AllResultsComponent extends Component{
       </v-card-text>
     </v-card>
     </div>"""
-  override val subscriptions = Map("fixtures" -> (c => FixturesService.spentFixtures(c.seasonId)))
-  override val props = @@("seasonId")
+  override val subscriptions = Map("fixtures" -> (c => ResultsViewService.results))
   
 }
 
@@ -92,6 +92,9 @@ object AllResultsTitleComponent extends RouteComponent{
       clipped-left>
       <v-toolbar-title class="white--text" >
         All Results
-      </v-toolbar-title>
+       </v-toolbar-title>
+      <ql-season-select :season="season"></ql-season-select>
     </v-toolbar>"""
+  
+  override val data = c => Map("season" -> ResultsViewService.season)
 }

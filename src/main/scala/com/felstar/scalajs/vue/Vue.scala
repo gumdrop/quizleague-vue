@@ -28,6 +28,7 @@ class Vue extends js.Object {
   val $value: js.Any = js.native
   // Data
   type Callback = js.Function2[_, _, Unit]
+  def $watch(expOrFn: js.Any, callback: js.Function): Unwatch = js.native
   def $watch(expOrFn: js.Any, callback: Callback): Unwatch = js.native
   def $watch(expOrFn: js.Any, callback: Callback, options: js.Any): Unwatch = js.native
   def $get(exp: String): js.Any = js.native
@@ -115,7 +116,7 @@ class Directive extends js.Object {
 
 
 @js.native
-trait VueComponent extends js.Object {
+trait VueComponent extends Vue {
   def $forceUpdate():Unit = js.native
 }
 

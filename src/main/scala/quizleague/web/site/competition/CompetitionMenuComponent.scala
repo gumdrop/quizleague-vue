@@ -27,10 +27,10 @@ import quizleague.web.model.Competition
 
 object CompetitionMenu extends RouteComponent{
   val template = """
-      <div>
-        <ql-competition-menu v-if="appData" :seasonId="appData.currentSeason.id"></ql-competition-menu>
-      </div>"""
-    override val subscriptions = Map("appData" -> (c => ApplicationContextService.get))
+        <ql-competition-menu></ql-competition-menu>
+  """
+  
+    override val components = @@(CompetitionMenuComponent)
 }
 
 object CompetitionMenuComponent extends Component{
@@ -43,8 +43,7 @@ object CompetitionMenuComponent extends Component{
       </v-list-tile>
     </v-list>
     """
-  override val props = @@("seasonId")
-  override val subParams = Map("seasonId" -> "competitions")
+
   override val subscriptions = Map("competitions" -> (c => CompetitionViewService.competitions()))
   override val methods = Map("sort" -> ((comps:js.Array[Competition]) => comps.sortBy(_.name)))
 }

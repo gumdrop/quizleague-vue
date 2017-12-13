@@ -47,5 +47,5 @@ object CompetitionTitleComponent extends RouteComponent{
       <ql-season-select :season="season"></ql-season-select>
     </v-toolbar>"""
   
-  override val subscriptions = Map("season" -> (c => CompetitionViewService.season))
+  override val data = c => Map("season" -> CompetitionViewService.season)
 }

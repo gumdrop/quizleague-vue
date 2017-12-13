@@ -6,30 +6,38 @@ import scalajs.js
 import quizleague.util.collection._
 import quizleague.web.util.Logging._
 import com.felstar.scalajs.vue.VueRxComponent
+import rxscalajs.Subject
 
 @js.native
 trait SeasonSelectComponent extends VueRxComponent{
-  val season:Season
+  val season:Subject[Season]
+  val seasonId:String
 }
 
 object SeasonSelectComponent extends Component{
   type facade = SeasonSelectComponent
   val name = "ql-season-select"
   val template = """
-   <v-select
+   <span v-if="seasons && seasonId">
+  
+    <v-select 
     :items="wrap(sort(seasons))"
-    :v-model="season"
+    v-model="seasonId"
     >
   </v-select>
+  </span>
 """
   
   override val props = @@("season")
-  override val subscriptions = Map("seasons" -> (c => SeasonService.list()))
+  override val subscriptions = Map(
+      "seasons" -> (c => SeasonService.list()), 
+      "seasonId" -> (_.season.map(_.id)))
   override val methods = Map(
       "sort" -> ((seasons:js.Array[Season]) => seasons.sortBy(_.startYear)(Desc)),
-      "wrap" -> ((seasons:js.Array[Season]) => seasons.map(s => new SelectWrapper(s"${s.startYear} / ${s.endYear}", s )))    
+      "wrap" -> ((seasons:js.Array[Season]) => seasons.map(s => new SelectWrapper(s"${s.startYear}/${s.endYear}", s.id )))    
   )
-  override val watch = Map("season" -> (c => log(c.season, "ql-web : season")) )
+  override val watch = Map("seasonId" -> ((c:facade, newValue:js.Any) => if(newValue != js.undefined) SeasonService.get(c.seasonId).subscribe(s => c.season.next(s))))
+  override val data = c => Map("seasonId" -> "")
   
   
 }
