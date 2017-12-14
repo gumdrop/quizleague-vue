@@ -101,8 +101,20 @@ object ResultsPage extends RouteComponent{
   override val components = @@(AllResults) 
 }
 
-object AllResults extends Component{
+trait ResultsComponent extends Component {
   type facade = IdComponent
+ 
+
+  override val props = @@("id")
+
+  override val subParams = Map("id" -> "latestResults")
+  override val subscriptions = Map("latestResults" -> (c => CompetitionViewService.latestResults(c.id, take)))
+
+  def take:Int
+}
+
+
+object AllResults extends ResultsComponent{
   val name = "all-results"
   val template = """
     <v-container grid-list-xl v-if="latestResults">
@@ -116,13 +128,8 @@ object AllResults extends Component{
     </v-card>
     </v-layout>
     </v-container>"""
-  
-  override val props = @@("id")
-  
-    override val subParams = Map("id" -> "latestResults")
-    override val subscriptions = Map(
-      "latestResults" -> (c => CompetitionViewService.latestResults(c.id))
-    )
+    
+    val take = Integer.MAX_VALUE
 }
 
 object FixturesPage extends RouteComponent{
