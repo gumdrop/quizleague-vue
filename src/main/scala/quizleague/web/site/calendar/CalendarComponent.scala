@@ -1,6 +1,8 @@
 package quizleague.web.site.calendar
 
 import scala.scalajs.js.annotation.JSExport
+import quizleague.web.core._
+import quizleague.web.site.season.SeasonIdComponent
 
 //import angulate2.ext.classModeScala
 //import angulate2.router.ActivatedRoute
@@ -11,6 +13,49 @@ import scala.scalajs.js.annotation.JSExport
 //import quizleague.web.site.common.ComponentUtils
 //import ComponentUtils._
 //
+
+object CalendarPage extends RouteComponent{
+  
+  val template = """<ql-calendar></ql-calendar>"""
+  override val components = @@(CalendarComponent)
+}
+
+
+object CalendarComponent extends Component{
+  val name = "ql-calendar" 
+  val template = """
+  <div v-if="items"> {{season.startYear}}
+  <v-card v-for="item in items" :key="item.date" class="mb3">
+     <v-card-title primary-title><h3>{{item.date | date("EEEE d MMMM yyyy")}}</h3></v-card-title>
+     <v-card-text>
+      <div v-for="event in item.events">
+          <!--ql-results-event v-if="event.eventType === 'fixtures'" :event="event"></ql-results-event>
+          <ql-calendar-event v-if="event.eventType === 'calendar'" :event="event"></ql-calendar-event>
+          <ql-competition-event v-if="event.eventType === 'competition'" :event="event"></ql-competition-event-->
+      </div>
+     </v-card-text>
+  </v-card>
+ 
+  </div>"""
+  override val subscriptions = Map("items" -> (c => CalendarViewService.events), "season" -> (c => CalendarViewService.season))
+  
+  
+}
+
+object CalendarTitleComponent extends RouteComponent{
+  val template = """<v-toolbar      
+      color="yellow darken-3"
+      dark
+      clipped-left>
+      <v-toolbar-title class="white--text" >
+        Calendar
+      </v-toolbar-title>
+      &nbsp;<h3><ql-season-select :season="season"></ql-season-select></h3>
+    </v-toolbar>"""
+  
+  override val data = c => Map("season" -> CalendarViewService.season)
+}
+
 //@Component(
 //  template = s"""
 //  <div *ngIf="itemObs | async as items ; else loading" fxLayout="column" fxLayoutGap="10px">

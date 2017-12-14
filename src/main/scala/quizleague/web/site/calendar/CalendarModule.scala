@@ -40,6 +40,8 @@ import scala.scalajs.js.annotation.JSExportAll
 import quizleague.web.util.rx._
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.competition._
+import quizleague.web.core._
+import com.felstar.scalajs.vue.RouteConfig
 
 //import scala.scalajs.js.WrappedArray
 //import quizleague.web.util.Logging._
@@ -59,29 +61,29 @@ import quizleague.web.site.competition._
 //      Route("", component = %%[CalendarTitleComponent], outlet = "title")
 //    )))
 //class CalendarRoutesModule
-
+object CalendarModule extends Module{
+  override val routes = @@(RouteConfig(path="/calendar" , components=Map("default"->CalendarPage(), "title"->CalendarTitleComponent())))
+}
 
 object CalendarViewService extends SeasonWatchService{
   
-  def getEvents(seasonId:String) = {
+  def events(seasonId:String):Observable[js.Array[DateWrapper]] = {
     
     import CompetitionType._
     
     val now = LocalDate.now.toString
     
-    val season = SeasonService.get(seasonId)
-        
+    
     def singletonEvents(c:Competition):js.Array[EventWrapper] = c match {
       case s:SingletonCompetition => js.Array(EventWrapper(s.event,c))
       case _ => js.Array()
     }
     
-    def flatten[T](obs:Observable[js.Array[Observable[js.Array[T]]]]):Observable[js.Array[T]] = obs.flatMap(e => combineLatest(e.toSeq).map(a => a.flatten.toJSArray))//.concatAll()
     
     val comps = CompetitionService.firstClassCompetitions(seasonId)
 
    
-    val fixtures:Observable[js.Array[EventWrapper]] = comps.flatMap(cs => cs.map(c => combineLatest(c.fixtures.map(_.obs).toSeq)).map(f => f.map(EventWrapper(_,c))))
+    val fixtures:Observable[js.Array[EventWrapper]] = comps.flatMap(cs => combineLatest(cs.flatMap(c => c.fixtures.map(_.obs).map(f => f.map(EventWrapper(_,c)))).toSeq)).map(_.toJSArray)
 
     val singletons = comps.map(cs => cs.flatMap(singletonEvents _))
     
@@ -92,18 +94,21 @@ object CalendarViewService extends SeasonWatchService{
           val ret = lists.flatMap(_.toSeq).toJSArray
           .groupBy(_.date)
           .toIterable
-          .map(t => new DateWrapper(t._1, t._2))
+          .map{case(d,e) => new DateWrapper(d, e)}
           .toJSArray
-          .sort((d1:DateWrapper,d2:DateWrapper) => d1.date compareTo d2.date)
+          .sortBy(_.date)
           ret
         }      
     )  
     res
 
   }
-  
+
+  def events:Observable[js.Array[DateWrapper]] = season.flatMap(s => events(s.id))
 }
 
-@JSExportAll
-class DateWrapper(val date:String, val events:js.Array[EventWrapper])
+
+
+
+class DateWrapper(val date:String, val events:js.Array[EventWrapper]) extends js.Object
 
