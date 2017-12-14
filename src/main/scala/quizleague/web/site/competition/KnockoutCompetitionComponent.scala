@@ -67,14 +67,10 @@ import quizleague.web.core.IdComponent
 //}
 
 object CupCompetitionPage extends RouteComponent{
-  val template = """<competition :id="$route.params.id" text-name="plate-comp"></competition>"""
-  override val components = @@(KnockoutCompetitionComponent)
-}
-
-object PlateCompetitionPage extends RouteComponent{
   val template = """<competition :id="$route.params.id" text-name="cup-comp"></competition>"""
   override val components = @@(KnockoutCompetitionComponent)
 }
+
 
 object KnockoutCompetitionComponent extends Component{
   type facade = IdComponent
@@ -82,7 +78,7 @@ object KnockoutCompetitionComponent extends Component{
   val template = """
   <div v-if="item" >
     {{text}}
-    <ql-named-text :name="item.textName"></ql-named-text>
+    <ql-named-text :name="textName"></ql-named-text>
     <ql-text :id="item.text.id"></ql-text>
     <latest-results :id="id"></latest-results>
     <next-fixtures :id="id"></next-fixtures>

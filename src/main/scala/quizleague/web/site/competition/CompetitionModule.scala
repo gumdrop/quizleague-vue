@@ -78,12 +78,12 @@ object CompetitionModule extends Module {
         RouteConfig(path="/competition/:id/league", components=Map("default" -> LeagueCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
         RouteConfig(path="/competition/:id/subsidiary", components=Map("default" -> BeerCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
         RouteConfig(path="/competition/:id/cup", components=Map("default" -> CupCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
-        RouteConfig(path="/competition/:id/plate", components=Map("default" -> PlateCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
         RouteConfig(path="/competition/:id/singleton", components=Map("default" -> SingletonCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
- 
+        RouteConfig(path="/competition/:id/results", components=Map("default" -> ResultsPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
+        RouteConfig(path="/competition/:id/fixtures", components=Map("default" -> FixturesPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
+
         RouteConfig(path="/competition", components=Map(/*"default" -> CompetitionsComponent(), */"title" -> CompetitionsTitleComponent(), "sidenav" -> CompetitionMenu())
   ))
-  
 }
 
 object CompetitionService extends CompetitionGetService{

@@ -10,7 +10,7 @@ object LeagueTables extends Component{
   type facade = IdComponent
   val name = "league-tables"
   val template = """
-    <v-card>
+    <v-card class="mb-3">
       <v-card-title primary-title><h3 class="headline mb-0">League Table</h3></v-card-title>
       <v-card-text>
         <ql-league-table v-for="table in item.tables" :key="table.id" :id="table.id"></ql-league-table>
@@ -25,10 +25,10 @@ object LeagueTables extends Component{
 object LatestResults extends Component{
   type facade = IdComponent
   val name = "latest-results"
-  val template = """<v-card v-if="latestResults">
+  val template = """<v-card class="mb-3">
       <v-card-title primary-title><h3 class="headline mb-0">Results</h3></v-card-title>
       <v-card-title>Latest results</v-card-title>
-      <v-card-text>
+      <v-card-text  v-if="latestResults">
         <div v-for="results in latestResults" :key="results.id">
           <div><h4>{{results.date | date("d MMM yyyy")}}</h4></div>
           <ql-results-simple :results="results.fixtures | combine" ></ql-results-simple>
@@ -50,7 +50,7 @@ object LatestResults extends Component{
 object NextFixtures extends Component{
   type facade = IdComponent
   val name = "next-fixtures"
-  val template = """<v-card>
+  val template = """<v-card class="mb-3">
       <v-card-title primary-title><h3 class="headline mb-0">Fixtures</h3></v-card-title>
       <v-card-title>Next fixtures</v-card-title>
       <v-card-text  v-if="nextFixtures">
@@ -96,4 +96,60 @@ object CompetitionTitleComponent extends Component{
   override val subscriptions = Map("item" -> (c => CompetitionService.get(c.id)))
 }
 
+object ResultsPage extends RouteComponent{
+  val template = """<all-results :id="$route.params.id"></all-results>"""
+  override val components = @@(AllResults) 
+}
 
+object AllResults extends Component{
+  type facade = IdComponent
+  val name = "all-results"
+  val template = """
+    <v-container grid-list-xl v-if="latestResults">
+    <v-layout column>
+    <v-card  v-for="results in latestResults" :key="results.id" class="mb-3">
+      <v-card-title primary-title><h3 class="headline mb-0">{{results.date | date("d MMM yyyy")}}</h3></v-card-title>
+      <v-card-text>
+          <ql-results-simple :results="results.fixtures | combine" ></ql-results-simple>
+        </div>
+      </v-card-text>
+    </v-card>
+    </v-layout>
+    </v-container>"""
+  
+  override val props = @@("id")
+  
+    override val subParams = Map("id" -> "latestResults")
+    override val subscriptions = Map(
+      "latestResults" -> (c => CompetitionViewService.latestResults(c.id))
+    )
+}
+
+object FixturesPage extends RouteComponent{
+  val template = """<remaining-fixtures :id="$route.params.id"></remaining-fixtures>"""
+  override val components = @@(RemainingFixtures) 
+}
+
+object RemainingFixtures extends Component{
+  type facade = IdComponent
+  val name = "remaining-fixtures"
+  val template = """
+    <v-container grid-list-xl v-if="nextFixtures">
+    <v-layout column>
+    <v-card v-for="fixtures in nextFixtures" :key="fixtures.id" class="mb-3">
+      <v-card-title primary-title><h3 class="headline mb-0">{{fixtures.date | date("d MMM yyyy")}}</h3></v-card-title>
+      <v-card-text>
+          <ql-fixtures-simple :fixtures="fixtures.fixtures | combine" ></ql-fixtures-simple>
+      </v-card-text>
+    </v-card>
+    </v-layout>
+    </v-container>"""
+  
+
+ 
+  override val props = @@("id")
+  override val subParams = Map("id" -> "nextFixtures")
+  override val subscriptions = Map(
+      "nextFixtures" -> (c => CompetitionViewService.nextFixtures(c.id))
+      )
+}
