@@ -38,6 +38,8 @@ object SiteComponent extends Component {
       	<v-btn to="/results" flat ><v-icon left>check</v-icon><span>Results</span></v-btn>
       	<v-btn to="/venue" flat ><v-icon left>location_on</v-icon><span>Venue</span></v-btn>
       	<v-btn to="/calendar" flat ><v-icon left>mdi-calendar</v-icon><span>Calendar</span></v-btn>
+      	<v-btn to="/rules" flat ><v-icon left>mdi-book-open-page-variant</v-icon><span>Rules</span></v-btn>
+      	<v-btn to="/links" flat ><v-icon left>link</v-icon><span>Links</span></v-btn>
       </div>
     </v-toolbar>
     <v-content>
