@@ -12,6 +12,7 @@ import rxscalajs.Observable
 import quizleague.web.core.IdComponent
 import com.felstar.scalajs.vue.VueComponent
 import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.site.results.TableUtils
 
 //@Component(
 //  selector = "ql-fixtures-simple",
@@ -62,7 +63,7 @@ object SimpleFixturesComponent extends Component {
   val template = """
    <div v-if="fixts" class="ql-fixtures-simple">
     <div>
-    <table >
+    <table>
       <ql-fixture-line v-for="fixture in fixts" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
     </table>
     </div> 
@@ -78,14 +79,20 @@ object SimpleFixturesComponent extends Component {
 
 }
 
-object FixtureLineComponent extends Component{
+
+object FixtureLineComponent extends Component with TableUtils{
   val name = "ql-fixture-line"
-  val template = """<tr>
+  val template = """
+      <tr>
         <td v-if="inlineDetails" class="inline-details" >{{fixture.date| date("d MMM yyyy")}} : {{fixture.parentDescription}} {{fixture.description}}</td>
-        <td class="home"><ql-team-name :team="fixture.home"></ql-team-name></td>
+        <td v-if="!fixture.result" class="home"><ql-team-name :team="fixture.home"></ql-team-name></td><td v-else class="home" :class="nameClass(fixture.result.homeScore, fixture.result.awayScore)"><ql-team-name :team="fixture.home"></ql-team-name></td>
+        <td v-if="!fixture.result"></td><td v-else class="score">{{fixture.result.awayScore}}</td>
         <td> - </td>
-        <td class="away"><ql-team-name :team="fixture.away"></ql-team-name></td> 
+        <td v-if="!fixture.result"></td><td v-else class="score">{{fixture.result.awayScore}}</td>
+        <td v-if="!fixture.result" class="away"><ql-team-name :team="fixture.away"></ql-team-name></td><td v-else class="away" :class="nameClass(fixture.result.awayScore, fixture.result.homeScore)"><ql-team-name :team="fixture.away"></ql-team-name></td> 
+        <td></td>
       </tr>"""
   
   override val props = @@("fixture","inlineDetails")
+  override val methods = Map("nameClass" -> nameClass _ )
 }
