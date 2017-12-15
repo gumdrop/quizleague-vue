@@ -13,6 +13,7 @@ import quizleague.web.core.IdComponent
 import com.felstar.scalajs.vue.VueComponent
 import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.site.results.TableUtils
+import quizleague.web.site.results.ReportsService
 
 //@Component(
 //  selector = "ql-fixtures-simple",
@@ -90,9 +91,37 @@ object FixtureLineComponent extends Component with TableUtils{
         <td> - </td>
         <td v-if="!fixture.result"></td><td v-else class="score">{{fixture.result.awayScore}}</td>
         <td v-if="!fixture.result" class="away"><ql-team-name :team="fixture.away"></ql-team-name></td><td v-else class="away" :class="nameClass(fixture.result.awayScore, fixture.result.homeScore)"><ql-team-name :team="fixture.away"></ql-team-name></td> 
-        <td></td>
+        <td v-if="!fixture.result"></td>
+        <td v-else>
+          <v-dialog v-model="showReports" max-width="290" lazy v-if="fixture.result.reports">
+            <v-btn icon slot="activator">
+            <v-icon style="transform:scale(0.75)">description</v-icon>
+          </v-btn>
+          <v-card>
+            <v-card-title>Results</v-card-title>
+            <v-card-text><ql-reports :id="fixture.result.reports.id"></ql-reports></v-card-text>
+          </v-card>
+         </v-dialog>
+        </td> 
       </tr>"""
-  
+  override val components = @@(ReportsComponent)
+  override val data = c => Map("showReports" -> false)
   override val props = @@("fixture","inlineDetails")
   override val methods = Map("nameClass" -> nameClass _ )
+}
+
+object ReportsComponent extends Component{
+  type facade = IdComponent
+  val name = "ql-reports"
+  val template = """
+    <div v-if="reports">
+      <v-card v-for="report in reports.reports">
+        <v-card-title>{{async(report.team).name}}</v-card-title>
+        <v-text>
+          <ql-text :id="report.text.id"></ql-text>
+        </v-text>
+      </v-card> 
+    </div>"""
+  override val props = @@("id")
+  override val subscriptions = Map("reports" -> (c => ReportsService.get(c.id)))
 }
