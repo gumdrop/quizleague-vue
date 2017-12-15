@@ -89,8 +89,8 @@ object CalendarViewService extends SeasonWatchService{
     
     val seasons = season.map(s => s.calendar.map(e => EventWrapper(e)))
 
-    val  res = Observable.zip(Seq(
-        fixtures,singletons,seasons))(lists =>  { 
+    val  res = combineLatest(Seq(
+        fixtures,singletons,seasons)).map(lists =>  { 
           val ret = lists.flatMap(_.toSeq).toJSArray
           .groupBy(_.date)
           .toIterable

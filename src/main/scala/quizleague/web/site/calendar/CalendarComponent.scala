@@ -1,8 +1,10 @@
 package quizleague.web.site.calendar
 
+import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExport
 import quizleague.web.core._
 import quizleague.web.site.season.SeasonIdComponent
+import com.felstar.scalajs.vue.VueRxComponent
 
 //import angulate2.ext.classModeScala
 //import angulate2.router.ActivatedRoute
@@ -29,8 +31,8 @@ object CalendarComponent extends Component{
      <v-card-title primary-title><h3>{{item.date | date("EEEE d MMMM yyyy")}}</h3></v-card-title>
      <v-card-text>
       <div v-for="event in item.events">
-          <!--ql-results-event v-if="event.eventType === 'fixtures'" :event="event"></ql-results-event>
-          <ql-calendar-event v-if="event.eventType === 'calendar'" :event="event"></ql-calendar-event>
+          <ql-fixtures-event v-if="event.eventType === 'fixtures'" :event="event"></ql-fixtures-event>
+          <!--ql-calendar-event v-if="event.eventType === 'calendar'" :event="event"></ql-calendar-event>
           <ql-competition-event v-if="event.eventType === 'competition'" :event="event"></ql-competition-event-->
       </div>
      </v-card-text>
@@ -38,7 +40,7 @@ object CalendarComponent extends Component{
  
   </div>"""
   override val subscriptions = Map("items" -> (c => CalendarViewService.events), "season" -> (c => CalendarViewService.season))
-  
+  override val components = @@(FixturesEventComponent)
   
 }
 
@@ -99,27 +101,24 @@ object CalendarTitleComponent extends RouteComponent{
 //  val service: CalendarViewService)
 //  
 //
-//trait EventComponent{
-//  
-//  @JSExport
-//  var event:EventWrapper = _
-//}
-//  
-//  
-//object PanelComponent {
-//  val buttonStyle = ".fixButPos{top:-12px;}"
-//}
-//
-//import PanelComponent._
-//
-//trait PanelComponent extends EventComponent{
-//  
-//  @JSExport
-//  var panelVisible:Boolean = false
-//  
-//  @JSExport
-//  def togglePanel() = panelVisible = !panelVisible 
-//}
+@js.native
+trait EventComponent extends VueRxComponent{
+  
+  val event:EventWrapper
+}
+  
+  
+object PanelComponent {
+  val buttonStyle = "top:-12px;"
+}
+
+
+@js.native
+trait PanelComponent extends EventComponent{
+
+  var panelVisible:Boolean
+
+}
 //
 //
 //
@@ -144,6 +143,32 @@ object CalendarTitleComponent extends RouteComponent{
 //)
 //@classModeScala
 //class ResultsEventComponent extends PanelComponent
+
+object FixturesEventComponent extends Component{
+  
+  type facade = PanelComponent
+  
+  val name = "ql-fixtures-event"
+   val template = s"""         
+    <v-container grid-list-xl>
+      <v-layout column>
+        <v-layout row>
+          <div><a :to="'/competition/' + event.competition.id + '/' + event.competition.typeName">{{event.fixtures.parentDescription}}</a> {{event.fixtures.description}}</div>
+            <v-btn icon style="${PanelComponent.buttonStyle}" v-on:click="togglePanel">
+             <v-icon v-if="!panelVisible">visibility</v-icon>
+             <v-icon v-if="panelVisible">visibility_off</v-icon>
+            </v-btn>
+          </div> 
+        </v-layout> 
+        <div v-if="panelVisible"><ql-fixtures-simple :fixtures="event.fixtures.fixtures | combine"></ql-fixtures-simple></div>
+      </v-layout>
+    </v-container>
+"""
+   override val data = c => Map("panelVisible" -> false)
+   override val props = @@("event")
+   override val methods = Map("togglePanel" -> ({c:facade => c.panelVisible = !c.panelVisible}:js.ThisFunction))
+}
+
 //
 //@Component(
 //  selector = "ql-fixtures-event",
