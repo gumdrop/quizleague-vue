@@ -87,18 +87,19 @@ object FixtureLineComponent extends Component with TableUtils{
       <tr>
         <td v-if="inlineDetails" class="inline-details" >{{fixture.date| date("d MMM yyyy")}} : {{fixture.parentDescription}} {{fixture.description}}</td>
         <td v-if="!fixture.result" class="home"><ql-team-name :team="fixture.home"></ql-team-name></td><td v-else class="home" :class="nameClass(fixture.result.homeScore, fixture.result.awayScore)"><ql-team-name :team="fixture.home"></ql-team-name></td>
-        <td v-if="!fixture.result"></td><td v-else class="score">{{fixture.result.awayScore}}</td>
+        <td v-if="!fixture.result"></td><td v-else class="score">{{fixture.result.homeScore}}</td>
         <td> - </td>
         <td v-if="!fixture.result"></td><td v-else class="score">{{fixture.result.awayScore}}</td>
         <td v-if="!fixture.result" class="away"><ql-team-name :team="fixture.away"></ql-team-name></td><td v-else class="away" :class="nameClass(fixture.result.awayScore, fixture.result.homeScore)"><ql-team-name :team="fixture.away"></ql-team-name></td> 
         <td v-if="!fixture.result"></td>
         <td v-else>
-          <v-dialog v-model="showReports" max-width="290" lazy v-if="fixture.result.reports">
-            <v-btn icon slot="activator">
+          <v-btn icon @click.stop="showReports=true" v-if="fixture.result.reports">
             <v-icon style="transform:scale(0.75)">description</v-icon>
           </v-btn>
+          <v-dialog v-model="showReports" max-width="500" lazy v-if="fixture.result.reports">
+
           <v-card>
-            <v-card-title>Results</v-card-title>
+            <v-card-title>Reports</v-card-title>
             <v-card-text><ql-reports :id="fixture.result.reports.id"></ql-reports></v-card-text>
           </v-card>
          </v-dialog>
@@ -114,14 +115,17 @@ object ReportsComponent extends Component{
   type facade = IdComponent
   val name = "ql-reports"
   val template = """
-    <div v-if="reports">
-      <v-card v-for="report in reports.reports">
+    <v-container v-if="reports">
+      <v-layout column>
+      <v-card v-for="report in reports.reports" :key="report.id" class="mb-3">
         <v-card-title>{{async(report.team).name}}</v-card-title>
-        <v-text>
+        <v-card-text v-if="report.text">
           <ql-text :id="report.text.id"></ql-text>
-        </v-text>
+        </v-card-text>
       </v-card> 
-    </div>"""
+    </v-layout>
+    </v-container>"""
   override val props = @@("id")
+  override val subParams = Map("id" -> "reports")
   override val subscriptions = Map("reports" -> (c => ReportsService.get(c.id)))
 }

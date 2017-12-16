@@ -93,6 +93,7 @@ object AllResultsTitleComponent extends RouteComponent{
       <v-toolbar-title class="white--text" >
         All Results
        </v-toolbar-title>
+      &nbsp;
       <ql-season-select :season="season"></ql-season-select>
     </v-toolbar>"""
   

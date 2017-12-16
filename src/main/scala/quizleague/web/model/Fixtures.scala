@@ -80,10 +80,10 @@ object Reports{
 
 class Report(
     val team:RefObservable[Team],
-    val text:RefObservable[Text])
+    val text:RefObservable[Text]) extends js.Object
     
 object Report{
   def apply(    team:RefObservable[Team],
-    text:RefObservable[Text]) = new Report(team,text)
+    text:RefObservable[Text]) = new Report(team,text) 
 }
     

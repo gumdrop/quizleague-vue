@@ -18,14 +18,14 @@ object SeasonSelectComponent extends Component{
   type facade = SeasonSelectComponent
   val name = "ql-season-select"
   val template = """
-   <span v-if="seasons && seasonId">
+   <h2 v-if="seasons && seasonId" >
   
-    <v-select 
+    <v-select style="top:5px;"
     :items="wrap(sort(seasons))"
     v-model="seasonId"
     >
   </v-select>
-  </span>
+  </h2>
 """
   
   override val props = @@("season")
