@@ -12,7 +12,7 @@ import scala.scalajs.js.annotation.ScalaJSDefined
     val website:String,
     val imageURL:String,
     val retired:Boolean = false
-) extends js.Object
+) extends Model
 
 object Venue{
   def apply(     id:String,

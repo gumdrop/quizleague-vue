@@ -22,7 +22,7 @@ trait PutService[T] {
   
   private[service] def saveDom(i:U) = {
     db.doc(s"$uriRoot/${i.id}").set(convertJsonToJs(enc(i)).asInstanceOf[js.Dictionary[js.Any]])
-    log(i,s"saved $uriRoot/${i.id} to http")
+    log(i,s"saved $uriRoot/${i.id} to firestore")
     deCache(i)
   }
   

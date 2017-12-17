@@ -51,6 +51,12 @@ object Router{
 //  val children: js.Array[RouteConfig] = js.native
 //}
 
+@js.native
+trait RouterInstance extends js.Object{
+  def back():Unit = js.native
+  def push(path:String):Unit = js.native
+}
+
 
 object RouteConfig{
   def apply(

@@ -1,11 +1,17 @@
 package quizleague.web.model
 
-import scala.scalajs.js.annotation.JSExportAll
+import scala.scalajs.js
 
-@JSExportAll
-case class User(
-    id:String,
+
+class User(
+    val id:String,
+    val name:String,
+    val email:String,
+    val retired:Boolean = false
+) extends Model
+object User{
+  def apply(id:String,
     name:String,
     email:String,
-    retired:Boolean = false
-)
+    retired:Boolean = false) = new User(id,name,email,retired)
+}

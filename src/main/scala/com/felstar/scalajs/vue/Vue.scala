@@ -114,10 +114,17 @@ class Directive extends js.Object {
   val `def`: js.Any = js.native
 }
 
+@js.native
+trait RouteInstance extends js.Object{
+  val params:js.Dictionary[String] = js.native
+}
 
 @js.native
 trait VueComponent extends Vue {
   def $forceUpdate():Unit = js.native
+  val $route:RouteInstance = js.native
+  val $router:RouterInstance = js.native
+  val $refs:js.Dynamic = js.native
 }
 
 

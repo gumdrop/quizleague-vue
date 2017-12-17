@@ -7,7 +7,7 @@ class Text(
     val id:String,
     val text:String,
     val mimeType:String
-) extends js.Object
+) extends Model
 
 object Text{
   def apply(id:String,

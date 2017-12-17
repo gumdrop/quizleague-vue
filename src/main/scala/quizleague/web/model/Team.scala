@@ -12,7 +12,7 @@ class Team (
     val text:RefObservable[Text],
     val users:js.Array[RefObservable[User]],
     val retired:Boolean
-)  extends js.Object
+)  extends Model
 
 object Team{
   
