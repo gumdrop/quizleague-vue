@@ -35,7 +35,7 @@ object LatestResults extends Component{
         </div>
       </v-card-text>
       <v-card-actions>
-        <v-btn flat to="results">Show All</v-btn>
+        <v-btn primary flat to="results">Show All</v-btn>
       </v-card-actions>
     </v-card>"""
   
@@ -60,7 +60,7 @@ object NextFixtures extends Component{
         </div>
       </v-card-text>
       <v-card-actions>
-        <v-btn flat to="fixtures">Show All</v-btn>
+        <v-btn primary flat to="fixtures">Show All</v-btn>
       </v-card-actions>
     </v-card>"""
   
@@ -87,13 +87,16 @@ object CompetitionTitleComponent extends Component{
       dark
       clipped-left>
       <v-toolbar-title class="white--text" v-if="item" >
-        {{item.name}}
+        {{item.name}} {{season.startYear}}/{{season.endYear}}
       </v-toolbar-title>
     </v-toolbar>"""
   
   override val props = @@("id")
-  override val subParams = Map("id" -> "item")
-  override val subscriptions = Map("item" -> (c => CompetitionService.get(c.id)))
+  override val subParams = Map("id" -> "item", "id" -> "season")
+  override val subscriptions = Map(
+      "item" -> (c => CompetitionService.get(c.id)),
+      "season" -> (c => CompetitionViewService.parentSeason(c.id))
+      )
 }
 
 object ResultsPage extends RouteComponent{

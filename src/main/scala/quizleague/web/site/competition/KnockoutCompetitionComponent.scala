@@ -17,8 +17,12 @@ object KnockoutCompetitionComponent extends Component{
   <div v-if="item" >
     <ql-named-text :name="textName"></ql-named-text>
     <ql-text :id="item.text.id"></ql-text>
-    <latest-results :id="id"></latest-results>
-    <next-fixtures :id="id"></next-fixtures>
+    <v-container grid-list-xl>
+      <v-layout column>
+        <latest-results :id="id"></latest-results>
+        <next-fixtures :id="id"></next-fixtures> 
+      </v-layout>
+     </v-container>
   </div>"""
   
   override val props = @@("id", "textName")

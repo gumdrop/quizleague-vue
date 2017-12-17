@@ -111,7 +111,8 @@ object VenueComponent extends Component {
   
   override val name = "ql-venue"
   override val template = """
-          <div v-if="venue">
+          <v-container v-if="venue">
+          <v-layout column>
            <v-card>
               <v-card-text>
                  <div>
@@ -127,7 +128,8 @@ object VenueComponent extends Component {
                  </div>
               </v-card-text>
             </v-card>
-          </div>"""
+            </v-layout>
+          </v-container>"""
   override val props = @@("id")
   override val subParams = Map("id"->"venue")
   override val subscriptions = Map("venue" -> (v => VenueService.get(v.id)))

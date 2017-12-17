@@ -73,14 +73,16 @@ object AllResultsComponent extends Component{
   val name = "ql-all-results"
   type facade = SeasonIdComponent
   val template = """
-    <div v-if="fixtures">
-    <v-card v-for="fixs in fixtures" :key="fixs.id">
+    <v-container v-if="fixtures">
+    <v-layout column>
+    <v-card v-for="fixs in fixtures" :key="fixs.id" class="mb-3">
       <v-card-title primary-title><h3 class="headline mb-0">{{fixs.date | date('d MMM yyyy')}} {{fixs.description}}</h3></v-card-title>
       <v-card-text>
         <ql-results-simple :results="fixs.fixtures | combine"></ql-results-simple>
       </v-card-text>
     </v-card>
-    </div>"""
+    </v-layout>
+    </v-container>"""
   override val subscriptions = Map("fixtures" -> (c => ResultsViewService.results))
   
 }

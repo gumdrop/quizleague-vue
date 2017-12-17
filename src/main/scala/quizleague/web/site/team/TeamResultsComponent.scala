@@ -8,12 +8,20 @@ import scalajs.js
 import quizleague.web.site.ApplicationContextService
 import quizleague.web.site.season.SeasonIdComponent
 import quizleague.web.core.IdComponent
+import quizleague.web.core.IdComponent
 
 object TeamResultsPage extends RouteComponent {
-  val template = """<div>
-                      <ql-all-team-results v-if="appData" :id="$route.params.id" :seasonId="appData.currentSeason.id"></ql-all-team-results>
-                    </div>"""
-  override val subscriptions = Map("appData" -> (c => ApplicationContextService.get))
+  val template = """<v-container v-if="season">
+                      <v-layout column>
+                      <v-card>
+                        <v-card-text>
+                          <ql-all-team-results  :id="$route.params.id" :seasonId="season.id"></ql-all-team-results>
+                        </v-card-text>
+                      </v-card>
+                      <div></div>
+                      </v-layout>
+                    </v-container>"""
+  override val subscriptions = Map("season" -> (c => TeamViewService.season))
   
   
 }
@@ -26,4 +34,30 @@ object TeamResultsComponent extends Component {
   override val methods = Map("fixtures" -> ((teamId:String,seasonId:String) => FixtureService.teamResults(teamId, seasonId)))
   override val props = @@("id","seasonId")
   
+}
+
+object TeamResultsTitle extends RouteComponent{
+  val template = """<results-title :id="$route.params.id"></results-title>"""
+  override val components = @@(TeamResultsTitleComponent)
+}
+
+object TeamResultsTitleComponent extends Component{
+  type facade = IdComponent
+  
+  val name = "results-title"
+  val template = """<v-toolbar      
+      color="amber darken-3"
+      dark
+      clipped-left>
+      <v-toolbar-title class="white--text" v-if="team">
+        {{team.name}} Results 
+       </v-toolbar-title>
+      &nbsp;
+      <ql-season-select :season="season"></ql-season-select>
+    </v-toolbar>"""
+  
+  override val props = @@("id")
+  override val subParams = Map("id" -> "team")
+  override val data = c => Map("season" -> TeamViewService.season)
+  override val subscriptions  = Map("team" -> (c => TeamService.get(c.id)))
 }

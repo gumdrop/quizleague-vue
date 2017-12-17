@@ -99,7 +99,7 @@ object FixtureLineComponent extends Component with TableUtils{
           <v-dialog v-model="showReports" max-width="500" lazy v-if="fixture.result.reports">
 
           <v-card>
-            <v-card-title>Reports</v-card-title>
+            <v-card-title>Reports ::&nbsp;<ql-team-name :team="fixture.home"></ql-team-name>&nbsp;{{fixture.result.homeScore}} - {{fixture.result.awayScore}}&nbsp;<ql-team-name :team="fixture.away"></ql-team-name></v-card-title>
             <v-card-text><ql-reports :id="fixture.result.reports.id"></ql-reports></v-card-text>
           </v-card>
          </v-dialog>

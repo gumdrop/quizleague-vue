@@ -23,6 +23,7 @@ import quizleague.web.site.season.SeasonWatchService
 import org.threeten.bp.LocalDate
 import quizleague.web.model.Fixtures
 import quizleague.util.collection._
+import quizleague.web.site.season.SeasonService
 
 //@Routes(
 //    root = false,
@@ -113,5 +114,10 @@ object CompetitionViewService extends SeasonWatchService {
   def latestResults(competitionId:String, take:Integer = Integer.MAX_VALUE):Observable[js.Array[Fixtures]] = {
     val today = LocalDate.now.toString
     fixtures(competitionId).map(_.filter(_.date <= today).sortBy(_.date)(Desc).take(take))
+  }
+  
+  def parentSeason(competitionId:String) = {
+    val seasons = SeasonService.list
+    seasons.map(_.filter(_.competitions.exists(_.id == competitionId)).head)
   }
 }

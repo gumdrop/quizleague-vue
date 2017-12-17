@@ -29,29 +29,33 @@ object TeamComponent extends Component {
   override val template = """
           <div v-if="team && appConfig">
            <ql-text :id="team.text.id"></ql-text>
-            <v-card>
+            <v-container>
+              <v-layout column>
+            <v-card class="mb-3">
               <v-card-title primary-title><h3 class="headline mb-0">Results</h3></v-card-title>
               <v-card-title >Last few results</v-card-title>
               <v-card-text>
                 <ql-results-simple :results="results(id, appConfig.currentSeason.id)" :inlineDetails="true"></ql-results-simple>
               </v-card-text>
               <v-card-actions>
-                <v-btn flat :to="id + '/results'">Show All</v-btn>
-                <v-btn flat>Graphs & Stats</v-btn>
+                <v-btn flat :to="id + '/results'" primary>Show All</v-btn>
+                <v-btn flat><v-icon>insert_chart</v-icon>Graphs & Stats</v-btn>
               </v-card-actions>
             </v-card>
-            <v-card>
+            <v-card class="mb-3">
               <v-card-title primary-title><h3 class="headline mb-0">Fixtures</h3></v-card-title>
               <v-card-title >Next few fixtures</v-card-title>
               <v-card-text>
                 <ql-fixtures-simple :fixtures="fixtures(id, appConfig.currentSeason.id)" :inlineDetails="true"></ql-fixtures-simple>
               </v-card-text>
               <v-card-actions>
-                <v-btn flat :to="id + '/fixtures'">Show All</v-btn>
-                <v-btn flat >Calendar URL</v-btn>
-                <v-btn flat>Download Calendar</v-btn>
+                <v-btn flat :to="id + '/fixtures'" primary>Show All</v-btn>
+                <v-btn flat ><v-icon>content_copy</v-icon>Calendar URL</v-btn>
+                <v-btn flat><v-icon>file_download</v-icon>Download Calendar</v-btn>
               </v-card-actions>
             </v-card>
+          </v-layout>
+          </v-container>
           </div>"""
   override val props = @@("id")
   override val subParams = Map("id"->"team")
@@ -80,6 +84,8 @@ object TeamTitle extends Component {
       <v-toolbar-title class="white--text" >
         {{team.name}}
       </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon :to="'/venue/' + team.venue.id"><v-icon>location_on</v-icon></v-btn>
     </v-toolbar>"""
   
    override val props = @@("id")

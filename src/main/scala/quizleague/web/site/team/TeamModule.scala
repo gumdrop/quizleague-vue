@@ -7,6 +7,7 @@ import quizleague.web.service.team.TeamGetService
 import quizleague.web.site.text.TextService
 import quizleague.web.site.venue.VenueService
 import quizleague.web.site.user.UserService
+import quizleague.web.site.season.SeasonWatchService
 
 
 object TeamModule extends Module{
@@ -21,7 +22,7 @@ object TeamModule extends Module{
       RouteConfig(path = "/team/:id/fixtures", 
           components = Map("default" -> TeamFixturesPage(), "title" -> TeamTitleComponent(),"sidenav" -> TeamMenuComponent())),
       RouteConfig(path = "/team/:id/results", 
-          components = Map("default" -> TeamResultsPage(), "title" -> TeamTitleComponent(),"sidenav" -> TeamMenuComponent()))
+          components = Map("default" -> TeamResultsPage(), "title" -> TeamResultsTitle(),"sidenav" -> TeamMenuComponent()))
 
   )
 
@@ -35,3 +36,5 @@ object TeamService extends TeamGetService{
   override val venueService = VenueService
   
 }
+
+object TeamViewService extends SeasonWatchService

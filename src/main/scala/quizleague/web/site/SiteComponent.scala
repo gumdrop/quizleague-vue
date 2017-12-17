@@ -28,9 +28,6 @@ object SiteComponent extends Component {
         <span v-if="appData">{{appData.leagueName}}</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>more_vert</v-icon>
-      </v-btn>
       <div slot="extension">
       	<v-btn to="/home" flat ><v-icon left>home</v-icon><span>Home</span></v-btn>
       	<v-btn to="/team" flat ><v-icon left>people</v-icon><span>Teams</span></v-btn>
