@@ -2,6 +2,7 @@ package quizleague.web.model
 
 import scala.scalajs.js
 import quizleague.web.util.rx.RefObservable
+import quizleague.web.util.UUID
 
 
 class Fixtures(
@@ -80,7 +81,9 @@ object Reports{
 
 class Report(
     val team:RefObservable[Team],
-    val text:RefObservable[Text]) extends js.Object
+    val text:RefObservable[Text]) extends js.Object{
+    val id = UUID.randomUUID().toString()
+}
     
 object Report{
   def apply(    team:RefObservable[Team],

@@ -33,11 +33,13 @@ object TeamComponent extends ItemComponentConfig[Team] with RouteComponent {
           required
         ></v-text-field>
         <v-select
+          label="Venue"
           :items="venues"
           v-model="item.venue"
           >
         </v-select>
         <v-select
+          label="Users"
           :items="users"
           v-model="item.users"
           multiple

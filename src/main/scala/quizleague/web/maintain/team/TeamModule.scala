@@ -27,7 +27,6 @@ object TeamService extends TeamGetService with TeamPutService{
   override val userService = UserService
   override val venueService = VenueService
   
-  def listVenues() = venueService.list().map(_.map(v => venueService.refObs(v.id)))
-  def listUsers() = userService.list()
+
 }
 

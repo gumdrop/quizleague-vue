@@ -115,7 +115,7 @@ object ReportsComponent extends Component{
   type facade = IdComponent
   val name = "ql-reports"
   val template = """
-    <v-container v-if="reports">
+    <v-container v-if="reports">seismic-bonfire-602.appspot.com
       <v-layout column>
       <v-card v-for="report in reports.reports" :key="report.id" class="mb-3">
         <v-card-title>{{async(report.team).name}}</v-card-title>
