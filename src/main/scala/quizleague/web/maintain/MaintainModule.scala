@@ -7,6 +7,7 @@ import quizleague.web.maintain.venue.VenueModule
 import quizleague.web.maintain.text.TextModule
 import quizleague.web.maintain.team.TeamModule
 import quizleague.web.maintain.applicationcontext.ApplicationContextModule
+import quizleague.web.maintain.globaltext.GlobalTextModule
 
 //import angulate2.std._
 //import angulate2.router.{Route, RouterModule}
@@ -84,7 +85,7 @@ import quizleague.web.maintain.applicationcontext.ApplicationContextModule
 
 object MaintainModule extends Module{
   
-  override val modules = @@(UserModule, VenueModule, TextModule, TeamModule, ApplicationContextModule)
+  override val modules = @@(UserModule, VenueModule, TextModule, TeamModule, ApplicationContextModule, GlobalTextModule)
   
   override val routes = @@(
     RouteConfig(path = "/maintain", components = Map("sidenav"->MaintainMenuComponent()))    
