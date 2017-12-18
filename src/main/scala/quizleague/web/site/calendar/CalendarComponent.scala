@@ -40,7 +40,8 @@ object CalendarTitleComponent extends RouteComponent{
     <v-toolbar      
       color="yellow darken-3"
       dark
-      clipped-left>
+      clipped-left
+      >
       <v-toolbar-title class="white--text" >
         Calendar
       </v-toolbar-title>
@@ -84,7 +85,7 @@ object FixturesEventComponent extends EventComponentConfig{
       <v-layout column>
         <v-layout row>
           <div><router-link :to="'/competition/' + event.competition.id + '/' + event.competition.typeName">{{event.fixtures.description}}</router-link></div>
-            <v-btn icon v-on:click="togglePanel">
+            <v-btn icon v-on:click="togglePanel" class="view-btn">
              <v-icon v-if="!panelVisible">visibility</v-icon>
              <v-icon v-if="panelVisible">visibility_off</v-icon>
             </v-btn>
@@ -100,7 +101,7 @@ object FixturesEventComponent extends EventComponentConfig{
 object CalendarEventComponent extends EventComponentConfig{
   
   val name = "ql-calendar-event"
-  val template = """<div><b>{{event.event.description}}</b>  {{event.event.time}}  Venue : <router-link :to="'/venue/' + event.event.venue.id">{{async(event.event.venue).name}}</router-link></div>"""
+  val template = """<div v-if="event.event"><b>{{event.event.description}}</b>  {{event.event.time}}  Venue : <router-link v-if="event.event.venue"router-link :to="'/venue/' + event.event.venue.id">{{async(event.event.venue).name}}</router-link></div>"""
 
 }
 

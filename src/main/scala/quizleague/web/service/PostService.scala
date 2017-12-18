@@ -5,8 +5,9 @@ import scala.scalajs.js
 import io.circe._, io.circe.parser._
 import quizleague.web.names.ComponentNames
 import quizleague.web.util.Logging._
+import quizleague.web.model.Model
 
-trait PostService[T] {
+trait PostService[T <: Model] {
   this: GetService[T] with PutService[T] with ComponentNames=>
 
   

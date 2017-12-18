@@ -24,7 +24,7 @@ object SeasonSelectComponent extends Component{
     :items="wrap(sort(seasons))"
     v-model="seasonId"
     >
-  </v-select>
+    </v-select>
   </h2>
 """
   

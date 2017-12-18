@@ -8,7 +8,7 @@ import rxscalajs.Observable
 import rxscalajs.subscription.Subscription
 import rxscalajs.facade.ObservableFacade
 
-class RefObservable[+T](val id: String, obsf: () => Observable[T]) extends js.Object{
+class RefObservable[+T](val id: String, obsf: () => Observable[T]) extends js.Object {
  
   def obs = obsf()
   def inner = obs.inner
@@ -20,10 +20,23 @@ class RefObservable[+T](val id: String, obsf: () => Observable[T]) extends js.Ob
   
   def toJSON() = js.Dynamic.literal(("id",id))
 
+  @inline override def equals(that: Any): scala.Boolean = {
+    that.isInstanceOf[RefObservable[T]] &&
+    (id == that.asInstanceOf[RefObservable[T]].id)
+}
+  
+  
+
 }
 
 object RefObservable {
-
-  def apply[T](ref: Ref[_], obsf: () => Observable[T]) = new RefObservable(ref.id, obsf)
-  def apply[T](id: String, obsf: () => Observable[T]) = new RefObservable(id, obsf)
+  var cache = Map[String, RefObservable[_]]() 
+  
+  def apply[T](ref: Ref[_], obsf: () => Observable[T]):RefObservable[T] = apply(ref.id, obsf)
+  def apply[T](id: String, obsf: () => Observable[T]):RefObservable[T] = cache.get(id).fold(add(new RefObservable(id, obsf)))(r => r).asInstanceOf[RefObservable[T]]
+  
+  private def add(ref:RefObservable[_]) = {
+    cache = cache + ((ref.id, ref))
+    ref
+  }
 }

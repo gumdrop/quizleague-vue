@@ -22,7 +22,9 @@ object SiteComponent extends Component {
       dark
 	    fixed 
       app 
-      clipped-left>
+      clipped-left
+      scroll-off-screen
+      >
       <v-toolbar-title class="white--text" >
         <v-toolbar-side-icon @click.stop="drawer = !drawer" v-show="menu"></v-toolbar-side-icon>
         <span v-if="appData">{{appData.leagueName}}</span>

@@ -29,8 +29,7 @@ trait TeamGetService extends GetService[Team] with TeamNames {
   
   protected def dec(json:js.Any) = decodeJson[U](json)
 
-  def listVenues() = venueService.list().map(_.map(v => venueService.refObs(v.id)))
-  def listUsers() = userService.list()
+
 }
 
 trait TeamPutService extends PutService[Team] with TeamGetService {

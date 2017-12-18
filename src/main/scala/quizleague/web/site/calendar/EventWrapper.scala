@@ -18,13 +18,13 @@ trait EventWrapper{
 //@JSExportAll
 class CalendarEventWrapper(@JSExport val event:CalendarEvent) extends EventWrapper{
   override val eventType = "calendar"
-  override val date = event.date
+  override val date = if(event == null) null else event.date
 }
 
 @JSExportAll
 class CompetitionEventWrapper(val event:Event, val competition:Competition) extends EventWrapper{
   override val eventType = "competition"
-  override val date = event.date
+  override val date = if(event == null) null else event.date
 }
 
 

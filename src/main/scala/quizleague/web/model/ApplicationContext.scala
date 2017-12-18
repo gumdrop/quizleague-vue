@@ -12,7 +12,7 @@ class ApplicationContext (
   val senderEmail:String,
   val emailAliases:js.Array[EmailAlias],
   val cloudStoreBucket:String
-) extends js.Object
+) extends js.Object with Model
 
 object ApplicationContext{
   def apply(  

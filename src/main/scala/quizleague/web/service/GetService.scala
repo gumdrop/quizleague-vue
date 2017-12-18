@@ -13,19 +13,20 @@ import quizleague.web.store.Firestore
 import rxscalajs._, rxscalajs.subjects._
 import quizleague.web.util.Logging._
 import firebase.firebase.firestore._
+import quizleague.web.model.Model
 
-trait GetService[T] {
+trait GetService[T <: Model] {
   this: ComponentNames =>
   type U <: Entity
 
   lazy val uriRoot = typeName
 
   val db = Firestore.db
-  private[service] val items: Map[String, U] = Map()
+  private[service] val items: Map[String, T] = Map()
   private val observables = Map[String, Observable[U]]()
   private var listObservable: Option[Observable[js.Array[U]]] = None
 
-  def get(id: String): Observable[T] = getFromStorage(id).map(mapOutSparse _)
+  def get(id: String): Observable[T] = items.get(id).fold(getFromStorage(id).map(mapOutSparse _).map(postProcess _))(Observable.just(_))
   def getRO(id: String): RefObservable[T] = RefObservable(id, () => get(id))
 
   def list(): Observable[js.Array[T]] = listFromStorage.map(c => c.map(u => mapOutSparse(u)))
@@ -47,7 +48,7 @@ trait GetService[T] {
     obs
   }
 
-  protected final def add(item: U) = { items += ((item.id, item)); mapOutSparse(item) }
+  protected final def add(item: T) = { items += ((item.id, item)); item }
   protected final def getFromStorage(id: String): Observable[U] = {
 
     observables.getOrElseUpdate(id, {
@@ -60,7 +61,7 @@ trait GetService[T] {
 
   }
 
-  protected[service] def postProcess(u: U): U = u
+  protected[service] def postProcess(t: T): T = t
 
   protected def dec(json: js.Any): Either[Error, U]
 
@@ -70,8 +71,8 @@ trait GetService[T] {
 
   final def refObs(id: String): RefObservable[T] = RefObservable(id, () => get(id))
   final def refObs(opt: Option[Ref[U]]): RefObservable[T] = opt.fold[RefObservable[T]](null)(ref => refObs[U, T](ref, this))
-  protected final def refObs[A <: Entity, B](ref: Ref[A], service: GetService[B]): RefObservable[B] = RefObservable(ref, () => service.get(ref.id))
-  protected final def refObsList[A <: Entity, B](refs: List[Ref[A]], service: GetService[B]): js.Array[RefObservable[B]] = refs.map(refObs(_, service)).toJSArray
+  protected final def refObs[A <: Entity, B <: Model](ref: Ref[A], service: GetService[B]): RefObservable[B] = if(ref == null) null else RefObservable(ref, () => service.get(ref.id))
+  protected final def refObsList[A <: Entity, B <: Model](refs: List[Ref[A]], service: GetService[B]): js.Array[RefObservable[B]] = refs.map(refObs(_, service)).toJSArray
 
   def ref(id: String): Ref[U] = Ref(typeName, id)
   def ref(list: js.Array[RefObservable[T]]): List[Ref[U]] = list.map(ref _).toList

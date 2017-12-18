@@ -8,11 +8,15 @@ import quizleague.web.util.rx.RefObservable
 import io.circe.Json
 import io.circe.scalajs._
 import quizleague.web.util.Logging._
+import rxscalajs.Observable
+import quizleague.web.model.Model
 
-trait PutService[T] {
+trait PutService[T <: Model] {
   this: GetService[T] with ComponentNames=>
-
-  def cache(item: T) = add(mapIn(item))
+ 
+  def cache(item: T) = add(item)
+  
+  protected def add(entity:U):T = add(mapOutSparse(entity))
   
   def save(item: T):Unit = save(mapIn(item))
   
@@ -29,8 +33,8 @@ trait PutService[T] {
   
   def getRef(item:T):Ref[U] = Ref(typeName,getId(item))
   def delete(item:T) = {items -= mapIn(item).id} 
-  def instance() = add(make())
-  def getId(item:T) = if (item != null ) mapIn(item).id else null
+  def instance() = add(mapOutSparse(make()))
+  def getId(item:T) = if (item != null ) item.id else null
   protected final def newId() = UUID.randomUUID.toString()
   private[service] def deCache(item:U) = items -= item.id
 

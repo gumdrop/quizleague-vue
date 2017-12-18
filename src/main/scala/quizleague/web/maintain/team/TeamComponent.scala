@@ -5,10 +5,16 @@ import quizleague.web.maintain.component.TemplateElements._
 import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.maintain.component.ItemComponentConfig
 import quizleague.web.model._
+import quizleague.web.maintain.component.SelectUtils
+import quizleague.web.maintain.venue._
+import quizleague.web.maintain.user.UserService
 
 object TeamComponent extends ItemComponentConfig[Team] with RouteComponent {
 
   val service = TeamService
+  val venueService = VenueService
+  def venues() = SelectUtils.model[Venue](venueService)(_.name)
+  def users() = SelectUtils.model[User](UserService)(_.name)
 
   val template = s"""
   <v-container v-if="item">
@@ -26,6 +32,18 @@ object TeamComponent extends ItemComponentConfig[Team] with RouteComponent {
           :rules=${valRequired("Short Name")}
           required
         ></v-text-field>
+        <v-select
+          :items="venues"
+          v-model="item.venue"
+          >
+        </v-select>
+        <v-select
+          :items="users"
+          v-model="item.users"
+          multiple
+          chips
+          >
+        </v-select>
         <div><v-btn :to="'/maintain/text/' + item.text.id" flat><v-icon>description</v-icon>Text</v-btn></div>
         $chbxRetired 
      </v-layout>
@@ -33,4 +51,7 @@ object TeamComponent extends ItemComponentConfig[Team] with RouteComponent {
     </v-form>
   </v-container>"""
 
+ override val subscriptions = super.subscriptions ++ Map(
+     "venues" -> {c:facade => venues()},
+     "users" -> {c:facade => users()})
 }
