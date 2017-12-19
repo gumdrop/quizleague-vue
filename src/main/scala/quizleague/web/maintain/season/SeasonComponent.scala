@@ -27,6 +27,11 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
         ></v-text-field>
 
         <div><v-btn :to="'/maintain/text/' + item.text.id" flat><v-icon>description</v-icon>Text</v-btn></div>
+        <div>Competitions
+          <div>
+           <v-chip close v-for="c in item.competitions" :key="c.id">{{async(c).name}}</v-chip>
+          </div>
+        </div>
         $chbxRetired 
      </v-layout>
      $formButtons

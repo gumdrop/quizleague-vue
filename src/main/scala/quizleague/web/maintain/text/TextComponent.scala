@@ -27,6 +27,7 @@ object TextComponent extends ItemComponentConfig[Text] with RouteComponent {
           :rules=${valRequired("Text")}
           required
           textarea
+          auto-grow
         ></v-text-field>
         $chbxRetired 
      </v-layout>
