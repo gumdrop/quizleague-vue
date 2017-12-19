@@ -18,7 +18,7 @@ object GlobalTextComponent extends ItemComponentConfig[GlobalText] with RouteCom
   <v-container v-if="item">
     <v-form v-model="valid" >
       <v-layout column>
-      <v-layout row v-for="entry in item.text" :key="entry.name">
+      <v-layout row v-for="entry in item.text" :key="entry.text.id">
           <v-text-field
           label="Name"
           v-model="entry.name"

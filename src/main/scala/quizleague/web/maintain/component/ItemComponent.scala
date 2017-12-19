@@ -10,6 +10,7 @@ import quizleague.web.core.Component
 import quizleague.web.model.Model
 import quizleague.web.names.ComponentNames
 import rxscalajs.Observable
+import quizleague.web.util.rx.RefObservable
 
 @js.native
 trait ItemComponent[T] extends VueRxComponent{
@@ -32,7 +33,7 @@ trait ItemComponentConfig[T <: Model] extends Component{
       
   )
   
-  override val data = c => Map("valid" -> false)
+  override val data:(facade) => Map[String,Any] = c => Map("valid" -> false)
 }
 
 @js.native
@@ -55,4 +56,18 @@ trait ItemListComponentConfig[T <: Model] extends Component{
   override def methods:Map[String, js.Function] = Map("add" -> ({(c:facade) => {
     val i = service.instance()
     c.$router.push(s"$typeName/${i.id}")}}:js.ThisFunction))
+}
+
+object ItemComponentConfig {
+  import scala.language.implicitConversions
+
+  implicit def wrapArray[T](list: js.Array[RefObservable[T]]) = new ArrayWrapper(list)
+
+  class ArrayWrapper[T](list: js.Array[RefObservable[T]]) {
+    def ---=(id: String):js.Array[RefObservable[T]] = list --= list.filter(_.id == id)
+    //def +++=(id:String, item:T):js.Array[RefObservable[T]] = list ++= RefObservable(id, () => Observable.of(item))
+  }
+  
+  
+
 }

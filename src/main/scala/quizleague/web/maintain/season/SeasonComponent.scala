@@ -1,13 +1,23 @@
 package quizleague.web.maintain.season
 
 import quizleague.web.maintain.component.ItemComponentConfig
+import quizleague.web.maintain.component.ItemComponentConfig._
 import quizleague.web.core.RouteComponent
 import quizleague.web.model._
 import quizleague.web.maintain.component.TemplateElements._
+import scalajs.js
+import js.JSConverters._
 
 object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
 
   val service = SeasonService
+  
+  def removeCompetition(c:facade, id:String) = c.item.competitions ---= id
+      def addCompetition(typeName:String) = {
+      val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
+      item.competitions +++= (comp.id,comp)
+      editCompetition(comp)
+    }
 
   val template = s"""
   <v-container v-if="item">
@@ -27,9 +37,10 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
         ></v-text-field>
 
         <div><v-btn :to="'/maintain/text/' + item.text.id" flat><v-icon>description</v-icon>Text</v-btn></div>
-        <div>Competitions
+        <v-layout column><span>Competitions&nbsp;</span><v-select prepend-icon="add" label="Competition Type" :items="types"></v-select></v-layout>
+        <div>
           <div>
-           <v-chip close v-for="c in item.competitions" :key="c.id">{{async(c).name}}</v-chip>
+           <v-chip close @input="removeCompetition(c.id)" v-for="c in item.competitions" :key="c.id">{{async(c).name}}</v-chip>
           </div>
         </div>
         $chbxRetired 
@@ -37,6 +48,10 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
      $formButtons
     </v-form>
   </v-container>"""
+     
+  override val methods = super.methods ++ Map("removeCompetition" -> ({(c:facade, id:String) => {removeCompetition(c,id)}}:js.ThisFunction))
+  
+  override val data = c => Map("types" -> CompetitionType.values.map(_.toString()).toJSArray)
 
 // override val subscriptions = super.subscriptions ++ Map(
 ////     "venues" -> {c:facade => venues()},
