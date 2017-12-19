@@ -25,7 +25,7 @@ trait ItemComponentConfig[T <: Model] extends Component{
   
   override def subscriptions:Map[String, facade => Observable[Any]] = Map("item" -> (c => service.get(c.$route.params(paramName))))
   
-  override val methods = Map(
+  override def methods = Map(
       "save" -> ({(c:facade) => {service.save(c.item);c.$router.back()}}:js.ThisFunction),
       "cancel" -> ({c:facade => c.$router.back()}:js.ThisFunction)  
       
@@ -48,8 +48,8 @@ trait ItemListComponentConfig[T <: Model] extends Component{
   type facade = ItemListComponent[T]
   
   val service:GetService[T] with PutService[T]
-  override val subscriptions = Map("items" -> (c => service.list()))
-  override val methods = Map("add" -> ({(c:facade) => {
+  override def subscriptions = Map("items" -> (c => service.list()))
+  override def methods:Map[String, js.Function] = Map("add" -> ({(c:facade) => {
     val i = service.instance()
     c.$router.push(s"$typeName/${i.id}")}}:js.ThisFunction))
 }

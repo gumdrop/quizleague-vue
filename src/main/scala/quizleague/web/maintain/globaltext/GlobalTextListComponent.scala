@@ -6,7 +6,7 @@ import quizleague.web.maintain.component.ItemListComponentConfig
 import quizleague.web.model._
 import quizleague.web.names._
 
-object GlobalTextListComponent extends ItemListComponentConfig[GlobalText] with RouteComponent with TeamNames{
+object GlobalTextListComponent extends ItemListComponentConfig[GlobalText] with RouteComponent with GlobalTextNames{
   val template = s"""
   <v-container>
     <v-layout column>
