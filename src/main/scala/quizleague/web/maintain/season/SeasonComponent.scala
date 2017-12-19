@@ -11,13 +11,17 @@ import js.JSConverters._
 object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
 
   val service = SeasonService
+  val competitionService = 
   
   def removeCompetition(c:facade, id:String) = c.item.competitions ---= id
-      def addCompetition(typeName:String) = {
+  
+  def addCompetition(typeName:String) = {
       val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
       item.competitions +++= (comp.id,comp)
       editCompetition(comp)
     }
+  
+  def editCompetition(comp:Competition) = Unit
 
   val template = s"""
   <v-container v-if="item">
