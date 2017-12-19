@@ -9,10 +9,13 @@ import scalajs.js
 import scalajs.js.JSConverters._
 
 object SeasonListComponent extends ItemListComponentConfig[Season] with RouteComponent with SeasonNames{
+  
+  override def sort(items:js.Array[Season]) = items.sortBy(_.startYear)
+  
   val template = s"""
   <v-container v-if="items">
     <v-layout column>
-      <div v-for="item in sort(items)">
+      <div v-for="item in items">
         <v-btn :to="'season/' + item.id" flat left>{{item.startYear}}/{{item.endYear}}</v-btn>
       </div>
       $addFAB
@@ -20,6 +23,5 @@ object SeasonListComponent extends ItemListComponentConfig[Season] with RouteCom
   </v-container>
 """
   val service = SeasonService
-  
-  override val methods = super.methods ++ Map("sort" -> ({(items:js.Array[Season]) => items.sortBy(_.startYear)}:js.Function))
+
 }

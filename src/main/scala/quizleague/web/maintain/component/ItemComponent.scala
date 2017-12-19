@@ -2,6 +2,7 @@ package quizleague.web.maintain.component
 
 import com.felstar.scalajs.vue.VueRxComponent
 import scalajs.js
+import js.JSConverters._
 import quizleague.web.service.PutService
 import quizleague.web.core.IdComponent
 import quizleague.web.service.GetService
@@ -46,9 +47,11 @@ trait ItemListComponentConfig[T <: Model] extends Component{
   this:ComponentNames =>
     
   type facade = ItemListComponent[T]
+ 
+  def sort(items:js.Array[T]) = items.sortBy(_.id)
   
   val service:GetService[T] with PutService[T]
-  override def subscriptions = Map("items" -> (c => service.list()))
+  override def subscriptions = Map("items" -> (c => service.list().map(sort _)))
   override def methods:Map[String, js.Function] = Map("add" -> ({(c:facade) => {
     val i = service.instance()
     c.$router.push(s"$typeName/${i.id}")}}:js.ThisFunction))

@@ -5,8 +5,12 @@ import quizleague.web.maintain.component.TemplateElements._
 import quizleague.web.maintain.component.ItemListComponentConfig
 import quizleague.web.model._
 import quizleague.web.names._
+import scalajs.js
 
 object UserListComponent extends ItemListComponentConfig[User] with RouteComponent with UserNames{
+  
+  override def sort(items:js.Array[User]) = items.sortBy(_.name)
+  
   val template = s"""
   <v-container>
     <v-layout column>
