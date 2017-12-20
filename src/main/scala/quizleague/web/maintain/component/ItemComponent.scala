@@ -19,7 +19,7 @@ trait ItemComponent[T] extends VueRxComponent{
 }
 
 trait ItemComponentConfig[T <: Model] extends Component{
-  type facade = ItemComponent[T]
+  type facade <: ItemComponent[T]
   
   val paramName = "id"
   
@@ -47,7 +47,7 @@ trait ItemListComponentConfig[T <: Model] extends Component{
 
   this:ComponentNames =>
     
-  type facade = ItemListComponent[T]
+  type facade <: ItemListComponent[T]
  
   def sort(items:js.Array[T]) = items.sortBy(_.id)
   
@@ -65,7 +65,7 @@ object ItemComponentConfig {
 
   class ArrayWrapper[T](list: js.Array[RefObservable[T]]) {
     def ---=(id: String):js.Array[RefObservable[T]] = list --= list.filter(_.id == id)
-    //def +++=(id:String, item:T):js.Array[RefObservable[T]] = list ++= RefObservable(id, () => Observable.of(item))
+    def +++=(id:String, item:T):js.Array[RefObservable[T]] = {list.push(RefObservable(id, () => Observable.of(item)));list}
   }
   
   

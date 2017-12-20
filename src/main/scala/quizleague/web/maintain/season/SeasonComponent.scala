@@ -1,5 +1,6 @@
 package quizleague.web.maintain.season
 
+import quizleague.web.maintain.component.ItemComponent
 import quizleague.web.maintain.component.ItemComponentConfig
 import quizleague.web.maintain.component.ItemComponentConfig._
 import quizleague.web.core.RouteComponent
@@ -7,21 +8,32 @@ import quizleague.web.model._
 import quizleague.web.maintain.component.TemplateElements._
 import scalajs.js
 import js.JSConverters._
+import quizleague.web.maintain.competition.CompetitionService
+
+@js.native
+trait SeasonComponent extends ItemComponent[Season]{
+  var selectedType:String
+}
 
 object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
 
+  override type facade = SeasonComponent
+    
   val service = SeasonService
-  val competitionService = 
+  val competitionService = CompetitionService
   
   def removeCompetition(c:facade, id:String) = c.item.competitions ---= id
   
-  def addCompetition(typeName:String) = {
+  def addCompetition(c:facade,typeName:String) = {
       val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
-      item.competitions +++= (comp.id,comp)
-      editCompetition(comp)
+      c.item.competitions +++= (comp.id,comp)
+      editCompetition(c,comp)
     }
   
-  def editCompetition(comp:Competition) = Unit
+  def editCompetition(c:facade, comp: Competition) = {
+    service.cache(c.item)
+    c.$router.push(s"${c.item.id}/competition/${comp.id}/${comp.typeName}")
+  }
 
   val template = s"""
   <v-container v-if="item">
@@ -41,21 +53,28 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
         ></v-text-field>
 
         <div><v-btn :to="'/maintain/text/' + item.text.id" flat><v-icon>description</v-icon>Text</v-btn></div>
-        <v-layout column><span>Competitions&nbsp;</span><v-select prepend-icon="add" label="Competition Type" :items="types"></v-select></v-layout>
+        <v-layout column>
+          <v-select @input="addCompetition(selectedType)" clearable append-icon="add" v-model="selectedType" label="Add Competition" :items="types"></v-select>
         <div>
-          <div>
-           <v-chip close @input="removeCompetition(c.id)" v-for="c in item.competitions" :key="c.id">{{async(c).name}}</v-chip>
-          </div>
+          <v-chip close @input="removeCompetition(c.id)" v-for="c in item.competitions" :key="c.id">{{async(c).name}}</v-chip>
         </div>
+        </v-layout>
         $chbxRetired 
      </v-layout>
      $formButtons
     </v-form>
   </v-container>"""
      
-  override val methods = super.methods ++ Map("removeCompetition" -> ({(c:facade, id:String) => {removeCompetition(c,id)}}:js.ThisFunction))
+  override val methods = super.methods ++ Map(
+      "removeCompetition" -> ({removeCompetition _}:js.ThisFunction),
+      "addCompetition" -> ({addCompetition _}:js.ThisFunction)
+  )
   
-  override val data = c => Map("types" -> CompetitionType.values.map(_.toString()).toJSArray)
+  override val data = c => Map(
+      "types" -> CompetitionType.values.map(_.toString()).toJSArray,
+      "selectedType" -> null,
+      "valid" -> true
+  )
 
 // override val subscriptions = super.subscriptions ++ Map(
 ////     "venues" -> {c:facade => venues()},
