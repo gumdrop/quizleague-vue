@@ -19,22 +19,7 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
 
   override type facade = SeasonComponent
     
-  val service = SeasonService
-  val competitionService = CompetitionService
-  
-  def removeCompetition(c:facade, id:String) = c.item.competitions ---= id
-  
-  def addCompetition(c:facade,typeName:String) = {
-      val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
-      c.item.competitions +++= (comp.id,comp)
-      c.selectedType = null
-      editCompetition(c,comp)
-    }
-  
-  def editCompetition(c:facade, comp: Competition) = {
-    service.cache(c.item)
-    c.$router.push(s"${c.item.id}/competition/${comp.id}/${comp.typeName}")
-  }
+
 
   val template = s"""
   <v-container v-if="item">
@@ -54,6 +39,7 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
         ></v-text-field>
 
         <div><v-btn v-on:click ="editText(item.text.id)" flat><v-icon>description</v-icon>Text</v-btn></div>
+        <div><v-btn v-on:click ="calendar(item.text.id)" flat><v-icon>mdi-calendar</v-icon>Calendar</v-btn></div>
         <v-layout column>
           <v-select @input="addCompetition(selectedType)" clearable append-icon="add" v-model="selectedType" label="Add Competition" :items="types"></v-select>
         <div>
@@ -65,10 +51,33 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
      $formButtons
     </v-form>
   </v-container>"""
+    
+     
+       val service = SeasonService
+  val competitionService = CompetitionService
+  
+  def removeCompetition(c:facade, id:String) = c.item.competitions ---= id
+  
+  def addCompetition(c:facade,typeName:String) = {
+      val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
+      c.item.competitions +++= (comp.id,comp)
+      c.selectedType = null
+      editCompetition(c,comp)
+    }
+  
+  def editCompetition(c:facade, comp: Competition) = {
+    service.cache(c.item)
+    c.$router.push(s"${c.item.id}/competition/${comp.id}/${comp.typeName}")
+  }
+  def calendar(c:facade) = {
+      service.cache(c.item)
+      c.$router.push(s"${c.item.id}/calendar")
+    }
      
   override val methods = super.methods ++ Map(
       "removeCompetition" -> ({removeCompetition _}:js.ThisFunction),
-      "addCompetition" -> ({addCompetition _}:js.ThisFunction)
+      "addCompetition" -> ({addCompetition _}:js.ThisFunction),
+      "calendar" -> ({calendar _}:js.ThisFunction)
   )
   
   override val data = c => Map(

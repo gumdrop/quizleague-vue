@@ -22,7 +22,7 @@ class CalendarEvent(
   val date: String,
   val time: String,
   val duration: Float,
-  val description: String)
+  val description: String) extends js.Object
 
 object CalendarEvent {
   def apply(

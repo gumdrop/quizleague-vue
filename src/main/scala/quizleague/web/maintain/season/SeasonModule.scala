@@ -11,10 +11,10 @@ import quizleague.web.maintain.MaintainMenuComponent
 
 object SeasonModule extends Module {
   override val routes = @@(     
-//      RouteConfig(
-//        path = "/maintain/season/:id/calendar",
-//        //component = %%[CalendarComponent]
-//      ),
+      RouteConfig(
+        path = "/maintain/season/:id/calendar",
+        components = Map("default" -> CalendarComponent(), "sidenav" -> MaintainMenuComponent())
+      ),
       RouteConfig(
         path = "/maintain/season/:id",
         components = Map("default" -> SeasonComponent(), "sidenav" -> MaintainMenuComponent())
