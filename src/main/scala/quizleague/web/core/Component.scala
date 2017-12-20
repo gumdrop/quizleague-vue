@@ -14,6 +14,7 @@ import com.felstar.scalajs.vue.VueComponent
 import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.util.Logging._
 
+
 trait RouteComponent extends Component{
 
   val name = ""
@@ -116,4 +117,3 @@ trait Component {
 trait IdComponent extends VueComponent with VueRxComponent{
   val id:String = js.native  
 }
-
