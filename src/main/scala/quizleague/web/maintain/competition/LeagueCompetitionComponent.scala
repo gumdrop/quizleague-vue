@@ -6,6 +6,9 @@ import quizleague.web.model._
 import scala.scalajs.js
 import TemplateElements._
 import quizleague.web.maintain.season.SeasonService
+import rxscalajs.Observable._
+import js.JSConverters._
+import quizleague.web.maintain.component.SelectUtils
 
 
 
@@ -57,7 +60,7 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
     }
   }
   
-  def subsidiaries(c:facade) = combineAll(c.season.competitions 
+  def subsidiaries(c:facade) = SelectUtils.model(c.season.competitions, CompetitionService)(_.name)(filterSubs _) 
 
 }
     

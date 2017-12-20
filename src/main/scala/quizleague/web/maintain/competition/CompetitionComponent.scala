@@ -1,6 +1,7 @@
 package quizleague.web.maintain.competition
 
 import quizleague.web.maintain.component._
+import quizleague.web.core._
 import quizleague.web.model._
 import scalajs.js
 import quizleague.web.maintain.season.SeasonService
@@ -12,7 +13,7 @@ trait CompetitionComponent extends ItemComponent[Competition]{
   
 }
 
-trait CompetitionComponentConfig extends ItemComponentConfig[Competition]{
+trait CompetitionComponentConfig extends ItemComponentConfig[Competition] with RouteComponent{
   
   override type facade = CompetitionComponent
   
