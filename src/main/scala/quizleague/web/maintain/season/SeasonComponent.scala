@@ -27,6 +27,7 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
   def addCompetition(c:facade,typeName:String) = {
       val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
       c.item.competitions +++= (comp.id,comp)
+      c.selectedType = null
       editCompetition(c,comp)
     }
   
@@ -52,7 +53,7 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
           required
         ></v-text-field>
 
-        <div><v-btn :to="'/maintain/text/' + item.text.id" flat><v-icon>description</v-icon>Text</v-btn></div>
+        <div><v-btn v-on:click ="editText(item.text.id)" flat><v-icon>description</v-icon>Text</v-btn></div>
         <v-layout column>
           <v-select @input="addCompetition(selectedType)" clearable append-icon="add" v-model="selectedType" label="Add Competition" :items="types"></v-select>
         <div>

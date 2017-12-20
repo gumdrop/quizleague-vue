@@ -25,11 +25,20 @@ trait ItemComponentConfig[T <: Model] extends Component{
   
   val service:GetService[T] with PutService[T]
   
+  def editText(c:facade, textId:String) = {
+      service.cache(c.item)
+      c.$router.push(s"/maintain/text/$textId")
+    }
+  
+  def save(c:facade) = {service.save(c.item);c.$router.back()}
+  def cancel(c:facade) = c.$router.back()
+  
   override def subscriptions:Map[String, facade => Observable[Any]] = Map("item" -> (c => service.get(c.$route.params(paramName))))
   
   override def methods = Map(
-      "save" -> ({(c:facade) => {service.save(c.item);c.$router.back()}}:js.ThisFunction),
-      "cancel" -> ({c:facade => c.$router.back()}:js.ThisFunction)  
+      "save" -> ({save _}:js.ThisFunction),
+      "cancel" -> ({cancel _}:js.ThisFunction),
+      "editText" -> ({editText _}:js.ThisFunction),
       
   )
   
