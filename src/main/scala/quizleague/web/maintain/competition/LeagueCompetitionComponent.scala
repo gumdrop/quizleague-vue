@@ -64,9 +64,9 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
              required></v-text-field>
           <v-text-field  label="Duration" type="nnumber" v-model.number="item.duration"
              required></v-text-field>
-          <v-select label="Subsidiary" :items="async(subsidiaries(season))" v-model="item.subsidiary"></v-select>
+          <v-select label="Subsidiary" :items="subsidiaries(season)" v-model="item.subsidiary"></v-select>
 
-      <div><v-btn v-on:click="editText(item.text)"  type="button" >Edit Text...</v-btn></div>
+      <div><v-btn v-on:click="editText(item.text.id)"  type="button" >Edit Text...</v-btn></div>
       <div><v-btn v-on:click="fixtures(item)" >Fixtures...</v-btn></div>
       <div><v-btn v-on:click="tables(item)" >Tables...</v-btn></div>
       </v-layout>
