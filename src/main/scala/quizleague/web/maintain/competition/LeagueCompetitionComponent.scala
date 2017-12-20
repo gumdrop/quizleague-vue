@@ -9,6 +9,7 @@ import quizleague.web.maintain.season.SeasonService
 import rxscalajs.Observable._
 import js.JSConverters._
 import quizleague.web.maintain.component.SelectUtils
+import quizleague.web.core._
 
 
 
@@ -51,7 +52,27 @@ import quizleague.web.maintain.component.SelectUtils
 //)
 object LeagueCompetitionComponent extends CompetitionComponentConfig{
   
+  val   template = s"""
+  <v-container v-if="item && season">
+    <h2>League Competition Detail</h2>
+    <v-form v-model="valid">
+      <v-layout column>
+   
+          <v-text-field  label="Name" type="text" v-model="item.name"
+             required></v-text-field>
+          <v-text-field  label="Start Time" type="time" v-model="item.startTime"
+             required></v-text-field>
+          <v-text-field  label="Duration" type="nnumber" v-model.number="item.duration"
+             required></v-text-field>
+          <v-select label="Subsidiary" :items="async(subsidiaries(season))" v-model="item.subsidiary"></v-select>
 
+      <div><v-btn v-on:click="editText(item.text)"  type="button" >Edit Text...</v-btn></div>
+      <div><v-btn v-on:click="fixtures(item)" >Fixtures...</v-btn></div>
+      <div><v-btn v-on:click="tables(item)" >Tables...</v-btn></div>
+      </v-layout>
+      $formButtons
+    </v-form>
+  </v-container>"""
   
   def filterSubs(c:Competition) = {
     c match {
@@ -60,7 +81,9 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
     }
   }
   
-  def subsidiaries(c:facade) = SelectUtils.model(c.season.competitions, CompetitionService)(_.name)(filterSubs _) 
+  def subsidiaries(c:facade, season:Season) = SelectUtils.model(season.competitions, CompetitionService)(_.name)(filterSubs _) 
+  
+  override val methods = super.methods ++ Map("subsidiaries" -> ({subsidiaries _}:js.ThisFunction))
 
 }
     

@@ -8,8 +8,12 @@ import quizleague.web.maintain.venue.VenueService
 import quizleague.web.core._
 import com.felstar.scalajs.vue.RouteConfig
 import quizleague.web.maintain.MaintainMenuComponent
+import quizleague.web.maintain.competition.CompetitionModule
 
 object SeasonModule extends Module {
+  
+  override val modules = @@(CompetitionModule)
+  
   override val routes = @@(     
       RouteConfig(
         path = "/maintain/season/:id/calendar",

@@ -43,7 +43,7 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
         <v-layout column>
           <v-select @input="addCompetition(selectedType)" clearable append-icon="add" v-model="selectedType" label="Add Competition" :items="types"></v-select>
         <div>
-          <v-chip close @input="removeCompetition(c.id)" v-for="c in item.competitions" :key="c.id">{{async(c).name}}</v-chip>
+          <v-chip close v-on:click="editCompetition(async(c))" @input="removeCompetition(c.id)" v-for="c in item.competitions" :key="c.id">{{async(c).name}}</v-chip>
         </div>
         </v-layout>
         $chbxRetired 
@@ -77,7 +77,8 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
   override val methods = super.methods ++ Map(
       "removeCompetition" -> ({removeCompetition _}:js.ThisFunction),
       "addCompetition" -> ({addCompetition _}:js.ThisFunction),
-      "calendar" -> ({calendar _}:js.ThisFunction)
+      "calendar" -> ({calendar _}:js.ThisFunction),
+      "editCompetition" -> ({editCompetition _}:js.ThisFunction)
   )
   
   override val data = c => Map(
