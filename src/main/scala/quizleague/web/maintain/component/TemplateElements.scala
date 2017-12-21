@@ -37,7 +37,7 @@ object TemplateElements {
               dark
               fab
               bottom
-              right
+              left
               small
               color="pink"
               v-on:click="add">
@@ -45,12 +45,16 @@ object TemplateElements {
       </v-btn>
 """
   
-  val backFAB = """    
-    <div style="position:absolute;left:1em;bottom:2em;">
-      <button md-fab (click)="back()">
-          <md-icon class="md-24">arrow_back</md-icon>
-      </button>
-    </div>
+  val backFAB = """      <v-btn  fixed
+              dark
+              fab
+              bottom
+              right
+              small
+              color="pink"
+              v-on:click="$router.back()">
+          <v-icon>back</v-icon>
+      </v-btn>
 """
   
   def valRequired(name:String) = s""""[(v) => !!v || '$name is required']""""

@@ -8,7 +8,7 @@ import js.JSConverters._
 import TemplateElements._
 import quizleague.web.maintain.text.TextService
 import js.Dynamic.{ global => g }
-import quizleague.web.util.Logging
+import quizleague.web.util.Logging._
 import quizleague.web.util.rx._
 import quizleague.web.maintain.competition.CompetitionService
 import quizleague.web.names.FixturesNames
@@ -26,11 +26,11 @@ object FixturesListComponent extends CompetitionComponentConfig with FixturesNam
   override type facade = FixturesListComponent
   
   val template = s"""
-  <v-container v-if="item && fixtures">
-    <v-layout column>
+  <v-container>
+    <v-layout column v-if="item ">
       <h2>Fixtures List for {{item.name}} </h2>
-      <div v-for="fixture in fixtures" :key="fixture.id">
-        <v-btn :to="item.typeName.toString + '/fixtures/' + fixture.id" flat left>{{fixture.date}}</v-btn>
+      <div v-for="fixture in fs" :key="fixture.id">
+        <v-btn :to="'fixtures/' + fixture.id" flat left>{{fixture.date | date("d MMMM yyyy")}}</v-btn>
       </div>
     </v-layout>
     $addFAB
@@ -45,7 +45,7 @@ object FixturesListComponent extends CompetitionComponentConfig with FixturesNam
     c.$router.push(s"fixtures/${fixs.id}")
   }
   
-  override val subscriptions = super.subscriptions ++ Map("fixtures" -> ((c:facade) => FixturesService.fixturesForCompetition(c.$route.params("id").toString).map(_.sortBy(_.date))))
+  override val subscriptions = super.subscriptions ++ Map("fs" -> ((c:facade) => FixturesService.fixturesForCompetition(c.$route.params("id").toString).map(_.sortBy(_.date))))
   
   override val methods = super.methods + (("add", ({add _}):js.ThisFunction))
 

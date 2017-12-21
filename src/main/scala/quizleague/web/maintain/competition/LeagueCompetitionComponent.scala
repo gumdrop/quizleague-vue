@@ -24,10 +24,10 @@ trait LeagueCompetitionComponent extends CompetitionComponent{
 object LeagueCompetitionComponent extends CompetitionComponentConfig{
   override type facade = LeagueCompetitionComponent
   val   template = s"""
-  <v-container>
+  <v-container v-if="item && season && subsidiaries">
     <h2>League Competition Detail {{season.startYear}}/{{season.endYear}}</h2>
 
-    <v-form v-model="valid"  v-if="item && season && subsidiaries">
+    <v-form v-model="valid"  >
       <v-layout column>
    
           <v-text-field  label="Name" type="text" v-model="item.name"
