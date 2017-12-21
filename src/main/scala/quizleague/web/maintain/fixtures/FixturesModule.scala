@@ -10,8 +10,22 @@ import quizleague.web.service.results.ReportsGetService
 import quizleague.web.service.results.ReportsPutService
 import quizleague.web.maintain.text.TextService
 import quizleague.web.maintain.user.UserService
+import quizleague.web.maintain.competition.CompetitionService
+import rxscalajs.Observable._
+import scalajs.js
+import js.JSConverters._
+import quizleague.web.core._
+import com.felstar.scalajs.vue.RouteConfig
+import quizleague.web.maintain.MaintainMenuComponent
 
-object FixturesModule {
+object FixturesModule extends Module {
+  override val routes = @@(     
+      RouteConfig(
+        path = "/maintain/season/:seasonId/competition/:id/fixtures",
+        components = Map("default" -> FixturesListComponent(), "sidenav" -> MaintainMenuComponent())
+      ),
+      
+  )
   
 }
 
@@ -24,6 +38,8 @@ object FixtureService extends FixtureGetService with FixturePutService{
 
 object FixturesService extends FixturesGetService with FixturesPutService{
   override val fixtureService = FixtureService
+  
+  def fixturesForCompetition(competitionId:String) = CompetitionService.get(competitionId).flatMap(c => combineLatest(c.fixtures.map(_.obs).toSeq)).map(_.toJSArray)
 }
 
 object ReportsService extends ReportsGetService with ReportsPutService{

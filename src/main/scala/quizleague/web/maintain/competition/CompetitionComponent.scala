@@ -22,7 +22,7 @@ trait CompetitionComponentConfig extends ItemComponentConfig[Competition] with R
   
   def fixtures(c:facade) = {
      service.cache(c.item)
-     c.$router.push(s"${c.item.id}/fixtures")
+     c.$router.push(s"fixtures")
    }
   
   def tables(c:facade) = {

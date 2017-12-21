@@ -9,9 +9,13 @@ import quizleague.web.maintain.leaguetable.LeagueTableService
 import quizleague.web.core._
 import com.felstar.scalajs.vue.RouteConfig
 import quizleague.web.maintain.MaintainMenuComponent
+import quizleague.web.maintain.fixtures.FixturesModule
 
 object CompetitionModule extends Module{
-    override val routes = @@(     
+  
+  override val modules = @@(FixturesModule)
+  
+  override val routes = @@(     
       RouteConfig(
         path = "/maintain/season/:seasonId/competition/:id/league",
         components = Map("default" -> LeagueCompetitionComponent(), "sidenav" -> MaintainMenuComponent())
