@@ -1,0 +1,47 @@
+package quizleague.web.maintain.competition
+
+import quizleague.web.maintain.component.ItemComponent
+import quizleague.web.maintain.component._
+import quizleague.web.model._
+import scala.scalajs.js
+
+import TemplateElements._
+import quizleague.web.maintain.text.TextService
+
+import quizleague.web.util.Logging
+
+import quizleague.web.maintain.venue.VenueService
+
+
+object SingletonCompetitionComponent extends CompetitionComponentConfig{
+  val template = s"""
+  <v-container v-if="item && season">
+    <h2>Singleton Competition Detail {{item.startYear}}/{{item.endYear}}</h2>
+    <v-form v-model="valid">
+      <v-layout column>
+        <v-text-field label="Name" required v-model="item.name"></v-text-field>
+        <v-text-field label="Text Name" required v-model="item.textName"></v-text-field>
+         <v-layout column v-if="item.event">
+          <v-layout row>
+            <v-text-field label="Date" required v-model="item.event.date" type="date"></v-text-field>
+            <v-text-field label="Time" required v-model="item.event.time" type="time"></v-text-field>
+            <v-text-field label="Duration" required v-model.number="item.event.duration" type="number" step="0.1"></v-text-field>
+          </v-layout>
+          <v-select label="Venue" v-model="item.event.venue" :items="venues"></v-select>
+         </v-layout>
+
+      <div><v-btn v-on:click="editText(item.text.id)" flat  ><v-icon>description</v-icon>Text...</v-btn></div>
+      </v-layout>
+      $formButtons
+    </form>
+  </div>
+
+  """  
+      
+  def venues() = SelectUtils.model[Venue](VenueService)(_.name)
+  
+  override val subscriptions = super.subscriptions ++ Map(
+     "venues" -> {c:facade => venues()})
+
+  
+}

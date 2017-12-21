@@ -24,6 +24,10 @@ object CompetitionModule extends Module{
         path = "/maintain/season/:seasonId/competition/:id/subsidiary",
         components = Map("default" -> SubsidiaryCompetitionComponent(), "sidenav" -> MaintainMenuComponent())
       ),
+      RouteConfig(
+        path = "/maintain/season/:seasonId/competition/:id/singleton",
+        components = Map("default" -> SingletonCompetitionComponent(), "sidenav" -> MaintainMenuComponent())
+      ),
  )
 }
 
