@@ -15,19 +15,13 @@ import quizleague.web.util.Logging._
 import quizleague.web.maintain.season.SeasonService
 
 
+object CupCompetitionComponent extends CompetitionComponentConfig{
 
-
-@js.native
-trait LeagueCompetitionComponent extends CompetitionComponent{
-  var subsidiaries:js.Array[SelectWrapper[Competition]]
-}
-object LeagueCompetitionComponent extends CompetitionComponentConfig{
-  override type facade = LeagueCompetitionComponent
   val   template = s"""
   <v-container>
-    <h2>League Competition Detail {{season.startYear}}/{{season.endYear}}</h2>
+    <h2>Cup Competition Detail {{season.startYear}}/{{season.endYear}}</h2>
 
-    <v-form v-model="valid"  v-if="item && season && subsidiaries">
+    <v-form v-model="valid"  v-if="item && season">
       <v-layout column>
    
           <v-text-field  label="Name" type="text" v-model="item.name"
@@ -36,33 +30,13 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
              required></v-text-field>
           <v-text-field  label="Duration" type="number" v-model.number="item.duration"
              required></v-text-field>
-          <v-select label="Subsidiary" :items="subsidiaries" v-model="item.subsidiary"></v-select>
 
       <div><v-btn flat v-on:click="editText(item.text.id)"  type="button" ><v-icon>description</v-icon>Text...</v-btn></div>
       <div><v-btn flat v-on:click="fixtures(item)" ><v-icon>check</v-icon>Fixtures...</v-btn></div>
-      <div><v-btn flat v-on:click="tables(item)" ><v-icon>mdi-table</v-icon>Tables...</v-btn></div>
       </v-layout>
       $formButtons
     </v-form>
   </v-container>"""
-  
-  def filterSubs(c:Competition) = {
-    c match {
-      case s:SubsidiaryLeagueCompetition => true
-      case _ => false
-    }
-  }
-  
-  def subsidiaries(seasonId:String):Observable[js.Array[SelectWrapper[Competition]]] = {
-    SeasonService.get(seasonId).flatMap(season => SelectUtils.model(season.competitions, CompetitionService)(_.name)(filterSubs _))
-    
-     
-  }
-  
  
-  override val subscriptions = super.subscriptions ++ Map("subsidiaries" -> ((c:facade) => subsidiaries(c.$route.params("seasonId").toString) ))
-  
- 
-
 }
     

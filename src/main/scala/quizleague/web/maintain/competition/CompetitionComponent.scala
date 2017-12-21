@@ -6,6 +6,7 @@ import quizleague.web.model._
 import scalajs.js
 import quizleague.web.maintain.season.SeasonService
 import rxscalajs.Observable
+import scala.scalajs.js.UndefOr
 
 @js.native
 trait CompetitionComponent extends ItemComponent[Competition]{
@@ -15,7 +16,7 @@ trait CompetitionComponent extends ItemComponent[Competition]{
 
 trait CompetitionComponentConfig extends ItemComponentConfig[Competition] with RouteComponent{
   
-  override type facade = CompetitionComponent
+  override type facade <: CompetitionComponent
   
   val service = CompetitionService
   

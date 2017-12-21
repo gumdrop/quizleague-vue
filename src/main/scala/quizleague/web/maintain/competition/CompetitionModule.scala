@@ -16,6 +16,14 @@ object CompetitionModule extends Module{
         path = "/maintain/season/:seasonId/competition/:id/league",
         components = Map("default" -> LeagueCompetitionComponent(), "sidenav" -> MaintainMenuComponent())
       ),
+      RouteConfig(
+        path = "/maintain/season/:seasonId/competition/:id/cup",
+        components = Map("default" -> CupCompetitionComponent(), "sidenav" -> MaintainMenuComponent())
+      ),
+      RouteConfig(
+        path = "/maintain/season/:seasonId/competition/:id/subsidiary",
+        components = Map("default" -> SubsidiaryCompetitionComponent(), "sidenav" -> MaintainMenuComponent())
+      ),
  )
 }
 

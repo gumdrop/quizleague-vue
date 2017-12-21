@@ -9,6 +9,7 @@ import quizleague.web.maintain.component.SelectUtils
 import quizleague.web.maintain.venue._
 import quizleague.web.maintain.user.UserService
 import scalajs.js
+import js.JSConverters._
 
 object GlobalTextComponent extends ItemComponentConfig[GlobalText] with RouteComponent {
 
@@ -18,7 +19,7 @@ object GlobalTextComponent extends ItemComponentConfig[GlobalText] with RouteCom
   <v-container v-if="item">
     <v-form v-model="valid" >
       <v-layout column>
-      <v-layout row v-for="entry in item.text" :key="entry.text.id">
+      <v-layout row v-for="entry in sort(item.text)" :key="entry.text.id">
           <v-text-field
           label="Name"
           v-model="entry.name"
@@ -42,7 +43,12 @@ object GlobalTextComponent extends ItemComponentConfig[GlobalText] with RouteCom
     </v-form>
   </v-container>"""
 
-  override def methods = super.methods ++ Map(
+  
+ def sort(c:facade, entries:js.Array[TextEntry]) = entries.sortBy(_.name)     
+      
+ override val methods = super.methods ++ Map(
+
+    "sort" -> ({sort _}:js.ThisFunction),
     "add" -> ({ (c: facade) =>
       {
         val i = service.entryInstance()
