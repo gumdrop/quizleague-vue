@@ -26,6 +26,7 @@ import quizleague.web.service.DirtyListService
 import quizleague.web.names.LeagueTableNames
 import io.circe.parser._,io.circe.syntax._
 import quizleague.util.json.codecs.DomainCodecs._
+import quizleague.web.util.rx.RefObservable
 
 
 
@@ -56,7 +57,7 @@ trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService
 
   override protected def make() = Dom(newId, "", List())
 
-  def rowInstance(team: Team) = LeagueTableRow(teamService.refObs(team.id), "", 0, 0, 0, 0, 0, 0, 0)
+  def rowInstance(team: RefObservable[Team]) = LeagueTableRow(team, "", 0, 0, 0, 0, 0, 0, 0)
 
 
   override def enc(item: Dom) = item.asJson

@@ -7,6 +7,8 @@ import scalajs.js
 import quizleague.web.maintain.season.SeasonService
 import rxscalajs.Observable
 import scala.scalajs.js.UndefOr
+import quizleague.web.maintain.component.ItemComponentConfig._
+import quizleague.web.maintain.leaguetable.LeagueTableService
 
 @js.native
 trait CompetitionComponent extends ItemComponent[Competition]{
@@ -21,20 +23,29 @@ trait CompetitionComponentConfig extends ItemComponentConfig[Competition] with R
   val service = CompetitionService
   
   def fixtures(c:facade) = {
-     service.cache(c.item)
      c.$router.push(s"fixtures")
    }
   
-  def tables(c:facade) = {
-     service.cache(c.item)
-     c.$router.push(s"${c.item.id}/leaguetable")
-   }
+  def toTable(c:facade, tableId:String) = {
+     c.$router.push(s"leaguetable/$tableId")
+  }
+  
+  def removeTable(c:facade, tableId:String) = {
+    c.item.tables ---= tableId
+  }
+  
+  def addTable(c:facade) = {
+    val table = LeagueTableService.instance()
+    c.item.tables +++= (table.id, table)
+  }
 
   
   override def subscriptions = super.subscriptions ++ Map("season" -> {c:facade => SeasonService.get(c.$route.params("seasonId").toString)})
   
   override def methods = super.methods ++ Map(
       "fixtures" -> ({fixtures _}:js.ThisFunction), 
-      "tables" -> ({tables _}:js.ThisFunction) 
+      "toTable" -> ({toTable _}:js.ThisFunction),
+      "removeTable" -> ({removeTable _}:js.ThisFunction),
+      "addTable" -> ({addTable _}:js.ThisFunction)
   )
 }

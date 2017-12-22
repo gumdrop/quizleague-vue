@@ -31,16 +31,18 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
       <v-layout column>
    
           <v-text-field  label="Name" type="text" v-model="item.name"
-             required></v-text-field>
+             required :rules=${valRequired("Name")}></v-text-field>
           <v-text-field  label="Start Time" type="time" v-model="item.startTime"
-             required></v-text-field>
+             required :rules=${valRequired("Start Time")}></v-text-field>
           <v-text-field  label="Duration" type="number" v-model.number="item.duration"
-             required></v-text-field>
+             required step="0.5" :rules=${valRequired("Duration")}></v-text-field>
           <v-select label="Subsidiary" :items="subsidiaries" v-model="item.subsidiary"></v-select>
 
       <div><v-btn flat v-on:click="editText(item.text.id)"  type="button" ><v-icon>description</v-icon>Text...</v-btn></div>
       <div><v-btn flat v-on:click="fixtures(item)" ><v-icon>check</v-icon>Fixtures...</v-btn></div>
-      <div><v-btn flat v-on:click="tables(item)" ><v-icon>mdi-table</v-icon>Tables...</v-btn></div>
+      <div>
+       <span>Tables</span>&nbsp;<v-btn v-on:click="addTable()" icon><v-icon>add</v-icon></v-btn>  <v-chip close v-on:click="toTable(table.id)" @input="removeTable(table.id)" v-for="(table,index) in item.tables" :key="table.id">{{async(table).description || 'Table ' + (index + 1)}}</v-chip>
+      </div>
       </v-layout>
       $formButtons
     </v-form>

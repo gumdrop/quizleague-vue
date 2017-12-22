@@ -53,7 +53,7 @@ object TemplateElements {
               small
               color="pink"
               v-on:click="$router.back()">
-          <v-icon>back</v-icon>
+          <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
 """
   

@@ -19,13 +19,13 @@ object SingletonCompetitionComponent extends CompetitionComponentConfig{
     <h2>Singleton Competition Detail {{item.startYear}}/{{item.endYear}}</h2>
     <v-form v-model="valid">
       <v-layout column>
-        <v-text-field label="Name" required v-model="item.name"></v-text-field>
-        <v-text-field label="Text Name" required v-model="item.textName"></v-text-field>
+        <v-text-field label="Name" required v-model="item.name" :rules=${valRequired("Name")}></v-text-field>
+        <v-text-field label="Text Name" required v-model="item.textName" :rules=${valRequired("Text Name")}></v-text-field>
          <v-layout column v-if="item.event">
           <v-layout row>
-            <v-text-field label="Date" required v-model="item.event.date" type="date"></v-text-field>
-            <v-text-field label="Time" required v-model="item.event.time" type="time"></v-text-field>
-            <v-text-field label="Duration" required v-model.number="item.event.duration" type="number" step="0.1"></v-text-field>
+            <v-text-field label="Date" required v-model="item.event.date" type="date" :rules=${valRequired("Date")}></v-text-field>
+            <v-text-field label="Time" required v-model="item.event.time" type="time" :rules=${valRequired("Time")}></v-text-field>
+            <v-text-field label="Duration" required v-model.number="item.event.duration" :rules=${valRequired("Duration")} type="number" step="0.5"></v-text-field>
           </v-layout>
           <v-select label="Venue" v-model="item.event.venue" :items="venues"></v-select>
          </v-layout>

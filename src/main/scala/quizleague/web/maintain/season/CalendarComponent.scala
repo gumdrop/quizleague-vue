@@ -90,7 +90,7 @@ object CalendarComponent extends ItemComponentConfig[Season] with RouteComponent
             <v-layout row>
               <v-text-field label="Date" v-model="event.date" type="date" required :rules=${valRequired("Date")}></v-text-field>
               <v-text-field label="Time" v-model="event.time" type="time" required :rules=${valRequired("Time")}></v-text-field>
-              <v-text-field label="Duration" v-model.number="event.duration" type="number" step="0.1" required :rules=${valRequired("Duration")}></v-text-field>
+              <v-text-field label="Duration" v-model.number="event.duration" type="number" step="0.5" required :rules=${valRequired("Duration")}></v-text-field>
             </v-layout>
             <v-select label="Venue" :items="venues" v-model="event.venue"></v-select>
           </v-layout>

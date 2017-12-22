@@ -25,7 +25,7 @@ object SubsidiaryCompetitionComponent extends CompetitionComponentConfig{
       <v-layout column>
    
           <v-text-field  label="Name" type="text" v-model="item.name"
-             required></v-text-field>
+             required :rules=${valRequired("Name")}></v-text-field>
 
       <div><v-btn flat v-on:click="editText(item.text.id)"  type="button" ><v-icon>description</v-icon>Text...</v-btn></div>
       <div><v-btn flat v-on:click="fixtures(item)" ><v-icon>check</v-icon>Fixtures...</v-btn></div>

@@ -26,7 +26,6 @@ trait ItemComponentConfig[T <: Model] extends Component{
   val service:GetService[T] with PutService[T]
   
   def editText(c:facade, textId:String) = {
-      service.cache(c.item)
       c.$router.push(s"/maintain/text/$textId")
   }
   

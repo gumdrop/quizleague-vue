@@ -49,15 +49,15 @@ object FixturesComponent extends CompetitionComponentConfig{
     <v-form v-model="valid">
     <v-layout column>
       <v-layout column>
-        <v-text-field label="Date" v-model="fxs.date" type="date" required></v-text-field>
-        <v-text-field label="Time" v-model="fxs.start" type="time" required></v-text-field>
-        <v-text-field label="Duration" v-model.number="fxs.duration" type="number" step=".1" required></v-text-field>
-        <v-text-field label="Description" v-model="fxs.description" type="text" required></v-text-field>
+        <v-text-field label="Date" v-model="fxs.date" type="date" required :rules=${valRequired("Date")}></v-text-field>
+        <v-text-field label="Time" v-model="fxs.start" type="time" required :rules=${valRequired("Time")}></v-text-field>
+        <v-text-field label="Duration" v-model.number="fxs.duration" type="number" step=".5" required :rules=${valRequired("Duration")}></v-text-field>
+        <v-text-field label="Description" v-model="fxs.description" type="text" required :rules=${valRequired("Description")}></v-text-field>
         <v-text-field label="Parent Description" v-model="fxs.parentDescription" type="text"></v-text-field>
        </v-layout>
        <v-layout column>
         <h4>Fixture List</h4>
-        <v-layout row v-if="venues">
+        <v-layout row v-if="venues && teams">
           <v-select label="Home" v-model="homeTeam" :items="unusedTeams(awayTeam)" @input="setVenue(homeTeam)"></v-select>        
           <v-select label="Away" v-model="awayTeam" :items="unusedTeams(homeTeam)"></v-select>
           <v-select label="Venue" v-model="venue" :items="venues"></v-select>
@@ -72,33 +72,7 @@ object FixturesComponent extends CompetitionComponentConfig{
     </v-form>
   </v-container>
   """
-  
-//  override def init(): Unit = {
-//    super.init()
-//    
-//    route.params
-//      .switchMap((params, i) => service.get(params("competitionId")))
-//      .subscribe(comp = _)
-//
-//    VenueService.list.subscribe(venues = _)
-//
-//    Observable.zip(
-//      loadItem() <v-layout row>
-//        .switchMap((f, i) => zip(f.fixtures))
-//        .switchMap((f, i) => f.flatMap(x => js.Array(x.home, x.away))),      "removeFixture" -> ({removeFixture _ }:js.ThisFunction),
-//      teamService.list(),
-//      (fixtureTeams: js.Array[Team], teams: js.Array[Team]) => {
-//        teamManager = new TeamManager(teams)
-//        fixtureTeams.foreach(teamManager.take(_))
-//      }).subscribe(x => Unit)
-//
-//  }
 
-//  override def save(): Unit = {
-//    FixturesService.cache(item)
-//    //item.fixtures.foreach({fixtureService.cache(_)})
-//    location.back()
-//  }
 
   def unusedTeams(c:facade, other: RefObservable[Team]) = teamManager(c).unusedTeams(other)
 
@@ -112,7 +86,6 @@ object FixturesComponent extends CompetitionComponentConfig{
       teamManager(c).take(c.homeTeam), 
       teamManager(c).take(c.awayTeam),
       c.venue)
-      
       c.fxs.fixtures +++= (f.id, f)
       fixtureService.cache(f)
 
@@ -169,7 +142,14 @@ object FixtureComponent extends Component{
   val name = "fixture"
   val template = """
     <v-layout column v-if="fx">
-      <v-layout row>
+      <v-layout row>(
+    override val service:LeagueTableService,
+    val teamService:TeamService,
+    val competitionService:CompetitionService,
+    override val route: ActivatedRoute,
+    override val location:Location,
+    val router:Router)
+    extends ItemComponent[LeagueTable]{
         <v-btn style="top:-14px;" icon v-on:click="removeFixture(fx)" ><v-icon>cancel</v-icon></v-btn>
         <v-btn style="top:-14px;" icon v-if="fx.result" v-on:click="showResult = !showResult"><v-icon>check</v-icon></v-btn>
         <v-btn style="top:-14px;" icon v-if="!fx.result" v-on:click="addResult()"><v-icon>add</v-icon></v-btn>
@@ -195,8 +175,6 @@ object FixtureComponent extends Component{
   }
   
   def editText(c:facade, textId:String) = {
-    FixtureService.cache(c.fx)
-    FixturesService.cache(c.fixtures)
     c.$router.push(s"/maintain/text/$textId")
   }
   

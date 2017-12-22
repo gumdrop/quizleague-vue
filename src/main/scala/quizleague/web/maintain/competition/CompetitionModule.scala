@@ -10,10 +10,11 @@ import quizleague.web.core._
 import com.felstar.scalajs.vue.RouteConfig
 import quizleague.web.maintain.MaintainMenuComponent
 import quizleague.web.maintain.fixtures.FixturesModule
+import quizleague.web.maintain.leaguetable.LeagueTableModule
 
 object CompetitionModule extends Module{
   
-  override val modules = @@(FixturesModule)
+  override val modules = @@(FixturesModule, LeagueTableModule)
   
   override val routes = @@(     
       RouteConfig(
