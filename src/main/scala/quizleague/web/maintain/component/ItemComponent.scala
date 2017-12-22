@@ -28,12 +28,14 @@ trait ItemComponentConfig[T <: Model] extends Component{
   def editText(c:facade, textId:String) = {
       service.cache(c.item)
       c.$router.push(s"/maintain/text/$textId")
-    }
+  }
+  
+  def obsFromParam[X <: Model](c:facade, param:String, service:GetService[X] with PutService[X] = service) = service.get(c.$route.params(param)).map(i => service.cache(i))
   
   def save(c:facade) = {service.save(c.item);c.$router.back()}
-  def cancel(c:facade) = c.$router.back()
+  def cancel(c:facade) = {service.flush();c.$router.back()}
   
-  override def subscriptions:Map[String, facade => Observable[Any]] = Map("item" -> (c => service.get(c.$route.params(paramName))))
+  override def subscriptions:Map[String, facade => Observable[Any]] = Map("item" -> (c => obsFromParam(c,paramName)))
   
   override def methods = Map(
       "save" -> ({save _}:js.ThisFunction),

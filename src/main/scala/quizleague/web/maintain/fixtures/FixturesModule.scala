@@ -17,6 +17,8 @@ import js.JSConverters._
 import quizleague.web.core._
 import com.felstar.scalajs.vue.RouteConfig
 import quizleague.web.maintain.MaintainMenuComponent
+import quizleague.web.model.Fixture
+import quizleague.domain.Result
 
 object FixturesModule extends Module {
   override val routes = @@(     
@@ -38,6 +40,11 @@ object FixtureService extends FixtureGetService with FixturePutService{
   override val venueService = VenueService
   override val reportsService = ReportsService
   override val userService = UserService
+  
+  def addResult(fixture:Fixture) = {
+    val fx = mapIn(fixture)
+    add(mapOutSparse(fx.copy(result = Some(Result(0,0,None,None,None)))))
+  }
 }
 
 object FixturesService extends FixturesGetService with FixturesPutService{

@@ -57,7 +57,7 @@ object FixturesComponent extends CompetitionComponentConfig{
        </v-layout>
        <v-layout column>
         <h4>Fixture List</h4>
-        <v-layout row>
+        <v-layout row v-if="venues">
           <v-select label="Home" v-model="homeTeam" :items="unusedTeams(awayTeam)" @input="setVenue(homeTeam)"></v-select>        
           <v-select label="Away" v-model="awayTeam" :items="unusedTeams(homeTeam)"></v-select>
           <v-select label="Venue" v-model="venue" :items="venues"></v-select>
@@ -126,17 +126,19 @@ object FixturesComponent extends CompetitionComponentConfig{
  
   def venues() = SelectUtils.model[Venue](VenueService)(_.name)
   def teams() = SelectUtils.model[Team](TeamService)(_.name)
+  override def save(c:facade) = {FixturesService.save(c.fxs);super.save(c)}
   
   override def methods = super.methods ++ Map(
       "addFixture" -> ({addFixture _ }:js.ThisFunction),
       "setVenue" -> ({setVenue _ }:js.ThisFunction),
       "unusedTeams" -> ({unusedTeams _ }:js.ThisFunction),
+      "save" -> ({save _ }:js.ThisFunction),
   )
       
   
   
   override def subscriptions = super.subscriptions ++ Map(
-      "fxs" -> ((c:facade) => FixturesService.get(c.$route.params("fixturesId"))),
+      "fxs" -> ((c:facade) => obsFromParam(c,"fixturesId", FixturesService)),
       "venues" -> ((c:facade) => venues()),
       "teams" -> ((c:facade) => teams()),
       
@@ -153,9 +155,10 @@ object FixturesComponent extends CompetitionComponentConfig{
 @js.native
 trait FixtureComponent extends VueRxComponent{
   val fixture:RefObservable[Fixture]
-  val fx:Fixture
+  var fx:Fixture
   val fixtures:Fixtures
   val teamManager:TeamManager
+  var showResult:Boolean
   
 }
 
@@ -169,18 +172,19 @@ object FixtureComponent extends Component{
       <v-layout row>
         <v-btn style="top:-14px;" icon v-on:click="removeFixture(fx)" ><v-icon>cancel</v-icon></v-btn>
         <v-btn style="top:-14px;" icon v-if="fx.result" v-on:click="showResult = !showResult"><v-icon>check</v-icon></v-btn>
-        <v-btn style="top:-14px;" icon v-if="!fx.result"><v-icon>add</v-icon></v-btn>
+        <v-btn style="top:-14px;" icon v-if="!fx.result" v-on:click="addResult()"><v-icon>add</v-icon></v-btn>
         <span >{{async(fx.home).name}} - {{async(fx.away).name}} @ {{async(fx.venue).name}}</span>
       </v-layout>
       <v-layout row v-if="showResult && fx.result">
-        <h4>Result : </h4>
-        <v-text-field label="Home Score" v-model="fx.result.homeScore"></v-text-field>
-        <v-text-field label="Away Score" v-model="fx.result.awayScore"></v-text-field>
+        <span style="position:relative;top:28px;"><h4>Result :&nbsp;</h4></span>
+        <v-text-field label="Home Score" v-model.number="fx.result.homeScore" type="number"></v-text-field>
+        <v-text-field label="Away Score" v-model.number="fx.result.awayScore" type="number"></v-text-field>
       </v-layout>
       <v-layout row v-if="showResult && fx.result.reports">
-        <h4>Reports : </h4><v-btn flat v-on:click="editText(report.text.id)" v-for="report in async(fx.result.reports).reports" :key="report.text.id">{{async(report.team).shortName}}...</v-btn>
+        <span style="position:relative;top:14px;"><h4>Reports :&nbsp;</h4></span><v-btn flat v-on:click="editText(report.text.id)" v-for="report in async(fx.result.reports).reports" :key="report.text.id">{{async(report.team).shortName}}...</v-btn>
       </v-layout>
       <v-divider></v-divider>
+      <span>&nbsp</span>
     </v-layout>
 """
   def removeFixture(c:facade, fx:Fixture) = {
@@ -196,12 +200,18 @@ object FixtureComponent extends Component{
     c.$router.push(s"/maintain/text/$textId")
   }
   
+  def addResult(c:facade) = {
+    c.fx = FixtureService.addResult(c.fx)
+    c.showResult = true
+  }
+  
   override val data = c => Map("showResult" -> false)
   override val props = @@("fixture","fixtures","teamManager")
-  override val subscriptions = Map("fx" -> (c => c.fixture.obs))
+  override val subscriptions = Map("fx" -> (c => c.fixture.obs.map(f => FixtureService.cache(f)).map(x => {c.teamManager.take(x.home);c.teamManager.take(x.away);x})))
   override val methods = Map(
       "removeFixture" -> ({removeFixture _ }:js.ThisFunction),
       "editText" -> ({editText _ }:js.ThisFunction),
+      "addResult" -> ({addResult _ }:js.ThisFunction),
   )
 }
     
