@@ -24,6 +24,10 @@ object FixturesModule extends Module {
         path = "/maintain/season/:seasonId/competition/:id/fixtures",
         components = Map("default" -> FixturesListComponent(), "sidenav" -> MaintainMenuComponent())
       ),
+      RouteConfig(
+        path = "/maintain/season/:seasonId/competition/:id/fixtures/:fixturesId",
+        components = Map("default" -> FixturesComponent(), "sidenav" -> MaintainMenuComponent())
+      ),
       
   )
   

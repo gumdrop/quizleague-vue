@@ -23,6 +23,7 @@ import quizleague.util.json.codecs.DomainCodecs._
 import io.circe.Json
 import quizleague.web.service.user.UserGetService
 import quizleague.web.service.results.ReportsGetService
+import quizleague.web.util.rx.RefObservable
 
 
 
@@ -53,8 +54,8 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService with 
   override val venueService:VenuePutService
   override val teamService:TeamPutService
   
-  def instance(fx:Fixtures, home:Team, away:Team, venue:Venue) = {
-    val dom = Dom(newId,fx.description, fx.parentDescription,venueService.getRef(venue),teamService.getRef(home),teamService.getRef(away),fx.date,fx.start,fx.duration, None)
+  def instance(fx:Fixtures, home:RefObservable[Team], away:RefObservable[Team], venue:RefObservable[Venue]) = {
+    val dom = Dom(newId,fx.description, fx.parentDescription,venueService.ref(venue),teamService.ref(home),teamService.ref(away),fx.date,fx.start,fx.duration, None)
     mapOutSparse(dom)
   }
   

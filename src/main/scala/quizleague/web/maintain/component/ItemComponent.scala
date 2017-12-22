@@ -42,7 +42,7 @@ trait ItemComponentConfig[T <: Model] extends Component{
       
   )
   
-  override val data:(facade) => Map[String,Any] = c => Map("valid" -> false)
+  override def data:(facade) => Map[String,Any] = c => Map("valid" -> false)
 }
 
 @js.native

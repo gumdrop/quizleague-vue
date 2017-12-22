@@ -57,6 +57,8 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
   }
 
   override def enc(item: Dom) = item.asJson
+  
+  override def save(item:Dom) = {fixtureService.saveAllDirty;super.save(item)}
 
 }
 
