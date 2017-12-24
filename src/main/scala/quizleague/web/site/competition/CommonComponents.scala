@@ -10,8 +10,8 @@ object LeagueTables extends Component{
   type facade = IdComponent
   val name = "league-tables"
   val template = """
-    <v-card class="mb-3">
-      <v-card-title primary-title><h3 class="headline mb-0">League Table</h3></v-card-title>
+    <v-card class="mb-x">
+      <v-card-title primary-title><h3 class="headline mb-x">League Table</h3></v-card-title>
       <v-card-text>
         <ql-league-table v-for="table in item.tables" :key="table.id" :id="table.id"></ql-league-table>
       </v-card-text>
@@ -25,8 +25,8 @@ object LeagueTables extends Component{
 object LatestResults extends Component{
   type facade = IdComponent
   val name = "latest-results"
-  val template = """<v-card class="mb-3">
-      <v-card-title primary-title><h3 class="headline mb-0">Results</h3></v-card-title>
+  val template = """<v-card class="mb-x">
+      <v-card-title primary-title><h3 class="headline mb-x">Results</h3></v-card-title>
       <v-card-title>Latest results</v-card-title>
       <v-card-text  v-if="latestResults">
         <div v-for="results in latestResults" :key="results.id">
@@ -35,7 +35,7 @@ object LatestResults extends Component{
         </div>
       </v-card-text>
       <v-card-actions>
-        <v-btn primary flat to="results">Show All</v-btn>
+        <v-btn color="primary" flat to="results">Show All</v-btn>
       </v-card-actions>
     </v-card>"""
   
@@ -50,8 +50,8 @@ object LatestResults extends Component{
 object NextFixtures extends Component{
   type facade = IdComponent
   val name = "next-fixtures"
-  val template = """<v-card class="mb-3">
-      <v-card-title primary-title><h3 class="headline mb-0">Fixtures</h3></v-card-title>
+  val template = """<v-card class="mb-x">
+      <v-card-title primary-title><h3 class="headline mb-x">Fixtures</h3></v-card-title>
       <v-card-title>Next fixtures</v-card-title>
       <v-card-text  v-if="nextFixtures">
         <div v-for="fixtures in nextFixtures" :key="fixtures.id">
@@ -60,7 +60,7 @@ object NextFixtures extends Component{
         </div>
       </v-card-text>
       <v-card-actions>
-        <v-btn primary flat to="fixtures">Show All</v-btn>
+        <v-btn color="primary" flat to="fixtures">Show All</v-btn>
       </v-card-actions>
     </v-card>"""
   
@@ -120,15 +120,17 @@ trait ResultsComponent extends Component {
 object AllResults extends ResultsComponent{
   val name = "all-results"
   val template = """
-    <v-container grid-list-xl v-if="latestResults">
+    <v-container grid-list-lg fluid v-if="latestResults">
     <v-layout column>
-    <v-card  v-for="results in latestResults" :key="results.id" class="mb-3">
-      <v-card-title primary-title><h3 class="headline mb-0">{{results.date | date("d MMM yyyy")}}</h3></v-card-title>
-      <v-card-text>
-          <ql-results-simple :results="results.fixtures | combine" ></ql-results-simple>
-        </div>
-      </v-card-text>
-    </v-card>
+    <v-flex v-for="results in latestResults" :key="results.id">
+      <v-card>
+        <v-card-title primary-title><h3 class="headline mb-x">{{results.date | date("d MMM yyyy")}}</h3></v-card-title>
+        <v-card-text>
+            <ql-results-simple :results="results.fixtures | combine" ></ql-results-simple>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-flex>
     </v-layout>
     </v-container>"""
     
@@ -144,14 +146,15 @@ object RemainingFixtures extends Component{
   type facade = IdComponent
   val name = "remaining-fixtures"
   val template = """
-    <v-container grid-list-xl v-if="nextFixtures">
+    <v-container grid-list-lg fluid v-if="nextFixtures">
     <v-layout column>
-    <v-card v-for="fixtures in nextFixtures" :key="fixtures.id" class="mb-3">
-      <v-card-title primary-title><h3 class="headline mb-0">{{fixtures.date | date("d MMM yyyy")}}</h3></v-card-title>
-      <v-card-text>
-          <ql-fixtures-simple :fixtures="fixtures.fixtures | combine" ></ql-fixtures-simple>
-      </v-card-text>
-    </v-card>
+    <v-flex v-for="fixtures in nextFixtures" :key="fixtures.id">
+      <v-card>
+        <v-card-title primary-title><h3 class="headline mb-x">{{fixtures.date | date("d MMM yyyy")}}</h3></v-card-title>
+        <v-card-text>
+            <ql-fixtures-simple :fixtures="fixtures.fixtures | combine" ></ql-fixtures-simple>
+        </v-card-text>
+      </v-card>
     </v-layout>
     </v-container>"""
   

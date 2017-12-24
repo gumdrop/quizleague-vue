@@ -141,6 +141,11 @@ trait VueRxComponent extends VueComponent {
   
 
 }
+
+@js.native
+trait VuetifyComponent extends VueComponent{
+  def $vuetify:js.Dynamic = js.native
+}
   
 
 

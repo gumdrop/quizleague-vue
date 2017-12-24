@@ -10,12 +10,20 @@ import quizleague.web.site.season.SeasonIdComponent
 import quizleague.web.core.IdComponent
 
 object TeamFixturesPage extends RouteComponent {
-  val template = """<div>
-                      <ql-all-team-fixtures v-if="appData" :id="$route.params.id" :seasonId="appData.currentSeason.id"></ql-all-team-fixtures>
-                    </div>"""
+  val template = """
+      <v-container v-if="appData" grid-list-lg fluid>
+        <v-layout column>
+          <v-flex><v-card>
+            <v-card-text>
+              <ql-all-team-fixtures v-if="appData" :id="$route.params.id" :seasonId="appData.currentSeason.id"></ql-all-team-fixtures>
+            </v-card-text>
+          </v-card></v-flex>
+        </v-layout>
+      </v-container>
+"""
   override val subscriptions = Map("appData" -> (c => ApplicationContextService.get))
   
-  
+  override val components = @@(TeamFixturesComponent)
 }
 
   

@@ -11,13 +11,13 @@ import quizleague.web.core.IdComponent
 import quizleague.web.core.IdComponent
 
 object TeamResultsPage extends RouteComponent {
-  val template = """<v-container v-if="season">
+  val template = """<v-container v-if="season" grid-list-lg fluid>
                       <v-layout column>
-                      <v-card>
+                      <v-flex><v-card>
                         <v-card-text>
                           <ql-all-team-results  :id="$route.params.id" :seasonId="season.id"></ql-all-team-results>
                         </v-card-text>
-                      </v-card>
+                      </v-card></v-flex>
                       <div></div>
                       </v-layout>
                     </v-container>"""

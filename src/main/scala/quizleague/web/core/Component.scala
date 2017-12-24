@@ -35,6 +35,7 @@ trait Component {
   def data: facade => Map[String, Any] = c => Map()
   def methods: Map[String, js.Function] = Map()
   def components: js.Array[Component] = @@()
+  def computed: Map[String, js.Function] = Map()
 
   var observables = js.Dictionary[js.Dictionary[Any]]() 
   val empty = new js.Object
@@ -104,6 +105,7 @@ trait Component {
       subscriptions = ((c: facade) => makeSubscriptions(c).map { case (k, v) => (k, v(c)) }.toJSDictionary): js.ThisFunction,
 
       methods = (commonMethods ++ methods).toJSDictionary,
+      computed = computed.toJSDictionary,
       components = components.map(c => ((c.name, c()))).toMap.toJSDictionary
            
     )

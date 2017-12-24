@@ -27,11 +27,12 @@ object TeamComponent extends Component {
   
   override val name = "ql-team"
   override val template = """
-          <div v-if="team && appConfig">
-           <ql-text :id="team.text.id"></ql-text>
-            <v-container>
+            <v-container v-if="team && appConfig" grid-list-lg fluid>
               <v-layout column>
-            <v-card class="mb-3">
+
+           <v-flex><ql-text :id="team.text.id"></ql-text></v-flex>
+
+            <v-flex><v-card >
               <v-card-title primary-title><h3 class="headline mb-0">Results</h3></v-card-title>
               <v-card-title >Last few results</v-card-title>
               <v-card-text>
@@ -42,7 +43,8 @@ object TeamComponent extends Component {
                 <v-btn flat><v-icon>insert_chart</v-icon>Graphs & Stats</v-btn>
               </v-card-actions>
             </v-card>
-            <v-card class="mb-3">
+            </v-flex>      
+            <v-flex><v-card >
               <v-card-title primary-title><h3 class="headline mb-0">Fixtures</h3></v-card-title>
               <v-card-title >Next few fixtures</v-card-title>
               <v-card-text>
@@ -54,9 +56,9 @@ object TeamComponent extends Component {
                 <v-btn flat><v-icon>file_download</v-icon>Download Calendar</v-btn>
               </v-card-actions>
             </v-card>
+            </v-flex>
           </v-layout>
-          </v-container>
-          </div>"""
+          </v-container>"""
   override val props = @@("id")
   override val subParams = Map("id"->"team")
   override val subscriptions = Map("team" -> (v => TeamService.get(v.id)), "appConfig" -> (c => ApplicationContextService.get))

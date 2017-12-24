@@ -16,7 +16,7 @@ object CalendarPage extends RouteComponent{
 object CalendarComponent extends Component{
   val name = "ql-calendar" 
   val template = """
-  <v-container grid-list-xl v-if="items" class="ql-calendar">
+  <v-container grid-list-xl  v-if="items" class="ql-calendar">
     <v-layout column>
       <v-card v-for="item in items" :key="item.date" class="mb-3">
          <v-card-title primary-title><h3 class="headline mb-0">{{item.date | date("EEEE d MMMM yyyy")}}</h3></v-card-title>

@@ -21,8 +21,11 @@ import quizleague.web.core.RouteComponent
 //}
 
 object TeamsComponent extends RouteComponent{
-    val template="""<ql-named-text name="teams-header"></ql-named-text>"""
-       
+    val template="""<v-container grid-list-lg fluid>
+        <v-layout>
+          <v-flex><ql-named-text name="teams-header"></ql-named-text></v-flex>
+        </v-layout>
+       </v-container>"""
 
 }
 object TeamsTitleComponent extends RouteComponent{

@@ -169,7 +169,7 @@ object VenueMenuComponent extends Component {
   
   override val template = """<v-list dense v-if="venues">
                     <v-list-tile v-for="venue in sort(venues) " :key="venue.id">
-                    <v-btn v-bind:to="'/venue/' + venue.id" flat style="text-transform: none;">{{venue.name}}</v-btn>
+                    <v-btn :to="'/venue/' + venue.id" flat style="text-transform: none;">{{venue.name}}</v-btn>
                     </v-list-tile>
                    </v-list>"""
     override val subscriptions = Map("venues" -> (v => VenueService.list))

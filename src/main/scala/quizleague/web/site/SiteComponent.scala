@@ -42,11 +42,11 @@ object SiteComponent extends Component {
       </div>
     </v-toolbar>
     <v-content>
-		  <v-container fill-height fluid>
+		  <v-container fill-height fluid class="px-0">
         <v-layout justify-left align-top column>
          <router-view name="title"  style="z-index:2"></router-view>
          <p></p>
-         <router-view></router-view>
+         <router-view ></router-view>
         </v-layout>
       </v-container>
     </v-content>

@@ -28,7 +28,7 @@ class LeagueTableRecalculator(
       
       val awayTotal = awayFixtures.map(points(false) _).sum
       
-      val others = fixtures.filter
+     // val others = fixtures.filter
       ((team, homeTotal + awayTotal))  
     }}
     

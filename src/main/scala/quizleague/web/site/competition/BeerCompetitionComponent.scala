@@ -15,16 +15,17 @@ object BeerCompetitionComponent extends Component{
   type facade = IdComponent
   val name = "competition"
   val template = """
-  <div v-if="item" >
-    <ql-named-text name="beer-comp"></ql-named-text>
-    <ql-text :id="item.text.id"></ql-text>
-  <v-container grid-list-xl>
-    <v-layout column>
-      <league-tables :id="id"></league-tables>
-      <latest-results :id="id"></latest-results>
+  <v-container grid-list-lg fluid v-if="item">
+    <v-layout column grid-list-lg>
+      <v-flex>      
+        <ql-named-text name="beer-comp"></ql-named-text>
+        <ql-text :id="item.text.id"></ql-text>
+      </v-flex>
+      <v-flex><league-tables :id="id"></league-tables></v-flex>
+      <v-flex><latest-results :id="id"></latest-results></v-flex>
     </v-layout>
    </v-container>
-  </div>"""
+"""""
   
   override val props = @@("id")
   override val subParams = Map("id" -> "item")

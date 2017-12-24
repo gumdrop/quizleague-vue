@@ -14,16 +14,17 @@ object KnockoutCompetitionComponent extends Component{
   type facade = IdComponent
   val name = "competition"
   val template = """
-  <div v-if="item" >
-    <ql-named-text :name="textName"></ql-named-text>
-    <ql-text :id="item.text.id"></ql-text>
-    <v-container grid-list-xl>
-      <v-layout column>
-        <latest-results :id="id"></latest-results>
-        <next-fixtures :id="id"></next-fixtures> 
-      </v-layout>
-     </v-container>
-  </div>"""
+  <v-container grid-list-lg fluid v-if="item">
+    <v-layout column grid-list-lg>
+      <v-flex>      
+        <ql-named-text name="cup-comp"></ql-named-text>
+        <ql-text :id="item.text.id"></ql-text>
+      </v-flex>
+      <v-flex><latest-results :id="id"></latest-results></v-flex>
+      <v-flex><next-fixtures :id="id"></next-fixtures></v-flex>
+    </v-layout>
+   </v-container>
+""""""
   
   override val props = @@("id", "textName")
   override val subParams = Map("id" -> "item")
