@@ -16,21 +16,23 @@ object CalendarPage extends RouteComponent{
 object CalendarComponent extends Component{
   val name = "ql-calendar" 
   val template = """
-  <v-container grid-list-xl  v-if="items" class="ql-calendar">
+  <v-container grid-list-lg  v-if="items" class="ql-calendar">
     <v-layout column>
-      <v-card v-for="item in items" :key="item.date" class="mb-3">
-         <v-card-title primary-title><h3 class="headline mb-0">{{item.date | date("EEEE d MMMM yyyy")}}</h3></v-card-title>
-         <v-card-text>
-          <div v-for="event in item.events">
-              <ql-fixtures-event v-if="event.eventType === 'fixtures'" :event="event"></ql-fixtures-event>
-              <ql-calendar-event v-if="event.eventType === 'calendar'" :event="event"></ql-calendar-event>
-              <ql-competition-event v-if="event.eventType === 'competition'" :event="event"></ql-competition-event>
-          </div>
-         </v-card-text>
-      </v-card>
+      <v-flex v-for="item in items" :key="item.date">
+        <v-card>
+           <v-card-title primary-title><h3 class="headline mb-0">{{item.date | date("EEEE d MMMM yyyy")}}</h3></v-card-title>
+           <v-card-text>
+            <div v-for="event in item.events">
+                <ql-fixtures-event v-if="event.eventType === 'fixtures'" :event="event"></ql-fixtures-event>
+                <ql-calendar-event v-if="event.eventType === 'calendar'" :event="event"></ql-calendar-event>
+                <ql-competition-event v-if="event.eventType === 'competition'" :event="event"></ql-competition-event>
+            </div>
+           </v-card-text>
+        </v-card>
+      </v-flex>
     </v-layout>
   </v-container>"""
-  override val subscriptions = Map("items" -> (c => CalendarViewService.events), "season" -> (c => CalendarViewService.season))
+  override val subscriptions = Map("items" -> (c => CalendarViewService.events))
   override val components = @@(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent)
   
 }

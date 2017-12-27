@@ -9,12 +9,37 @@ object SiteComponent extends Component {
      val template="""
   <v-app
     toolbar 
+    style="font-size:16px;"
   >
   <v-navigation-drawer
       clipped
       fixed
       app
+      disable-resize-watcher
 	  v-model="drawer">
+    <v-list dense v-if="$vuetify.breakpoint.mdAndDown">
+      <v-list-group no-action>
+            <v-list-tile slot="item" @click="">
+              <v-list-tile-action>
+                <v-icon>menu</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>Main Menu</v-list-tile-title>
+              </v-list-tile-content>
+              <v-list-tile-action>
+                <v-icon>keyboard_arrow_down</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+        <v-list-tile><v-list-tile-action><v-btn to="/home" flat ><v-icon left>home</v-icon><span>Home</span></v-btn></v-list-tile-action></v-list-tile>  
+      	<v-list-tile><v-list-tile-action><v-btn to="/team" flat ><v-icon left>people</v-icon><span>Teams</span></v-btn></v-list-tile-action></v-list-tile>
+        <v-list-tile><v-list-tile-action><v-btn to="/competition" flat ><v-icon left>mdi-trophy</v-icon><span>Competitions</span></v-btn></v-list-tile-action></v-list-tile>
+        <v-list-tile><v-list-tile-action><v-btn to="/results" flat ><v-icon left>check</v-icon><span>Results</span></v-btn></v-list-tile-action></v-list-tile>  
+        <v-list-tile><v-list-tile-action><v-btn to="/calendar" flat ><v-icon left>location_on</v-icon><span>Calendar</span></v-btn></v-list-tile-action></v-list-tile>  
+        <v-list-tile><v-list-tile-action><v-btn to="/rules" flat ><v-icon left>mdi-book-open-page-variant</v-icon><span>Rules</span></v-btn></v-list-tile-action></v-list-tile>
+        <v-list-tile><v-list-tile-action><v-btn to="/links" flat ><v-icon left>link</v-icon><span>Links</span></v-btn></v-list-tile-action></v-list-tile>  
+      </v-list-group>
+    </v-list>
+
     <router-view name="sidenav"></router-view>
   </v-navigation-drawer>
     <v-toolbar      
@@ -30,7 +55,7 @@ object SiteComponent extends Component {
         <span v-if="appData">{{appData.leagueName}}</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <div slot="extension">
+      <div slot="extension" v-if="$vuetify.breakpoint.lgAndUp">
       	<v-btn to="/home" flat ><v-icon left>home</v-icon><span>Home</span></v-btn>
       	<v-btn to="/team" flat ><v-icon left>people</v-icon><span>Teams</span></v-btn>
       	<v-btn to="/competition" flat ><v-icon left>mdi-trophy</v-icon><span>Competitions</span></v-btn>
