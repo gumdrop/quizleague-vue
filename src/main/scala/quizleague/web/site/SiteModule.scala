@@ -32,6 +32,7 @@ import quizleague.web.site.other._
 import quizleague.web.maintain.MaintainModule
 
 
+
 object SiteModule extends Module {
   
   override val modules = @@(HomeModule, TeamModule, TextModule, VenueModule, FixturesModule, ResultsModule, LeagueTableModule, CompetitionModule, SeasonModule, CalendarModule, MaintainModule)
@@ -54,4 +55,8 @@ object ApplicationContextService extends ApplicationContextGetService{
   override val seasonService = SeasonService
   override val userService = UserService
   
+}
+
+object SiteService {
+  val sidemenu = ReplaySubject[Boolean]()
 }

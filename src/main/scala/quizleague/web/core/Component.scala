@@ -36,6 +36,7 @@ trait Component {
   def methods: Map[String, js.Function] = Map()
   def components: js.Array[Component] = @@()
   def computed: Map[String, js.Function] = Map()
+  def mounted: js.Function = null
 
   var observables = js.Dictionary[js.Dictionary[Any]]() 
   val empty = new js.Object
@@ -106,7 +107,8 @@ trait Component {
 
       methods = (commonMethods ++ methods).toJSDictionary,
       computed = computed.toJSDictionary,
-      components = components.map(c => ((c.name, c()))).toMap.toJSDictionary
+      components = components.map(c => ((c.name, c()))).toMap.toJSDictionary,
+      mounted = mounted
            
     )
     

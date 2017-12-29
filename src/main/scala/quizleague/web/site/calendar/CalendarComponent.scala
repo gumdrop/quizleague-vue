@@ -3,10 +3,11 @@ package quizleague.web.site.calendar
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExport
 import quizleague.web.core._
+import quizleague.web.site._
 import quizleague.web.site.season.SeasonIdComponent
 import com.felstar.scalajs.vue.VueRxComponent
 
-object CalendarPage extends RouteComponent{
+object CalendarPage extends RouteComponent with NoSideMenu{
   
   val template = """<ql-calendar></ql-calendar>"""
   override val components = @@(CalendarComponent)

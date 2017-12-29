@@ -12,10 +12,11 @@ import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.leaguetable.LeagueTableService
 import com.felstar.scalajs.vue.VuetifyComponent
+import quizleague.web.site._
 
 
 
-object HomeComponent extends RouteComponent{
+object HomeComponent extends RouteComponent with NoSideMenu{
 
   type facade = VueRxComponent with VuetifyComponent
   
@@ -43,8 +44,9 @@ object HomeComponent extends RouteComponent{
   </v-container>
 """
     override val components = @@(HomePageLeagueTable, NextFixturesComponent,LatestResultsComponent)
-    def align(c:facade) = js.Dictionary("column" -> c.$vuetify.breakpoint.xsOnly)
+    def align(c:facade) = js.Dictionary("column" -> c.$vuetify.breakpoint.smAndDown)
     override val computed = Map("align" -> ({align _}:js.ThisFunction))
+
 }
 
 @js.native

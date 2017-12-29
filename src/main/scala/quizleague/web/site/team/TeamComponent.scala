@@ -36,7 +36,7 @@ object TeamComponent extends Component {
               <v-card-title primary-title><h3 class="headline mb-0">Results</h3></v-card-title>
               <v-card-title >Last few results</v-card-title>
               <v-card-text>
-                <ql-results-simple :results="results(id, appConfig.currentSeason.id)" :inlineDetails="true"></ql-results-simple>
+                <ql-fixtures-simple :fixtures="results(id, appConfig.currentSeason.id)" :inlineDetails="true"></ql-fixtures-simple>
               </v-card-text>
               <v-card-actions>
                 <v-btn flat :to="id + '/results'" primary>Show All</v-btn>
@@ -98,11 +98,14 @@ object TeamTitle extends Component {
 
 object TeamMenuComponent extends RouteComponent {
   
-  override val template = """<v-list dense v-if="teams">
-                    <v-list-tile v-for="team in sort(teams) " :key="team.id">
-                    <v-btn :to="'/team/' + team.id" flat >{{team.name}}</v-btn>
-                    </v-list-tile>
-                   </v-list>"""
+  override val template = """
+     <v-list dense v-if="teams">
+       <v-list-tile v-for="team in sort(teams) " :key="team.id">
+        <v-btn :to="'/team/' + team.id" flat >{{team.name}}</v-btn>
+       </v-list-tile>
+     </v-list>"""
     override val subscriptions = Map("teams" -> (c => TeamService.list))
-    override val methods = Map("sort" -> ((teams:js.Array[Team]) => teams.sortBy(_.shortName)))
+    override val methods = Map(
+        "sort" -> ((teams:js.Array[Team]) => teams.sortBy(_.shortName))
+    )
 }

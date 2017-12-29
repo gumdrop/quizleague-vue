@@ -1,6 +1,7 @@
 package quizleague.web.site
 
 import quizleague.web.core.Component
+import scalajs.js
 
 
 object SiteComponent extends Component {
@@ -77,7 +78,14 @@ object SiteComponent extends Component {
     </v-content>
   </v-app>"""
   
-  override val data = c => Map("drawer" -> true,"menu" -> true)
-  override val subscriptions = Map("appData" -> (c => ApplicationContextService.get()))
+  override val data = c => Map("menu" -> true)
+  override val subscriptions = Map(
+      "appData" -> (c => ApplicationContextService.get()),
+      "drawer" -> (c => SiteService.sidemenu))
 
+}
+
+trait NoSideMenu{
+  this:Component =>
+  override val mounted:js.Function = () => SiteService.sidemenu.next(false)
 }
