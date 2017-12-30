@@ -43,24 +43,9 @@ import quizleague.web.site.competition._
 import quizleague.web.core._
 import com.felstar.scalajs.vue.RouteConfig
 
-//import scala.scalajs.js.WrappedArray
-//import quizleague.web.util.Logging._
-//
-//@NgModule(
-//  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, CommonAppModule, SeasonModule, CalendarRoutesModule, ResultsComponentsModule, FixturesComponentsModule],
-//  declarations = @@[CalendarComponent, CalendarTitleComponent, ResultsEventComponent, FixturesEventComponent, CalendarEventComponent, CompetitionEventComponent],
-//  providers = @@[CalendarViewService])
-//class CalendarModule
-//
-//@Routes(
-//  root = false,
-//  Route(
-//    path = "calendar",
-//    children = @@@(
-//      Route("", component = %%[CalendarComponent]),
-//      Route("", component = %%[CalendarTitleComponent], outlet = "title")
-//    )))
-//class CalendarRoutesModule
+
+import quizleague.web.util.Logging._
+
 object CalendarModule extends Module{
   override val routes = @@(RouteConfig(path="/calendar" , components=Map("default"->CalendarPage(), "title"->CalendarTitleComponent())))
 }
@@ -69,9 +54,9 @@ object CalendarViewService extends SeasonWatchService{
   
   def events(seasonId:String):Observable[js.Array[DateWrapper]] = {
     
-    import CompetitionType._
+    log(seasonId, "ql-web : calendar")
     
-    val now = LocalDate.now.toString
+    import CompetitionType._
     
     
     def singletonEvents(c:Competition):js.Array[EventWrapper] = c match {
@@ -81,26 +66,23 @@ object CalendarViewService extends SeasonWatchService{
     
     
     val comps = CompetitionService.firstClassCompetitions(seasonId)
-
-   
+    
     val fixtures:Observable[js.Array[EventWrapper]] = comps.flatMap(cs => combineLatest(cs.flatMap(c => c.fixtures.map(_.obs).map(f => f.map(EventWrapper(_,c)))).toSeq)).map(_.toJSArray)
-
+    
     val singletons = comps.map(cs => cs.flatMap(singletonEvents _))
     
     val seasons = season.map(s => s.calendar.map(e => EventWrapper(e)))
 
-    val  res = combineLatest(Seq(
-        fixtures,singletons,seasons)).map(lists =>  { 
-          val ret = lists.flatMap(_.toSeq).toJSArray
+    combineLatest(Seq(fixtures,singletons,seasons))
+        .map(lists =>  
+          lists.flatMap(_.toSeq).toJSArray
           .groupBy(_.date)
           .toIterable
           .map{case(d,e) => new DateWrapper(d, e)}
           .toJSArray
           .sortBy(_.date)
-          ret
-        }      
     )  
-    res
+    
 
   }
 

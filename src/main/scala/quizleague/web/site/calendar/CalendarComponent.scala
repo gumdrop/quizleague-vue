@@ -9,12 +9,15 @@ import com.felstar.scalajs.vue.VueRxComponent
 
 object CalendarPage extends RouteComponent with NoSideMenu{
   
-  val template = """<ql-calendar></ql-calendar>"""
+  val template = """<ql-calendar v-if="season" :seasonId="season.id"></ql-calendar>"""
   override val components = @@(CalendarComponent)
+  override val subscriptions = Map("season" -> (c => CalendarViewService.season)) 
 }
 
 
+
 object CalendarComponent extends Component{
+  type facade = SeasonIdComponent
   val name = "ql-calendar" 
   val template = """
   <v-container grid-list-lg  v-if="items" class="ql-calendar">
@@ -33,7 +36,9 @@ object CalendarComponent extends Component{
       </v-flex>
     </v-layout>
   </v-container>"""
-  override val subscriptions = Map("items" -> (c => CalendarViewService.events))
+  override val props = @@("seasonId")
+  override val subParams = Map("seasonId" -> "items")
+  override val subscriptions = Map("items" -> (c => CalendarViewService.events(c.seasonId)))
   override val components = @@(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent)
   
 }

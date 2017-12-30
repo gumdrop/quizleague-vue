@@ -58,5 +58,5 @@ object ApplicationContextService extends ApplicationContextGetService{
 }
 
 object SiteService {
-  val sidemenu = ReplaySubject[Boolean]()
+  val sidemenu = BehaviorSubject[Boolean](false)
 }
