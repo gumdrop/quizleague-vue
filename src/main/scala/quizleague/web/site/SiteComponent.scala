@@ -55,7 +55,6 @@ object SiteComponent extends Component {
         <v-toolbar-side-icon @click.stop="drawer = !drawer" v-show="menu"></v-toolbar-side-icon>
         <span v-if="appData">{{appData.leagueName}}</span>
       </v-toolbar-title>
-      <v-spacer></v-spacer>
       <div slot="extension" v-if="$vuetify.breakpoint.lgAndUp">
       	<v-btn to="/home" flat ><v-icon left>home</v-icon><span>Home</span></v-btn>
       	<v-btn to="/team" flat ><v-icon left>people</v-icon><span>Teams</span></v-btn>
@@ -68,7 +67,7 @@ object SiteComponent extends Component {
       </div>
     </v-toolbar>
     <v-content>
-		  <v-container fill-height fluid class="px-0">
+		  <v-container fill-height fluid class="px-0 py-0">
         <v-layout justify-left align-top column>
          <router-view name="title"  style="z-index:2"></router-view>
          <p></p>
@@ -87,5 +86,10 @@ object SiteComponent extends Component {
 
 trait NoSideMenu{
   this:Component =>
-  override val mounted:js.Function = () => SiteService.sidemenu.next(false)
+  override val beforeCreate:js.Function = () => SiteService.sidemenu.next(false)
+}
+
+trait SideMenu{
+  this:Component =>
+  override val mounted:js.Function = () => SiteService.sidemenu.next(true)
 }

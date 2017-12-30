@@ -12,8 +12,9 @@ import quizleague.web.site.ApplicationContextService
 import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.model.ApplicationContext
 import quizleague.web.site.fixtures.FixtureService
+import quizleague.web.site._
 
-object TeamPage extends RouteComponent {
+object TeamPage extends RouteComponent{
   override val template = """<ql-team :id="$route.params.id"></ql-team>"""
 }
 
@@ -21,7 +22,7 @@ object TeamPage extends RouteComponent {
 trait TeamComponent extends IdComponent{
   val appConfig:ApplicationContext
 }
-object TeamComponent extends Component {
+object TeamComponent extends Component{
 
   type facade = IdComponent
   

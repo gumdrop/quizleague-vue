@@ -24,11 +24,34 @@ object HomeComponent extends RouteComponent with NoSideMenu{
       "appData" -> (c => ApplicationContextService.get()),
   )
   override val template="""
-   <v-container grid-list-xl v-if="appData">
+   <v-container grid-list-lg v-if="appData">
      <v-layout v-bind="align">
-      <v-flex xs12 mdAndUp5>
-        <v-carousel light >
-          <v-carousel-item src="">
+      <v-flex xs12 smAndUp5>
+      <!--div>
+      <v-tabs grow :scrollable="false">
+        <v-tabs-bar ripple>
+        <v-tabs-slider color="yellow"></v-tabs-slider>
+          <v-tabs-item href="#league">League Tables</v-tabs-item>
+          <v-tabs-item href="#results">Latest Results</v-tabs-item>
+          <v-tabs-item href="#fixtures">Next Fixtures</v-tabs-item>
+        </v-tabs-bar>
+
+        <v-tabs-items>
+          <v-tabs-content id="league">
+           <ql-home-page-table style="min-width:400px" :seasonId="appData.currentSeason.id"></ql-home-page-table>
+          </v-tabs-content>
+          <v-tabs-content id="results">
+            <ql-latest-results style="min-width:400px" :seasonId="appData.currentSeason.id"></ql-latest-results>
+          </v-tabs-content>
+          <v-tabs-content id="fixtures">
+            <ql-next-fixtures style="min-width:400px" :seasonId="appData.currentSeason.id"></ql-next-fixtures></v-carousel-item>
+          </v-tabs-content>
+        </v-tabs-items>
+      </v-tabs>
+      </div-->  
+
+<v-carousel light style="min-height:35em"  :cycle="true">
+          <v-carousel-item src="" style="align-item:start;">
             <ql-home-page-table :seasonId="appData.currentSeason.id"></ql-home-page-table>
           </v-carousel-item>
           <v-carousel-item src=""><ql-latest-results :seasonId="appData.currentSeason.id"></ql-latest-results>
@@ -62,14 +85,14 @@ object NextFixturesComponent extends Component{
   val template = 
     
     """
-   <v-card>
-   <v-card-title primary-title><h3>Next Fixtures</h3></v-card-title>
-   <v-card-text v-if="fixtures">
-      <div v-for="f in fixtures" :key="f.id">
-      <h4>{{f.description}} {{f.date | date("d MMM yyyy")}}</h4>
-      <ql-fixtures-simple :fixtures="f.fixtures | combine"></ql-fixtures-simple>
-      </div>
-   </v-card-text>
+   <v-card flat>
+     <v-card-title primary-title><h3 class="headline mb-0">Next Fixtures</h3></v-card-title>
+     <v-card-text v-if="fixtures">
+        <div v-for="f in fixtures" :key="f.id">
+        <h4>{{f.description}} {{f.date | date("d MMM yyyy")}}</h4>
+        <ql-fixtures-simple :fixtures="f.fixtures | combine"></ql-fixtures-simple>
+        </div>
+     </v-card-text>
    </v-card>
 
 """
@@ -89,8 +112,8 @@ object LatestResultsComponent extends Component{
   val template = 
     
     """
-   <v-card>
-     <v-card-title primary-title><h3>Latest Results</h3></v-card-title>
+   <v-card flat>
+     <v-card-title primary-title><h3 class="headline mb-0">Latest Results</h3></v-card-title>
      <v-card-text v-if="fixtures">
         <div v-for="f in fixtures" :key="f.id">
         <h4>{{f.description}} {{f.date | date("d MMM yyyy")}}</h4>
@@ -106,16 +129,7 @@ object LatestResultsComponent extends Component{
   override val subscriptions = Map("fixtures" -> (c => FixturesService.latestResults(c.seasonId)))
 }
 
-object HomeSidenavComponent extends RouteComponent{
-   override val template="""
-  <v-list dense>
-    <v-list-tile>Home Menu1</v-list-tile>
-    <v-list-tile>Home Menu2</v-list-tile>
-  </v-list>"""
-       
-  
 
-}
 
 @js.native
 trait HomePageLeagueTable extends VueComponent with VueRxComponent{
@@ -129,8 +143,9 @@ object HomePageLeagueTable extends Component{
   
   override val name = "ql-home-page-table"
   
-  override val template ="""<v-card v-if="tables">
-              <v-card-title primary-title><h4>League Table</h4></v-card-title>
+  override val template ="""
+            <v-card v-if="tables">
+              <v-card-title primary-title><h3 class="headline mb-0">League Table</h3></v-card-title>
               <v-card-text>
               <ql-league-table v-for="table in tables"  :key="table.id" :id="table.id"></ql-league-table>
               </v-card-text>

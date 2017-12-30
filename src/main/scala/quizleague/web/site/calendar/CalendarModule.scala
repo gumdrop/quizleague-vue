@@ -54,8 +54,6 @@ object CalendarViewService extends SeasonWatchService{
   
   def events(seasonId:String):Observable[js.Array[DateWrapper]] = {
     
-    log(seasonId, "ql-web : calendar")
-    
     import CompetitionType._
     
     
