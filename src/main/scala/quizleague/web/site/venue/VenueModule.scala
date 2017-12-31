@@ -3,11 +3,12 @@ package quizleague.web.site.venue
 
 
 import scala.scalajs.js
+
 import quizleague.web.model.Venue
 
 import quizleague.web.names.ComponentNames
 
-
+import quizleague.web.service._
 import quizleague.web.service.venue.VenueGetService
 import quizleague.web.site._
 import quizleague.web.site.text.TextModule
@@ -31,5 +32,5 @@ object VenueModule extends Module{
 }
 
 
-object VenueService extends VenueGetService
+object VenueService extends VenueGetService with RetiredFilter[Venue]
 

@@ -33,6 +33,8 @@ trait GetService[T <: Model] {
 
   def flush() = items.clear()
 
+  protected def filterList(u:U) = true
+  
   protected final def listFromStorage(): Observable[js.Array[U]] = {
 
     val obs = listObservable.getOrElse({
@@ -41,7 +43,7 @@ trait GetService[T <: Model] {
 
       db.collection(uriRoot).onSnapshot(subject.inner)
 
-      subject.map(q => q.docs.map(d => dec(d.data()).fold(e => {throw e}, u => u)))
+      subject.map(q => q.docs.map(d => dec(d.data()).fold(e => {throw e}, u => u))).map(_.filter(filterList _))
     })
 
     listObservable = Option(obs)

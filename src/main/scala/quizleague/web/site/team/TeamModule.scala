@@ -8,7 +8,8 @@ import quizleague.web.site.text.TextService
 import quizleague.web.site.venue.VenueService
 import quizleague.web.site.user.UserService
 import quizleague.web.site.season.SeasonWatchService
-
+import quizleague.web.service._
+import quizleague.web.model._
 
 object TeamModule extends Module{
   
@@ -29,7 +30,7 @@ object TeamModule extends Module{
       
 }
 
-object TeamService extends TeamGetService{
+object TeamService extends TeamGetService with RetiredFilter[Team]{
   
   override val textService = TextService
   override val userService = UserService
