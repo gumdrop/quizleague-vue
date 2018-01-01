@@ -22,6 +22,7 @@ sealed trait Competition extends js.Object with Model{
   val fixtures: js.Array[RefObservable[Fixtures]]
   val tables: js.Array[RefObservable[LeagueTable]]
   val text: RefObservable[Text]
+  val textName:String
 }
 
 class LeagueCompetition(
@@ -32,6 +33,7 @@ class LeagueCompetition(
   override val fixtures: js.Array[RefObservable[Fixtures]],
   override val tables: js.Array[RefObservable[LeagueTable]],
   override val text: RefObservable[Text],
+  override val textName:String,
   val subsidiary: RefObservable[Competition]) extends Competition {
   override val typeName = league.toString()
 }
@@ -42,7 +44,8 @@ class CupCompetition(
   val startTime: String,
   val duration: Float,
   override val fixtures: js.Array[RefObservable[Fixtures]],
-  override val text: RefObservable[Text]) extends Competition {
+  override val text: RefObservable[Text],  
+  override val textName:String) extends Competition {
   override val typeName = cup.toString()
   override val tables = js.Array[RefObservable[LeagueTable]]()
 }
@@ -51,7 +54,8 @@ class SubsidiaryLeagueCompetition(
   override val id: String,
   override val name: String,
   override val tables: js.Array[RefObservable[LeagueTable]],
-  override val text: RefObservable[Text]) extends Competition {
+  override val text: RefObservable[Text],
+  override val textName:String) extends Competition {
   override val typeName = subsidiary.toString()
   override val fixtures = js.Array[RefObservable[Fixtures]]()
 }

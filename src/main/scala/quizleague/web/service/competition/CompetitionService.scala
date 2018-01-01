@@ -68,6 +68,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           refObsList(c.fixtures,fixturesService),
           refObsList(c.tables, leagueTableService),
           refObs(c.text, textService),
+          c.textName,          
           refObs(c.subsidiary))
         case c: DCC => new CupCompetition(
           c.id,
@@ -75,12 +76,14 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           c.startTime,
           c.duration,
           refObsList(c.fixtures,fixturesService),
-          refObs(c.text, textService))
+          refObs(c.text, textService),
+          c.textName)
         case c: DSC => new SubsidiaryLeagueCompetition(
           c.id,
           c.name,
           refObsList(c.tables, leagueTableService),
-          refObs(c.text, textService))
+          refObs(c.text, textService),
+          c.textName)
         case c : DSiC => new SingletonCompetition(
           c.id,
           c.name,
@@ -143,7 +146,8 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
       LocalTime.of(20, 30),
       Duration.ofSeconds(5400),
       List(),
-      textService.getRef(textService.instance()))
+      textService.getRef(textService.instance()),
+      "cup-comp")
 
     def makeSubsidiary = DSC(
       newId(),
@@ -169,7 +173,8 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
           l.fixtures.map(fixturesService.ref(_)).toList,
           l.tables.map(leagueTableService.ref(_)).toList,
           textService.ref(l.text),
-          if (l.subsidiary == null) None else Option(ref(l.subsidiary)))
+          if (l.subsidiary == null) None else Option(ref(l.subsidiary)),
+          l.textName)
 
         case c: CupCompetition => DCC(
           c.id,
@@ -177,13 +182,15 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
           c.startTime,
           c.duration,
           c.fixtures.map(fixturesService.ref(_)).toList,
-          textService.ref(c.text))
+          textService.ref(c.text),
+          c.textName)
 
         case s: SubsidiaryLeagueCompetition => DSC(
           s.id,
           s.name,
           s.tables.map(leagueTableService.ref(_)).toList,
-          textService.ref(s.text))
+          textService.ref(s.text),
+          s.textName)
         
         case s: SingletonCompetition => DSiC(
           s.id,

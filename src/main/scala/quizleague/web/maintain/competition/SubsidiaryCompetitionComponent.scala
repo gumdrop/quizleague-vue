@@ -24,8 +24,9 @@ object SubsidiaryCompetitionComponent extends CompetitionComponentConfig{
     <v-form v-model="valid"  v-if="item && season">
       <v-layout column>
    
-          <v-text-field  label="Name" type="text" v-model="item.name"
+        <v-text-field  label="Name" type="text" v-model="item.name"
              required :rules=${valRequired("Name")}></v-text-field>
+        <v-text-field label="Text Name" required v-model="item.textName" :rules=${valRequired("Text Name")}></v-text-field>
 
       <div><v-btn flat v-on:click="editText(item.text.id)"  type="button" ><v-icon>description</v-icon>Text...</v-btn></div>
       <div><v-btn flat v-on:click="fixtures(item)" ><v-icon>check</v-icon>Fixtures...</v-btn></div>

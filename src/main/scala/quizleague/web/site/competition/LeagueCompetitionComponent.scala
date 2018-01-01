@@ -16,7 +16,7 @@ object LeagueCompetitionComponent extends Component{
   <v-container grid-list-lg fluid v-if="item">
     <v-layout column grid-list-lg>
       <v-flex>      
-        <ql-named-text name="league-comp"></ql-named-text>
+        <ql-named-text :name="item.textName"></ql-named-text>
         <ql-text :id="item.text.id"></ql-text>
       </v-flex>
       <v-flex><league-tables :id="id"></league-tables></v-flex>
