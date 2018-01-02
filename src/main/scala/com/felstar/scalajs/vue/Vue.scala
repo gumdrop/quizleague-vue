@@ -131,7 +131,6 @@ trait VueComponent extends Vue {
 @js.native
 trait VueRxComponent extends VueComponent {
   
-  //@JSName("$subscribeTo")
   def $subscribeTo[_](obs:ObservableFacade[_], fn:js.Function):Unit = js.native
   def $subscribeTo[_](obs:ObservableFacade[_], sub:ObservableFacade[_]):Unit = js.native
   

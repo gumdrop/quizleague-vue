@@ -73,7 +73,7 @@ object LeagueTableComponent extends Component{
       </table>
 """
   override val props = @@("id")
-  override val subParams = Map("id" -> "table")
+  override val subParams = List("id" -> "table")
   override val subscriptions = Map("table" -> (c => LeagueTableService.get(c.id)))
   
   

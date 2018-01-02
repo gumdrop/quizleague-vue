@@ -37,7 +37,7 @@ object CalendarComponent extends Component{
     </v-layout>
   </v-container>"""
   override val props = @@("seasonId")
-  override val subParams = Map("seasonId" -> "items")
+  override val subParams = List("seasonId" -> "items")
   override val subscriptions = Map("items" -> (c => CalendarViewService.events(c.seasonId)))
   override val components = @@(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent)
   

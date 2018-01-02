@@ -19,6 +19,6 @@ object TeamNameComponent extends Component{
   val template = """<span v-if="t">{{short ? t.shortName : t.name}}</span>"""
   override val props = @@("team","short","id")
   override val subscriptions = Map("t" -> (c => if(c.team != null) c.team.obs else TeamService.get(c.id)))
-  override val subParams = Map("team"->"t", "id" -> "t")
+  override val subParams = List("team"->"t", "id" -> "t")
   
 }

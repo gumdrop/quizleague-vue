@@ -30,7 +30,7 @@ trait Component {
   def template: String
   def props: js.Array[String] = @@()
   def watch: Map[String, ((facade,js.Any) => Unit)] = Map()
-  def subParams: Map[String, String] = Map()
+  def subParams: List[((String, String))] = List()
   def subscriptions: Map[String, facade => Observable[Any]] = Map()
   def data: facade => Map[String, Any] = c => Map()
   def methods: Map[String, js.Function] = Map()
@@ -56,7 +56,7 @@ trait Component {
     
     def sub() = {
       val a = js.Dictionary[Any]()
-      c.$subscribeTo(obs.inner, (b:js.Dynamic) => {val r:js.Any = Vue.util.extend(a,b);c.$forceUpdate()})
+      c.$subscribeTo(obs.inner, (b:js.Dynamic) => c.$nextTick({() => Vue.util.extend(a,b);c.$forceUpdate()}))
       observables += ((obs.id,a))
       a
     }
@@ -81,7 +81,7 @@ trait Component {
     
     def makeSubscriptions(c:facade) = {
 
-      val watchSubs = subParams.map{case (k, v) => {
+      val watchSubs = subParams.toMap.map{case (k, v) => {
         val subject = ReplaySubject[Any]()
         
         val subscription = update(subject)(subscriptions(v)) _
@@ -91,7 +91,7 @@ trait Component {
         
       }}
       
-      val subs = subscriptions.filterKeys(k => !subParams.values.exists(_ == k)).map{
+      val subs = subscriptions.filterKeys(k => !subParams.toMap.values.exists(_ == k)).map{
         case (k,v) => ((k, (c:facade) => v(c).inner))
       }
       

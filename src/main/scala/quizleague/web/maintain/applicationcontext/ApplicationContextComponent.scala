@@ -73,6 +73,7 @@ object ApplicationContextComponent extends ItemComponentConfig[ApplicationContex
           required
         ></v-text-field>
         <v-layout column>
+          <span>Email Aliases</span>
           <v-layout row>
             <v-btn style="position:relative;top:12px" :disabled="!alias && !user" v-on:click="addAlias" icon><v-icon>add</v-icon></v-btn>
             <v-text-field v-model="alias" label="Alias"></v-text-field>

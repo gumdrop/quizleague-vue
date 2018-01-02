@@ -14,7 +14,7 @@ object TeamListComponent extends ItemListComponentConfig[Team] with RouteCompone
   val template = s"""
   <v-container>
     <v-layout column>
-      <div v-for="item in items">
+      <div v-for="item in items" :key="item.id">
         <v-btn :to="'team/' + item.id" flat left>{{item.name}}</v-btn>
       </div>
       $addFAB

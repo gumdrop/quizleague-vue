@@ -29,7 +29,7 @@ object SingletonCompetitionComponent extends Component{
   </div>"""
   
   override val props = @@("id")
-  override val subParams = Map("id" -> "item")
+  override val subParams = List("id" -> "item")
  
   
   override val subscriptions = Map("item" -> (c => CompetitionService.get(c.id)))

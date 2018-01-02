@@ -73,7 +73,7 @@ object SimpleFixturesComponent extends Component {
 """
 
   override val props = @@("fixtures", "list", "inlineDetails")
-  override val subParams = Map("fixtures" -> "fixts")
+  override val subParams = List("fixtures" -> "fixts")
   override val subscriptions = Map("fixts" -> (c => c.fixtures))
   override val components = @@(FixtureLineComponent)
 
@@ -129,6 +129,6 @@ object ReportsComponent extends Component{
     </v-layout>
     </v-container>"""
   override val props = @@("id")
-  override val subParams = Map("id" -> "reports")
+  override val subParams = List("id" -> "reports")
   override val subscriptions = Map("reports" -> (c => ReportsService.get(c.id)))
 }

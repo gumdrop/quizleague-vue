@@ -17,89 +17,7 @@ import scala.scalajs.js.ThisFunction0
 import quizleague.web.core.Component
 import quizleague.web.core.IdComponent
 
-//@Component(
-//    template = s"""
-// <div *ngIf="itemObs | async as item; else loading">
-//     <md-card>
-//      <md-card-content>
-//         <div fxLayout="row" fxLayoutAlign="space-between start">
-//           <div fxLayout="column">
-//             <div [innerText]="item.address" ></div>
-//             <div class="map" fxHide.xs="true">
-//               <iframe [src]="embeddedUrl(item)" width="400" height="300" frameborder="0" style="border: 0"></iframe>
-//             </div>
-//             <div fxHide="true" fxShow.xs="true"><a [href]="linkUrl(item)" target="_blank">map</a></div>
-//             <div>email : <a href="mailto:{{item.email}}">{{item.email}}</a></div>
-//             <div>website : <a href="{{item.website}}" target="_blank">{{item.website}}</a></div>
-//             <div>phone : {{item.phone}}</div>
-//           </div>
-//           <div fxHide="true" fxShow.gt-sm="true">
-//              <img md-card-img-sm src="{{item.imageURL}}">
-//           </div>
-//         </div>
-//      </md-card-content>
-//    </md-card>
-//  </div>
-//  $loadingTemplate
-//""",
-//    styles = @@@("""
-//       .map{
-//          margin-top:.5em;
-//          margin-bottom:.5em;
-//        }
-// """)
-//)
-//@classModeScala
-//class VenueComponent(
-//    route:ActivatedRoute,
-//    service:VenueService,
-//    sanitiser:DomSanitizer,
-//    override val titleService:TitleService,
-//    override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent with TitledComponent{
-//
-//  val itemObs = route.params.switchMap( (params,i) => service.get(params("id")))
-//
-//  itemObs.subscribe(v => setTitle(v.name))
-//
-//  def embeddedUrl(venue:Venue) = sanitiser.bypassSecurityTrustResourceUrl(makeParts(venue).join(""))
-//
-//  def linkUrl(venue:Venue) = sanitiser.bypassSecurityTrustResourceUrl(makeParts(venue).take(2).join(""))
-//
-//  private def makeParts(venue:Venue) = {
-//    js.Array("https://maps.google.com/maps?&q=",js.URIUtils.encodeURIComponent(s"${venue.name} ${venue.address}".replaceAll("\\s", "+")), "&output=embed")
-//  }
-//}
-//
-//@Component(
-//    template = s"""
-//  <ql-section-title>
-//     <span *ngIf="itemObs | async as item; else loading">
-//      {{item.name}}
-//    </span>
-//    $loadingTemplate
-//  </ql-section-title>
-//"""
-//)
-//class VenueTitleComponent(
-//        route:ActivatedRoute,
-//    service:VenueService
-//    ){
-//
-//  val itemObs = route.params.switchMap( (params,i) => service.get(params("id")))
-//}
-//
-//@Component(
-//  template = s"""
-//  <div fxLayout="column" *ngFor="let item of items | async">
-//    <a fxFlexAlign="start" routerLink="/venue/{{item.id}}"  md-menu-item routerLinkActive="active" >{{item.name}}</a>
-//  </div>
-//  """
-//)
-//class VenueMenuComponent(service:VenueService){
-//
-//  val items = service.list()
-//
-//}
+
 
 object VenuePage extends RouteComponent {
   override val template = """<ql-venue :id="$route.params.id"></ql-venue>"""
@@ -111,29 +29,52 @@ object VenueComponent extends Component {
   
   override val name = "ql-venue"
   override val template = """
-          <v-container v-if="venue">
+          <v-container grid-list-lg fluid v-if="venue">
           <v-layout column>
-           <v-card>
-              <v-card-text>
-                 <div>
-                   <div >
-                     <div v-html="lineBreaks(venue.address)"></div>
-                      <div>email : <a :href="'mailto:' + venue.email">{{venue.email}}</a></div>
-                     <div>website : <a :href="venue.website" target="_blank">{{venue.website}}</a></div>
-                     <div>phone : {{venue.phone}}</div>
-                   </div>
-                   <div v-if="venue.imageURL" >
-                      <img :src="venue.imageURL">
-                   </div>
-                 </div>
-              </v-card-text>
-            </v-card>
+           <v-flex>
+             <v-card>
+                <v-card-text>
+                  <v-container grid-list-sm fluid>
+                    <v-layout row wrap justify-end>
+                     <v-layout column>
+                      <v-flex>
+                        <div>Address : </div>
+                        <div class="pl-2" v-html="lineBreaks(venue.address)"></div>
+                        <iframe :src="embeddedUrl(venue)" width="400" height="300" frameborder="0" style="border: 0" class="hidden-sm-and-down"></iframe>
+                        <div class="hidden-md-and-up"><a :href="linkUrl(venue)" target="_blank">map</a></div>
+                       </v-flex>
+                       <v-flex>
+                         <div>email : <a :href="'mailto:' + venue.email">{{venue.email}}</a></div>
+                         <div>website : <a :href="venue.website" target="_blank">{{venue.website}}</a></div>
+                         <div>phone : {{venue.phone}}</div>
+                      </v-flex>
+                     </v-layout>
+                     <v-spacer></v-spacer>
+                     <v-flex v-if="venue.imageURL" class="hidden-sm-and-down">
+                        <img :src="venue.imageURL">
+                     </v-flex>
+                   </v-layout>
+                  </v-container>
+                </v-card-text>
+              </v-card>
+            </v-flex>
             </v-layout>
           </v-container>"""
+  
+  def embeddedUrl(venue:Venue) = makeParts(venue).join("")
+  
+  def linkUrl(venue:Venue) = makeParts(venue).take(2).join("")
+    
+  private def makeParts(venue:Venue) = {
+    js.Array("https://maps.google.com/maps?&q=",js.URIUtils.encodeURIComponent(s"${venue.name} ${venue.address}".replaceAll("\\s", "+")), "&output=embed")
+  } 
   override val props = @@("id")
-  override val subParams = Map("id"->"venue")
+  override val subParams = List("id"->"venue")
   override val subscriptions = Map("venue" -> (v => VenueService.get(v.id)))
-  override val methods = Map("lineBreaks" -> ((s: String) => s.replaceAll("\\n", "<br>")))
+  override val methods = Map(
+      "lineBreaks" -> ((s: String) => s.replaceAll("\\n", "<br>")),
+      "embeddedUrl" -> embeddedUrl _,
+      "linkUrl" -> linkUrl _)
 
 }
 
@@ -157,8 +98,10 @@ object VenueTitle extends Component {
       </v-toolbar-title>
     </v-toolbar>"""
   
+
+  
    override val props = @@("id")
-   override val subParams = Map("id"->"venue")
+   override val subParams = List("id"->"venue")
    override val subscriptions = Map("venue" -> (v => VenueService.get(v.id)))
 
 }

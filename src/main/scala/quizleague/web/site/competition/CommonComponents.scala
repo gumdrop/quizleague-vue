@@ -18,7 +18,7 @@ object LeagueTables extends Component{
     </v-card>"""
   
   override val props = @@("id")
-  override val subParams = Map("id" -> "item")
+  override val subParams = List("id" -> "item")
   override val subscriptions = Map("item" -> (c => CompetitionService.get(c.id)))
 }
 
@@ -41,7 +41,7 @@ object LatestResults extends Component{
   
   override val props = @@("id")
   
-    override val subParams = Map("id" -> "latestResults")
+    override val subParams = List("id" -> "latestResults")
     override val subscriptions = Map(
       "latestResults" -> (c => CompetitionViewService.latestResults(c.id,1))
     )
@@ -67,7 +67,7 @@ object NextFixtures extends Component{
 
  
   override val props = @@("id")
-  override val subParams = Map("id" -> "nextFixtures")
+  override val subParams = List("id" -> "nextFixtures")
   override val subscriptions = Map(
       "nextFixtures" -> (c => CompetitionViewService.nextFixtures(c.id,1))
       )
@@ -92,7 +92,7 @@ object CompetitionTitleComponent extends Component{
     </v-toolbar>"""
   
   override val props = @@("id")
-  override val subParams = Map("id" -> "item", "id" -> "season")
+  override val subParams = List("id" -> "item")
   override val subscriptions = Map(
       "item" -> (c => CompetitionService.get(c.id)),
       "season" -> (c => CompetitionViewService.parentSeason(c.id))
@@ -110,7 +110,7 @@ trait ResultsComponent extends Component {
 
   override val props = @@("id")
 
-  override val subParams = Map("id" -> "latestResults")
+  override val subParams = List("id" -> "latestResults")
   override val subscriptions = Map("latestResults" -> (c => CompetitionViewService.latestResults(c.id, take)))
 
   def take:Int
@@ -161,7 +161,7 @@ object RemainingFixtures extends Component{
 
  
   override val props = @@("id")
-  override val subParams = Map("id" -> "nextFixtures")
+  override val subParams = List("id" -> "nextFixtures")
   override val subscriptions = Map(
       "nextFixtures" -> (c => CompetitionViewService.nextFixtures(c.id))
       )

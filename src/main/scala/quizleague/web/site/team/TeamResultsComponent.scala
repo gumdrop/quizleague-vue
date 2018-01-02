@@ -57,7 +57,7 @@ object TeamResultsTitleComponent extends Component{
     </v-toolbar>"""
   
   override val props = @@("id")
-  override val subParams = Map("id" -> "team")
+  override val subParams = List("id" -> "team")
   override val data = c => Map("season" -> TeamViewService.season)
   override val subscriptions  = Map("team" -> (c => TeamService.get(c.id)))
 }

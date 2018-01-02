@@ -100,7 +100,7 @@ object NextFixturesComponent extends Component{
 
   
   override val props = @@("seasonId")
-  override val subParams = Map("seasonId"-> "fixtures")
+  override val subParams = List("seasonId"-> "fixtures")
   override val subscriptions = Map("fixtures" -> (c => FixturesService.nextFixtures(c.seasonId)))
 
 }
@@ -125,7 +125,7 @@ object LatestResultsComponent extends Component{
 """
   
   override val props = @@("seasonId")
-  override val subParams = Map("seasonId"-> "fixtures")
+  override val subParams = List("seasonId"-> "fixtures")
   override val subscriptions = Map("fixtures" -> (c => FixturesService.latestResults(c.seasonId)))
 }
 
@@ -152,6 +152,6 @@ object HomePageLeagueTable extends Component{
             </v-card>"""
   
   override val props = @@("seasonId")
-  override val subParams = Map("seasonId"-> "tables")
+  override val subParams = List("seasonId"-> "tables")
   override val subscriptions = Map("tables" -> (c => LeagueTableService.leagueTables(c.seasonId)))
 }

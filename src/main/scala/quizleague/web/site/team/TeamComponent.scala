@@ -61,7 +61,7 @@ object TeamComponent extends Component{
           </v-layout>
           </v-container>"""
   override val props = @@("id")
-  override val subParams = Map("id"->"team")
+  override val subParams = List("id"->"team")
   override val subscriptions = Map("team" -> (v => TeamService.get(v.id)), "appConfig" -> (c => ApplicationContextService.get))
   override val methods = Map(
       "fixtures" -> ((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,seasonId,5)),
@@ -92,7 +92,7 @@ object TeamTitle extends Component {
     </v-toolbar>"""
   
    override val props = @@("id")
-   override val subParams = Map("id"->"team")
+   override val subParams = List("id"->"team")
    override val subscriptions = Map("team" -> (v => TeamService.get(v.id)))
 
 }
