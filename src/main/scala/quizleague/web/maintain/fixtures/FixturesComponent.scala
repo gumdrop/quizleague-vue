@@ -142,14 +142,7 @@ object FixtureComponent extends Component{
   val name = "fixture"
   val template = """
     <v-layout column v-if="fx">
-      <v-layout row>(
-    override val service:LeagueTableService,
-    val teamService:TeamService,
-    val competitionService:CompetitionService,
-    override val route: ActivatedRoute,
-    override val location:Location,
-    val router:Router)
-    extends ItemComponent[LeagueTable]{
+      <v-layout row>
         <v-btn style="top:-14px;" icon v-on:click="removeFixture(fx)" ><v-icon>cancel</v-icon></v-btn>
         <v-btn style="top:-14px;" icon v-if="fx.result" v-on:click="showResult = !showResult"><v-icon>check</v-icon></v-btn>
         <v-btn style="top:-14px;" icon v-if="!fx.result" v-on:click="addResult()"><v-icon>add</v-icon></v-btn>

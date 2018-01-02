@@ -24,6 +24,7 @@ trait GetService[T <: Model] {
   val db = Firestore.db
   private[service] val items: Map[String, T] = Map()
   private val observables = Map[String, Observable[U]]()
+  private val refObsCache = Map[String, RefObservable[T]]()
   private var listObservable: Option[Observable[js.Array[U]]] = None
 
   def get(id: String): Observable[T] = items.get(id).fold(getFromStorage(id).map(mapOutSparse _).map(postProcess _))(Observable.just(_))
@@ -71,9 +72,10 @@ trait GetService[T <: Model] {
 
   protected def decodeJson[T](obj: js.Any)(implicit dec: Decoder[T]) = convertJsToJson(obj).fold(t => null, dec.decodeJson(_))
 
-  final def refObs(id: String): RefObservable[T] = RefObservable(id, () => get(id))
-  final def refObs(opt: Option[Ref[U]]): RefObservable[T] = opt.fold[RefObservable[T]](null)(ref => refObs[U, T](ref, this))
-  protected final def refObs[A <: Entity, B <: Model](ref: Ref[A], service: GetService[B]): RefObservable[B] = if(ref == null) null else RefObservable(ref, () => service.get(ref.id))
+  protected[service] def getRefObs(id:String):RefObservable[T] = refObsCache.getOrElseUpdate(id, RefObservable(id, () => get(id)))
+  final def refObs(id: String): RefObservable[T] = getRefObs(id)
+  final def refObs(opt: Option[Ref[U]]): RefObservable[T] = opt.fold[RefObservable[T]](null)(ref => refObs(ref.id))
+  protected final def refObs[A <: Entity, B <: Model](ref: Ref[A], service: GetService[B]): RefObservable[B] = if(ref == null) null else service.getRefObs(ref.id)
   protected final def refObsList[A <: Entity, B <: Model](refs: List[Ref[A]], service: GetService[B]): js.Array[RefObservable[B]] = refs.map(refObs(_, service)).toJSArray
 
   def ref(id: String): Ref[U] = Ref(typeName, id)

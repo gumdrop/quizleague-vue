@@ -30,13 +30,7 @@ class RefObservable[+T](val id: String, obsf: () => Observable[T]) extends js.Ob
 }
 
 object RefObservable {
-  var cache = Map[String, RefObservable[_]]() 
   
   def apply[T](ref: Ref[_], obsf: () => Observable[T]):RefObservable[T] = apply(ref.id, obsf)
-  def apply[T](id: String, obsf: () => Observable[T]):RefObservable[T] = cache.get(id).fold(add(new RefObservable(id, obsf)))(r => r).asInstanceOf[RefObservable[T]]
-  
-  private def add(ref:RefObservable[_]) = {
-    cache = cache + ((ref.id, ref))
-    ref
-  }
+  def apply[T](id: String, obsf: () => Observable[T]):RefObservable[T] = new RefObservable(id, obsf)
 }
