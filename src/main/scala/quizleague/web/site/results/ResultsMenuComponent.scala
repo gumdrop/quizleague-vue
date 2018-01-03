@@ -8,10 +8,13 @@ object ResultsMenuComponent extends RouteComponent{
   val template = """
   <v-list dense >
     <v-list-tile >
-      <v-btn to="/results/all" flat style="text-transform: none;">All Results</v-btn>
+      <v-btn to="/results/all" flat >All Results</v-btn>
     </v-list-tile>
     <v-list-tile >
-      <v-btn to="/fixtures/all" flat style="text-transform: none;">All Fixtures</v-btn>
+      <v-btn to="/fixtures/all" flat >All Fixtures</v-btn>
+    </v-list-tile>
+        <v-list-tile >
+      <v-btn to="/results/submit" flat >Submit Results</v-btn>
     </v-list-tile>
    </v-list>
   """    

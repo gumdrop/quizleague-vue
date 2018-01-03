@@ -88,7 +88,8 @@ object TeamTitle extends Component {
         {{team.name}}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon :to="'/venue/' + team.venue.id"><v-icon>location_on</v-icon></v-btn>
+      <v-tooltip top><v-btn icon slot="activator"><v-icon>email</v-icon></v-btn><span>Contact Us</span></v-tooltip>
+      <v-tooltip top><v-btn icon :to="'/venue/' + team.venue.id" slot="activator"><v-icon>location_on</v-icon></v-btn><span>Venue</span></v-tooltip>
     </v-toolbar>"""
   
    override val props = @@("id")

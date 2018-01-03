@@ -93,16 +93,17 @@ object FixtureLineComponent extends Component with TableUtils{
         <td v-if="!fixture.result"></td><td v-else class="score">{{fixture.result.awayScore}}</td>
         <td v-if="!fixture.result" class="away"><ql-team-name :team="fixture.away" :short="short"></ql-team-name></td><td v-else class="away" :class="nameClass(fixture.result.awayScore, fixture.result.homeScore)"><ql-team-name :short="short" :team="fixture.away"></ql-team-name></td> 
         <td v-if="!fixture.result"></td>
-        <td v-else>
-          <v-btn icon @click.stop="showReports=true" v-if="fixture.result.reports">
-            <v-icon style="transform:scale(0.75)">description</v-icon>
-          </v-btn>
+        <td v-else><div>
+          <v-tooltip top>
+            <v-btn icon @click.stop="showReports=true" v-if="fixture.result.reports" slot="activator">
+              <v-icon style="transform:scale(0.75)">description</v-icon>
+            </v-btn>
+            <span>Match Reports</span></v-tooltip></div>
           <v-dialog v-model="showReports" max-width="500" lazy v-if="fixture.result.reports">
-
-          <v-card>
-            <v-card-title>Reports ::&nbsp;<ql-team-name :short="short" :team="fixture.home"></ql-team-name>&nbsp;{{fixture.result.homeScore}} - {{fixture.result.awayScore}}&nbsp;<ql-team-name :short="short" :team="fixture.away"></ql-team-name></v-card-title>
-            <ql-reports :id="fixture.result.reports.id"></ql-reports>
-          </v-card>
+            <v-card>
+              <v-card-title>Reports ::&nbsp;<ql-team-name :short="short" :team="fixture.home"></ql-team-name>&nbsp;{{fixture.result.homeScore}} - {{fixture.result.awayScore}}&nbsp;<ql-team-name :short="short" :team="fixture.away"></ql-team-name></v-card-title>
+              <ql-reports :id="fixture.result.reports.id"></ql-reports>
+            </v-card>
          </v-dialog>
         </td> 
       </tr>"""

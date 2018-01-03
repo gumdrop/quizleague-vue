@@ -40,7 +40,10 @@ object VenueComponent extends Component {
                       <v-flex>
                         <div>Address : </div>
                         <div class="pl-2" v-html="lineBreaks(venue.address)"></div>
-                        <iframe :src="embeddedUrl(venue)" width="400" height="300" frameborder="0" style="border: 0" class="hidden-xs-only"></iframe>
+                        <div class="hidden-xs-only">
+                          <p></p>
+                          <iframe :src="embeddedUrl(venue)" width="400" height="300" frameborder="0" style="border: 0" ></iframe>
+                        </div>
                         <div class="hidden-sm-and-up"><a :href="linkUrl(venue)" target="_blank">map</a></div>
                        </v-flex>
                        <v-flex>
@@ -49,8 +52,7 @@ object VenueComponent extends Component {
                          <div>phone : {{venue.phone}}</div>
                       </v-flex>
                      </v-layout>
-                     <v-spacer></v-spacer>
-                     <v-flex v-if="venue.imageURL" class="hidden-xs-only">
+                     <v-flex v-if="venue.imageURL" class="hidden-xs-only text-xs-left text-sm-left text-md-right text-lg-right text-xl-right" >
                         <img :src="venue.imageURL">
                      </v-flex>
                    </v-layout>
