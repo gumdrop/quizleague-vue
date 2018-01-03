@@ -32,6 +32,13 @@ trait Component {
   def watch: Map[String, ((facade,js.Any) => Unit)] = Map()
   def subParams: List[((String, String))] = List()
   def subscriptions: Map[String, facade => Observable[Any]] = Map()
+  private var addedSubs: Map[String, facade => Observable[Any]] = Map()
+  private var addedSubParams: List[((String, String))] = List()
+  private var addedProps:List[String] = List()
+  private var addedMethods:Map[String, js.Function] = Map()
+  private var addedDataFn:Map[String, facade => Any] = Map()
+  private var addedData:Map[String,Any] = Map()
+  private var addedComponents:List[Component] = List()
   def data: facade => Map[String, Any] = c => Map()
   def methods: Map[String, js.Function] = Map()
   def components: js.Array[Component] = @@()
@@ -60,13 +67,39 @@ trait Component {
       observables += ((obs.id,a))
       a
     }
-    
     if(retval.isEmpty) sub() else retval.get
     }
     else empty
 
   }):js.ThisFunction))
   
+  protected final def subscription(name:String,linkedProps:String*)(fn:facade => Observable[Any]) {
+    addedSubs  = addedSubs + ((name, fn))
+
+    linkedProps.foreach{s => {
+      addedSubParams = addedSubParams :+ (s,name)
+      }}
+  }
+  
+  protected final def prop(name:String){
+    addedProps = addedProps :+ name
+  }
+  
+  protected final def method(name:String)(fn:js.Function){
+    addedMethods = addedMethods + ((name, fn))
+  }
+  
+  protected final def data(name:String, value:Any){
+    addedData = addedData + ((name, value))
+  }
+  
+  protected final def data(name:String)(fn:facade => Any){
+    addedDataFn = addedDataFn + ((name, fn))
+  }
+  
+  protected final def components(comps:Component*){
+    addedComponents = addedComponents ++ comps
+  }
 
   
   def apply():js.Dynamic = {
@@ -81,6 +114,9 @@ trait Component {
     
     def makeSubscriptions(c:facade) = {
 
+      val subscriptions = this.subscriptions ++ addedSubs
+      val subParams = this.subParams ++ addedSubParams
+      
       val watchSubs = subParams.toMap.map{case (k, v) => {
         val subject = ReplaySubject[Any]()
         
@@ -103,14 +139,14 @@ trait Component {
     
     val retval = literal(
       template = template,
-      props = props,
-      data = ((v: facade) => data(v).toJSDictionary): js.ThisFunction,
+      props = props ++ addedProps,
+      data = ((v: facade) => (data(v) ++ addedData ++ addedDataFn.map{case(k,fn) => (k,fn(v))}).toJSDictionary): js.ThisFunction,
       watch = (watch.map { case (k, v) => (k, v: js.ThisFunction) }).toJSDictionary,
       subscriptions = ((c: facade) => makeSubscriptions(c).map { case (k, v) => (k, v(c)) }.toJSDictionary): js.ThisFunction,
 
-      methods = (commonMethods ++ methods).toJSDictionary,
+      methods = (commonMethods ++ methods ++ addedMethods).toJSDictionary,
       computed = computed.toJSDictionary,
-      components = components.map(c => ((c.name, c()))).toMap.toJSDictionary,
+      components = (components ++ addedComponents).map(c => ((c.name, c()))).toMap.toJSDictionary,
       mounted = mounted,
       activated = activated,
       created = created,

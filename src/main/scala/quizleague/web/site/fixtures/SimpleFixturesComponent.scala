@@ -5,8 +5,6 @@ import scala.scalajs.js
 import quizleague.web.model.Fixture
 import quizleague.web.util.rx._
 
-//import quizleague.web.site.common.ComponentUtils
-//import ComponentUtils._
 import quizleague.web.core._
 import rxscalajs.Observable
 import quizleague.web.core.IdComponent
@@ -15,40 +13,6 @@ import com.felstar.scalajs.vue._
 import quizleague.web.site.results.TableUtils
 import quizleague.web.site.results.ReportsService
 
-//@Component(
-//  selector = "ql-fixtures-simple",
-//  template = s"""
-//   <div  in-viewport (inViewport)="load($$event.value)">
-//    &nbsp;
-//    <div *ngIf="inView">
-//    <table *ngIf="fixtures | async as fs else loading">
-//      <tr *ngFor="let fixture of fs">
-//        <td *ngIf="inlineDetails" class="inline-details" >{{fixture.date | date : "d MMM yyyy"}} : {{fixture.parentDescription}} {{fixture.description}}</td>
-//        <td class="home">{{(fixture.home | async)?.name}}</td>
-//        <td> - </td>
-//        <td class="away">{{(fixture.away | async)?.name}}</td>
-//      </tr>
-//    </table>
-//    </div>
-//    </div>
-//    $loadingTemplate
-//  """,
-//    styles = js.Array(
-//  """
-//    .inline-details{
-//      font-style: italic;
-//      padding-right: .5em;
-//      color: darkblue;
-//    }
-//""",
-//""".home{
-//      text-align:right;
-//      padding-right:1em;
-//    }
-//    .away{
-//      padding-left:1em;
-//    }""")
-//)
 
 @js.native
 trait SimpleFixturesComponent extends VueRxComponent {
@@ -63,19 +27,18 @@ object SimpleFixturesComponent extends Component {
 
   val template = """
    <div v-if="fixts" class="ql-fixtures-simple">
-    <div>
-    <table>
-      <ql-fixture-line v-for="fixture in fixts" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
-    </table>
-    </div> 
-    </div>
+      <table>
+        <ql-fixture-line v-for="fixture in fixts" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
+      </table>
+   </div>
 
 """
 
-  override val props = @@("fixtures", "list", "inlineDetails")
-  override val subParams = List("fixtures" -> "fixts")
-  override val subscriptions = Map("fixts" -> (c => c.fixtures))
-  override val components = @@(FixtureLineComponent)
+  prop("fixtures")
+  prop("list")
+  prop("inlineDetails")
+  subscription("fixts","fixtures")(c => c.fixtures)
+  components(FixtureLineComponent)
 
 
 }
@@ -107,10 +70,12 @@ object FixtureLineComponent extends Component with TableUtils{
          </v-dialog>
         </td> 
       </tr>"""
-  override val components = @@(ReportsComponent)
-  override val data = c => Map("showReports" -> false, "short" -> c.$vuetify.breakpoint.smAndDown)
-  override val props = @@("fixture","inlineDetails")
-  override val methods = Map("nameClass" -> nameClass _ )
+  components(ReportsComponent)
+  data("showReports", false)
+  data("short")(c => c.$vuetify.breakpoint.smAndDown)
+  prop("fixture")
+  prop("inlineDetails")
+  method("nameClass")(nameClass _ )
 }
 
 object ReportsComponent extends Component{
@@ -129,7 +94,7 @@ object ReportsComponent extends Component{
       </v-flex>
     </v-layout>
     </v-container>"""
-  override val props = @@("id")
-  override val subParams = List("id" -> "reports")
-  override val subscriptions = Map("reports" -> (c => ReportsService.get(c.id)))
+  
+  prop("id")
+  subscription("reports", "id")(c => ReportsService.get(c.id))
 }
