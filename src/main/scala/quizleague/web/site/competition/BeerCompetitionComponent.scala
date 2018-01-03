@@ -8,7 +8,7 @@ import quizleague.web.core.IdComponent
 
 object BeerCompetitionPage extends RouteComponent{
   val template = """<competition :id="$route.params.id"></competition>"""
-  override val components = @@(BeerCompetitionComponent)
+  components(BeerCompetitionComponent)
 }
 
 object BeerCompetitionComponent extends Component{
@@ -27,11 +27,9 @@ object BeerCompetitionComponent extends Component{
    </v-container>
 """""
   
-  override val props = @@("id")
-  override val subParams = List("id" -> "item")
+  props("id")
  
-  
-  override val subscriptions = Map("item" -> (c => CompetitionService.get(c.id)))
+  subscription ("item","id")(c => CompetitionService.get(c.id))
       
-  override val components = @@(LatestResults, LeagueTables)
+  components (LatestResults, LeagueTables)
 }

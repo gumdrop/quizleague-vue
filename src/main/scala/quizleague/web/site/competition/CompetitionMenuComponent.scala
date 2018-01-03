@@ -30,7 +30,7 @@ object CompetitionMenu extends RouteComponent{
         <ql-competition-menu></ql-competition-menu>
   """
   
-    override val components = @@(CompetitionMenuComponent)
+  components(CompetitionMenuComponent)
 }
 
 object CompetitionMenuComponent extends Component{
@@ -38,12 +38,12 @@ object CompetitionMenuComponent extends Component{
   val name = "ql-competition-menu"
   val template = """
     <v-list dense v-if="competitions">
-       <v-list-tile v-for="competition in sort(competitions)" :key="competition.id">
-          <v-btn :to="'/competition/' + competition.id +'/' + competition.typeName" flat style="text-transform: none;">{{competition.name}}</v-btn>
+       <v-list-tile v-for="competition in sort(competitions)" :key="competition.id" left>
+          <v-btn :to="'/competition/' + competition.id +'/' + competition.typeName" flat left>{{competition.name}}</v-btn>
       </v-list-tile>
     </v-list>
     """
 
-  override val subscriptions = Map("competitions" -> (c => CompetitionViewService.competitions()))
-  override val methods = Map("sort" -> ((comps:js.Array[Competition]) => comps.sortBy(_.name)))
+  subscription("competitions")(c => CompetitionViewService.competitions())
+  method("sort")((comps:js.Array[Competition]) => comps.sortBy(_.name))
 }

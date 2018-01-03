@@ -15,7 +15,7 @@ trait EventWrapper{
   val date:String
 }
 
-//@JSExportAll
+
 class CalendarEventWrapper(@JSExport val event:CalendarEvent) extends EventWrapper{
   override val eventType = "calendar"
   override val date = if(event == null) null else event.date

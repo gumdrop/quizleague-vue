@@ -17,9 +17,8 @@ object LeagueTables extends Component{
       </v-card-text>
     </v-card>"""
   
-  override val props = @@("id")
-  override val subParams = List("id" -> "item")
-  override val subscriptions = Map("item" -> (c => CompetitionService.get(c.id)))
+  props ("id")
+  subscription ("item","id")(c => CompetitionService.get(c.id))
 }
 
 object LatestResults extends Component{
@@ -39,12 +38,10 @@ object LatestResults extends Component{
       </v-card-actions>
     </v-card>"""
   
-  override val props = @@("id")
+  props("id")
   
-    override val subParams = List("id" -> "latestResults")
-    override val subscriptions = Map(
-      "latestResults" -> (c => CompetitionViewService.latestResults(c.id,1))
-    )
+  subscription ("latestResults","id")(c => CompetitionViewService.latestResults(c.id,1))
+    
 }
 
 object NextFixtures extends Component{
@@ -66,17 +63,14 @@ object NextFixtures extends Component{
   
 
  
-  override val props = @@("id")
-  override val subParams = List("id" -> "nextFixtures")
-  override val subscriptions = Map(
-      "nextFixtures" -> (c => CompetitionViewService.nextFixtures(c.id,1))
-      )
+  props("id")
+  subscription("nextFixtures","id")(c => CompetitionViewService.nextFixtures(c.id,1))
 }
 
 
 object CompetitionTitle extends RouteComponent{
   val template = """<competition-title :id="$route.params.id"></competition-title>"""
-  override val components = @@(CompetitionTitleComponent)
+  components(CompetitionTitleComponent)
 }
   
 object CompetitionTitleComponent extends Component{
@@ -91,27 +85,23 @@ object CompetitionTitleComponent extends Component{
       </v-toolbar-title>
     </v-toolbar>"""
   
-  override val props = @@("id")
-  override val subParams = List("id" -> "item")
-  override val subscriptions = Map(
-      "item" -> (c => CompetitionService.get(c.id)),
-      "season" -> (c => CompetitionViewService.parentSeason(c.id))
-      )
+  props("id")
+  subscription("item","id")(c => CompetitionService.get(c.id))
+  subscription("season" )(c => CompetitionViewService.parentSeason(c.id))
 }
 
 object ResultsPage extends RouteComponent{
   val template = """<all-results :id="$route.params.id"></all-results>"""
-  override val components = @@(AllResults) 
+  components(AllResults) 
 }
 
 trait ResultsComponent extends Component {
   type facade = IdComponent
  
 
-  override val props = @@("id")
+  props("id")
 
-  override val subParams = List("id" -> "latestResults")
-  override val subscriptions = Map("latestResults" -> (c => CompetitionViewService.latestResults(c.id, take)))
+  subscription("latestResults","id")(c => CompetitionViewService.latestResults(c.id, take))
 
   def take:Int
 }
@@ -139,7 +129,7 @@ object AllResults extends ResultsComponent{
 
 object FixturesPage extends RouteComponent{
   val template = """<remaining-fixtures :id="$route.params.id"></remaining-fixtures>"""
-  override val components = @@(RemainingFixtures) 
+  components(RemainingFixtures) 
 }
 
 object RemainingFixtures extends Component{
@@ -160,9 +150,8 @@ object RemainingFixtures extends Component{
   
 
  
-  override val props = @@("id")
-  override val subParams = List("id" -> "nextFixtures")
-  override val subscriptions = Map(
-      "nextFixtures" -> (c => CompetitionViewService.nextFixtures(c.id))
-      )
+  props("id")
+
+  subscription("nextFixtures","id")(c => CompetitionViewService.nextFixtures(c.id))
+
 }

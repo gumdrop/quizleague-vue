@@ -36,6 +36,7 @@ trait Component {
   private var addedSubParams: List[((String, String))] = List()
   private var addedProps:List[String] = List()
   private var addedMethods:Map[String, js.Function] = Map()
+  private var addedComputed:Map[String, js.Function] = Map()
   private var addedDataFn:Map[String, facade => Any] = Map()
   private var addedData:Map[String,Any] = Map()
   private var addedComponents:List[Component] = List()
@@ -81,6 +82,11 @@ trait Component {
       }}
   }
   
+  
+  protected final def props(names:String*){
+    addedProps = addedProps ++ names
+  }
+  
   protected final def prop(name:String){
     addedProps = addedProps :+ name
   }
@@ -99,6 +105,10 @@ trait Component {
   
   protected final def components(comps:Component*){
     addedComponents = addedComponents ++ comps
+  }
+  
+  protected final def computed(name:String)(fn:js.Function){
+    addedComputed = addedComputed + ((name, fn))
   }
 
   
@@ -145,7 +155,7 @@ trait Component {
       subscriptions = ((c: facade) => makeSubscriptions(c).map { case (k, v) => (k, v(c)) }.toJSDictionary): js.ThisFunction,
 
       methods = (commonMethods ++ methods ++ addedMethods).toJSDictionary,
-      computed = computed.toJSDictionary,
+      computed = (computed ++ addedComputed).toJSDictionary,
       components = (components ++ addedComponents).map(c => ((c.name, c()))).toMap.toJSDictionary,
       mounted = mounted,
       activated = activated,

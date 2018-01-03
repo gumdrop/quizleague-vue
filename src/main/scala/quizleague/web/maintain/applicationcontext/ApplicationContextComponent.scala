@@ -95,22 +95,14 @@ object ApplicationContextComponent extends ItemComponentConfig[ApplicationContex
        c.user = null
      }
      
- override val subscriptions = Map(
-     "item" -> {c:facade => ApplicationContextService.get},
-     "users" -> {c:facade => users()},
-     "textSets" -> {c:facade => textSets()},
-     "seasons" -> {c:facade => seasons()},
-     )
-  
- override val methods = super.methods ++ Map(
-     "removeAlias" ->  ({removeAlias _ }:js.ThisFunction),
-     "addAlias" ->  ({addAlias _ }:js.ThisFunction)
-     )
- override val data = (c:facade) => super.data(c) ++ Map("user" -> null, "alias" -> null)
+   subscription("item"){c => ApplicationContextService.get}
+   subscription("users"){c => users()}
+   subscription("textSets"){c => textSets()}
+   subscription("seasons"){c => seasons()}
+
+   method("removeAlias")({removeAlias _}:js.ThisFunction)
+   method("addAlias")({addAlias _}:js.ThisFunction)
+
+   data("user",null)
+   data("alias",null)
 }
-
-class AliasSelectWrapper(val text:String, val value:EmailAlias)
-
-
-
-

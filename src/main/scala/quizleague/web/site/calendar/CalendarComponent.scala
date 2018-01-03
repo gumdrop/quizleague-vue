@@ -10,8 +10,8 @@ import com.felstar.scalajs.vue.VueRxComponent
 object CalendarPage extends RouteComponent with NoSideMenu{
   
   val template = """<ql-calendar v-if="season" :seasonId="season.id"></ql-calendar>"""
-  override val components = @@(CalendarComponent)
-  override val subscriptions = Map("season" -> (c => CalendarViewService.season)) 
+  components(CalendarComponent)
+  subscription("season")(c => CalendarViewService.season)
 }
 
 
@@ -36,10 +36,9 @@ object CalendarComponent extends Component{
       </v-flex>
     </v-layout>
   </v-container>"""
-  override val props = @@("seasonId")
-  override val subParams = List("seasonId" -> "items")
-  override val subscriptions = Map("items" -> (c => CalendarViewService.events(c.seasonId)))
-  override val components = @@(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent)
+  props("seasonId")
+  subscription("items", "seasonId")(c => CalendarViewService.events(c.seasonId))
+  components(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent)
   
 }
 
@@ -56,7 +55,7 @@ object CalendarTitleComponent extends RouteComponent{
       &nbsp;<h3><ql-season-select :season="season"></ql-season-select></h3>
     </v-toolbar>"""
   
-  override val data = c => Map("season" -> CalendarViewService.season)
+  data("season", CalendarViewService.season)
 }
 
 
@@ -78,9 +77,9 @@ trait PanelComponent extends EventComponent{
 trait EventComponentConfig extends Component{
    
    type facade = PanelComponent
-   override val data = c => Map("panelVisible" -> false)
-   override val props = @@("event")
-   override val methods = Map("togglePanel" -> ({c:facade => c.panelVisible = !c.panelVisible}:js.ThisFunction))
+   data("panelVisible",false)
+   props("event")
+   method("togglePanel")({c:facade => c.panelVisible = !c.panelVisible}:js.ThisFunction)
 }
 
 
