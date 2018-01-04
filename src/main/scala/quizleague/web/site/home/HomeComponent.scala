@@ -20,8 +20,7 @@ object HomeComponent extends RouteComponent with NoSideMenu{
 
   type facade = VueRxComponent with VuetifyComponent
   
-  override val subscriptions = Map(
-      "appData" -> (c => ApplicationContextService.get()),
+  subscription("appData")(c => ApplicationContextService.get()
   )
   override val template="""
    <v-container grid-list-lg v-if="appData">
@@ -66,9 +65,9 @@ object HomeComponent extends RouteComponent with NoSideMenu{
     </v-layout>
   </v-container>
 """
-    override val components = @@(HomePageLeagueTable, NextFixturesComponent,LatestResultsComponent)
+    components(HomePageLeagueTable, NextFixturesComponent,LatestResultsComponent)
     def align(c:facade) = js.Dictionary("column" -> c.$vuetify.breakpoint.smAndDown)
-    override val computed = Map("align" -> ({align _}:js.ThisFunction))
+    computed("align")({align _}:js.ThisFunction)
 
 }
 
@@ -99,9 +98,8 @@ object NextFixturesComponent extends Component{
   
 
   
-  override val props = @@("seasonId")
-  override val subParams = List("seasonId"-> "fixtures")
-  override val subscriptions = Map("fixtures" -> (c => FixturesService.nextFixtures(c.seasonId)))
+  props("seasonId")
+  subscription("fixtures", "seasonId")(c => FixturesService.nextFixtures(c.seasonId))
 
 }
 
@@ -124,9 +122,8 @@ object LatestResultsComponent extends Component{
 
 """
   
-  override val props = @@("seasonId")
-  override val subParams = List("seasonId"-> "fixtures")
-  override val subscriptions = Map("fixtures" -> (c => FixturesService.latestResults(c.seasonId)))
+  props("seasonId")
+  subscription("fixtures", "seasonId")(c => FixturesService.latestResults(c.seasonId))
 }
 
 
@@ -151,7 +148,6 @@ object HomePageLeagueTable extends Component{
               </v-card-text>
             </v-card>"""
   
-  override val props = @@("seasonId")
-  override val subParams = List("seasonId"-> "tables")
-  override val subscriptions = Map("tables" -> (c => LeagueTableService.leagueTables(c.seasonId)))
+  props("seasonId")
+  subscription("tables", "seasonId")(c => LeagueTableService.leagueTables(c.seasonId))
 }

@@ -33,7 +33,7 @@ object AllResultsComponent extends Component{
       </v-flex>
     </v-layout>
     </v-container>"""
-  override val subscriptions = Map("fixtures" -> (c => ResultsViewService.results))
+  subscription("fixtures")(c => ResultsViewService.results)
   
 }
 
@@ -49,5 +49,5 @@ object AllResultsTitleComponent extends RouteComponent{
       <ql-season-select :season="season"></ql-season-select>
     </v-toolbar>"""
   
-  override val data = c => Map("season" -> ResultsViewService.season)
+  data("season", ResultsViewService.season)
 }

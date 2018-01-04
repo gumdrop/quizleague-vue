@@ -70,13 +70,12 @@ object VenueComponent extends Component {
   private def makeParts(venue:Venue) = {
     js.Array("https://maps.google.com/maps?&q=",js.URIUtils.encodeURIComponent(s"${venue.name} ${venue.address}".replaceAll("\\s", "+")), "&output=embed")
   } 
-  override val props = @@("id")
-  override val subParams = List("id"->"venue")
-  override val subscriptions = Map("venue" -> (v => VenueService.get(v.id)))
-  override val methods = Map(
-      "lineBreaks" -> ((s: String) => s.replaceAll("\\n", "<br>")),
-      "embeddedUrl" -> embeddedUrl _,
-      "linkUrl" -> linkUrl _)
+  props("id")
+  subscription("venue","id")(v => VenueService.get(v.id))
+  method("lineBreaks")((s: String) => s.replaceAll("\\n", "<br>"))
+  method("embeddedUrl")(embeddedUrl _)
+  method("linkUrl")(linkUrl _)
+
 
 }
 

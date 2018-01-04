@@ -45,9 +45,9 @@ object FixturesListComponent extends CompetitionComponentConfig with FixturesNam
     c.$router.push(s"fixtures/${fixs.id}")
   }
   
-  override val subscriptions = super.subscriptions ++ Map("fs" -> ((c:facade) => FixturesService.fixturesForCompetition(c.$route.params("id").toString).map(_.sortBy(_.date))))
+ subscription("fs")((c:facade) => FixturesService.fixturesForCompetition(c.$route.params("id").toString).map(_.sortBy(_.date)))
   
-  override val methods = super.methods + (("add", ({add _}):js.ThisFunction))
+ method("add")({add _}:js.ThisFunction)
 
     
     

@@ -53,7 +53,6 @@ object TeamComponent extends ItemComponentConfig[Team] with RouteComponent {
     </v-form>
   </v-container>"""
 
- override val subscriptions = super.subscriptions ++ Map(
-     "venues" -> {c:facade => venues()},
-     "users" -> {c:facade => users()})
+ subscription("venues"){c:facade => venues()}
+ subscription("users"){c:facade => users()}
 }

@@ -176,13 +176,15 @@ object FixtureComponent extends Component{
     c.showResult = true
   }
   
-  override val data = c => Map("showResult" -> false)
-  override val props = @@("fixture","fixtures","teamManager")
-  override val subscriptions = Map("fx" -> (c => c.fixture.obs.map(f => FixtureService.cache(f)).map(x => {c.teamManager.take(x.home);c.teamManager.take(x.away);x})))
-  override val methods = Map(
-      "removeFixture" -> ({removeFixture _ }:js.ThisFunction),
-      "editText" -> ({editText _ }:js.ThisFunction),
-      "addResult" -> ({addResult _ }:js.ThisFunction),
-  )
+  data("showResult", false)
+
+  props("fixture","fixtures","teamManager")
+  
+  subscription("fx")(c => c.fixture.obs.map(f => FixtureService.cache(f)).map(x => {c.teamManager.take(x.home);c.teamManager.take(x.away);x}))
+  
+  method("removeFixture")({removeFixture _ }:js.ThisFunction)
+  method("editText")({editText _ }:js.ThisFunction)
+  method("addResult")({addResult _ }:js.ThisFunction)
+
 }
     

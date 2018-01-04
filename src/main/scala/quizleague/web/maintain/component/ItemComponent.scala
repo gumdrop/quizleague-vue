@@ -34,16 +34,13 @@ trait ItemComponentConfig[T <: Model] extends Component{
   def save(c:facade) = {service.save(c.item);c.$router.back()}
   def cancel(c:facade) = {service.flush();c.$router.back()}
   
-  override def subscriptions:Map[String, facade => Observable[Any]] = Map("item" -> (c => obsFromParam(c,paramName)))
-  
-  override def methods = Map(
-      "save" -> ({save _}:js.ThisFunction),
-      "cancel" -> ({cancel _}:js.ThisFunction),
-      "editText" -> ({editText _}:js.ThisFunction),
-      
-  )
-  
-  override def data:(facade) => Map[String,Any] = c => Map("valid" -> false)
+  subscription("item")(c => obsFromParam(c,paramName))
+
+  method("save")({save _}:js.ThisFunction)
+  method("cancel")({cancel _}:js.ThisFunction)
+  method("editText")({editText _}:js.ThisFunction)
+
+  data("valid",false)
 }
 
 @js.native
@@ -62,10 +59,12 @@ trait ItemListComponentConfig[T <: Model] extends Component{
   def sort(items:js.Array[T]) = items.sortBy(_.id)
   
   val service:GetService[T] with PutService[T]
-  override def subscriptions = Map("items" -> (c => service.list().map(sort _)))
-  override def methods:Map[String, js.Function] = Map("add" -> ({(c:facade) => {
+  
+  subscription("items")(c => service.list().map(sort _))
+  
+  method("add")({(c:facade) => {
     val i = service.instance()
-    c.$router.push(s"$typeName/${i.id}")}}:js.ThisFunction))
+    c.$router.push(s"$typeName/${i.id}")}}:js.ThisFunction)
 }
 
 object ItemComponentConfig {

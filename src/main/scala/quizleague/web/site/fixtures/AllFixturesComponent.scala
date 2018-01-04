@@ -70,7 +70,7 @@ object AllFixturesPage extends RouteComponent{
   val template = """<div>
                       <ql-all-fixtures v-if="appData" :seasonId="appData.currentSeason.id"></ql-all-fixtures>
                     </div>"""
-    override val subscriptions = Map("appData" -> (c => ApplicationContextService.get))
+    subscription("appData")(c => ApplicationContextService.get)
 }
 
 
@@ -90,8 +90,9 @@ object AllFixturesComponent extends Component{
       </v-flex>
     </v-layout>
     </v-container>"""
-  override val subscriptions = Map("fixtures" -> (c => FixturesService.activeFixtures(c.seasonId)))
-  override val props = @@("seasonId")
+  
+  subscription("fixtures")(c => FixturesService.activeFixtures(c.seasonId))
+  props("seasonId")
   
 }
 

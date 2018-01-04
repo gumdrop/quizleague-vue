@@ -74,19 +74,14 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
       c.$router.push(s"${c.item.id}/calendar")
     }
      
-  override val methods = super.methods ++ Map(
-      "removeCompetition" -> ({removeCompetition _}:js.ThisFunction),
-      "addCompetition" -> ({addCompetition _}:js.ThisFunction),
-      "calendar" -> ({calendar _}:js.ThisFunction),
-      "editCompetition" -> ({editCompetition _}:js.ThisFunction)
-  )
-  
-  override val data = c => Map(
-      "types" -> CompetitionType.values.map(_.toString()).toJSArray,
-      "selectedType" -> null,
-      "valid" -> true
-  )
+  method("removeCompetition")({removeCompetition _}:js.ThisFunction)
+  method("addCompetition")({addCompetition _}:js.ThisFunction)
+  method("calendar")({calendar _}:js.ThisFunction)
+  method("editCompetition")({editCompetition _}:js.ThisFunction)
 
+  data("types",CompetitionType.values.map(_.toString()).toJSArray)
+  data("selectedType",null)
+  data("valid",true)
 
 }
 

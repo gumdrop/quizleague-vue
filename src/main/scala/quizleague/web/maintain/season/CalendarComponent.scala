@@ -107,11 +107,10 @@ object CalendarComponent extends ItemComponentConfig[Season] with RouteComponent
     
     override def save(c:facade) = {service.cache(c.item);c.$router.back()}
     
-    override val subscriptions = super.subscriptions ++ Map("venues" -> {c:facade => venues()})
-    override val methods = super.methods ++ Map(
-      "addEvent" -> ({addEvent _}:js.ThisFunction),
-      "deleteEvent" -> ({deleteEvent _}:js.ThisFunction)
-  )
+    subscription("venues"){c:facade => venues()}
+
+    method("addEvent")({addEvent _}:js.ThisFunction)
+    method("deleteEvent")({deleteEvent _}:js.ThisFunction)
     
 }
     

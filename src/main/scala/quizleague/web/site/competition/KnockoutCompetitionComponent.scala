@@ -24,13 +24,11 @@ object KnockoutCompetitionComponent extends Component{
       <v-flex><next-fixtures :id="id"></next-fixtures></v-flex>
     </v-layout>
    </v-container>
-""""""
+"""
   
-  override val props = @@("id", "textName")
-  override val subParams = List("id" -> "item")
+  props("id", "textName")
  
-  
-  override val subscriptions = Map("item" -> (c => CompetitionService.get(c.id)))
+  subscription("item","id")(c => CompetitionService.get(c.id))
       
-  override val components = @@(LatestResults,NextFixtures, LeagueTables)
+  components(LatestResults,NextFixtures, LeagueTables)
 }

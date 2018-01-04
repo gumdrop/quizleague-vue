@@ -39,13 +39,11 @@ trait CompetitionComponentConfig extends ItemComponentConfig[Competition] with R
     c.item.tables +++= (table.id, table)
   }
 
+  subscription("season"){c:facade => SeasonService.get(c.$route.params("seasonId"))}
   
-  override def subscriptions = super.subscriptions ++ Map("season" -> {c:facade => SeasonService.get(c.$route.params("seasonId").toString)})
+  method("fixtures")({fixtures _}:js.ThisFunction)
+  method("toTable")({toTable _}:js.ThisFunction)
+  method("removeTable")({removeTable _}:js.ThisFunction)
+  method("addTable")({addTable _}:js.ThisFunction)
   
-  override def methods = super.methods ++ Map(
-      "fixtures" -> ({fixtures _}:js.ThisFunction), 
-      "toTable" -> ({toTable _}:js.ThisFunction),
-      "removeTable" -> ({removeTable _}:js.ThisFunction),
-      "addTable" -> ({addTable _}:js.ThisFunction)
-  )
 }

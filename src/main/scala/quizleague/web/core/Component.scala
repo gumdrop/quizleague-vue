@@ -29,21 +29,20 @@ trait Component {
   val name: String
   def template: String
   def props: js.Array[String] = @@()
-  def watch: Map[String, ((facade,js.Any) => Unit)] = Map()
   def subParams: List[((String, String))] = List()
   def subscriptions: Map[String, facade => Observable[Any]] = Map()
   private var addedSubs: Map[String, facade => Observable[Any]] = Map()
   private var addedSubParams: List[((String, String))] = List()
   private var addedProps:List[String] = List()
   private var addedMethods:Map[String, js.Function] = Map()
-  private var addedComputed:Map[String, js.Function] = Map()
+  private var addedComputed:Map[String, js.Any] = Map()
   private var addedDataFn:Map[String, facade => Any] = Map()
   private var addedData:Map[String,Any] = Map()
   private var addedComponents:List[Component] = List()
+  private var addedWatch: Map[String, ((facade,js.Any) => Unit)] = Map()
   def data: facade => Map[String, Any] = c => Map()
   def methods: Map[String, js.Function] = Map()
   def components: js.Array[Component] = @@()
-  def computed: Map[String, js.Function] = Map()
   def mounted: js.Function = null
   def activated:js.Function = null
   def created:js.Function = null
@@ -110,6 +109,16 @@ trait Component {
   protected final def computed(name:String)(fn:js.Function){
     addedComputed = addedComputed + ((name, fn))
   }
+  
+  protected final def computedGetSet(name:String)(get:js.Function, set:js.Function){
+    addedComputed = addedComputed + ((name, js.Dynamic.literal(get = get, set = set)))
+  }
+  
+  protected final def watch(name:String)(fn:(facade,js.Any) => Unit){
+    addedWatch = addedWatch + ((name, fn))
+  }
+  
+
 
   
   def apply():js.Dynamic = {
@@ -151,11 +160,11 @@ trait Component {
       template = template,
       props = props ++ addedProps,
       data = ((v: facade) => (data(v) ++ addedData ++ addedDataFn.map{case(k,fn) => (k,fn(v))}).toJSDictionary): js.ThisFunction,
-      watch = (watch.map { case (k, v) => (k, v: js.ThisFunction) }).toJSDictionary,
+      watch = (addedWatch.map { case (k, v) => (k, v: js.ThisFunction) }).toJSDictionary,
       subscriptions = ((c: facade) => makeSubscriptions(c).map { case (k, v) => (k, v(c)) }.toJSDictionary): js.ThisFunction,
 
       methods = (commonMethods ++ methods ++ addedMethods).toJSDictionary,
-      computed = (computed ++ addedComputed).toJSDictionary,
+      computed = addedComputed.toJSDictionary,
       components = (components ++ addedComponents).map(c => ((c.name, c()))).toMap.toJSDictionary,
       mounted = mounted,
       activated = activated,

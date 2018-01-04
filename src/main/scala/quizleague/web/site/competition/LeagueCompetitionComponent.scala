@@ -26,11 +26,11 @@ object LeagueCompetitionComponent extends Component{
    </v-container>
 """
   
-  override val props = @@("id")
+  props("id")
   override val subParams = List("id" -> "item")
  
   
-  override val subscriptions = Map("item" -> (c => CompetitionService.get(c.id)))
+  subscription("item")(c => CompetitionService.get(c.id))
       
-  override val components = @@(LatestResults,NextFixtures, LeagueTables)
+  components(LatestResults,NextFixtures, LeagueTables)
 }

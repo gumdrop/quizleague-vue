@@ -72,9 +72,8 @@ object LeagueTableComponent extends Component{
         </tbody>
       </table>
 """
-  override val props = @@("id")
-  override val subParams = List("id" -> "table")
-  override val subscriptions = Map("table" -> (c => LeagueTableService.get(c.id)))
+  props("id")
+  subscription("table","id")(c => LeagueTableService.get(c.id))
   
   
 }
@@ -87,6 +86,6 @@ object LeagueTableRowComponent extends Component{
             <td>{{row.position}}</td><td><router-link :to="'/team/' + row.team.id"><ql-team-name :team="row.team" short="true"></ql-team-name></router-link></a></td><td class="num">{{row.played}}</td><td class="num">{{row.won}}</td><td class="num">{{row.lost}}</td><td class="num">{{row.drawn}}</td><td class="num">{{row.matchPointsFor}}</td><td class="num">{{row.leaguePoints}}</td>
           </tr>"""
   
-  override val props = @@("row")
+  props("row")
   
 }

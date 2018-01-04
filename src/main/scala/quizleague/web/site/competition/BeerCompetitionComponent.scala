@@ -25,7 +25,7 @@ object BeerCompetitionComponent extends Component{
       <v-flex><latest-results :id="id"></latest-results></v-flex>
     </v-layout>
    </v-container>
-"""""
+"""
   
   props("id")
  

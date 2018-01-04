@@ -40,8 +40,7 @@ object SingletonCompetitionComponent extends CompetitionComponentConfig{
       
   def venues() = SelectUtils.model[Venue](VenueService)(_.name)
   
-  override val subscriptions = super.subscriptions ++ Map(
-     "venues" -> {c:facade => venues()})
+  subscription("venues"){c:facade => venues()}
 
   
 }

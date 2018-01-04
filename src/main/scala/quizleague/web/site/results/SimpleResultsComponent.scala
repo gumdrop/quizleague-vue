@@ -16,7 +16,7 @@ object SimpleResultsComponent extends Component{
   val name = "ql-results-simple"
   val template = """<ql-fixtures-simple :fixtures="results" :inlineDetails="inlineDetails"></ql-fixtures-simple>"""
 
-  override val props = @@("results","inlineDetails")
+  props("results","inlineDetails")
 
 }  
 

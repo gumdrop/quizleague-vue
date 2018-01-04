@@ -62,8 +62,9 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
      
   }
   
- 
-  override val subscriptions = super.subscriptions ++ Map("subsidiaries" -> ((c:facade) => subsidiaries(c.$route.params("seasonId").toString) ))
+  
+  
+  subscription("subsidiaries")(c => subsidiaries(c.$route.params("seasonId")))
   
  
 

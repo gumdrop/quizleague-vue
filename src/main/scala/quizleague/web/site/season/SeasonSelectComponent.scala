@@ -28,16 +28,15 @@ object SeasonSelectComponent extends Component{
   </h2>
 """
   
-  override val props = @@("season")
-  override val subscriptions = Map(
-      "seasons" -> (c => SeasonService.list()), 
-      "seasonId" -> (_.season.map(_.id)))
-  override val methods = Map(
-      "sort" -> ((seasons:js.Array[Season]) => seasons.sortBy(_.startYear)(Desc)),
-      "wrap" -> ((seasons:js.Array[Season]) => seasons.map(s => new SelectWrapper(s"${s.startYear}/${s.endYear}", s.id )))    
-  )
-  override val watch = Map("seasonId" -> ((c:facade, newValue:js.Any) => if(newValue != js.undefined) SeasonService.get(c.seasonId).subscribe(s => c.season.next(s))))
-  override val data = c => Map("seasonId" -> "")
+  prop("season")
+  subscription("seasons")(c => SeasonService.list()) 
+  subscription("seasonId")(_.season.map(_.id))
+  
+  method("sort")((seasons:js.Array[Season]) => seasons.sortBy(_.startYear)(Desc))
+  method("wrap")((seasons:js.Array[Season]) => seasons.map(s => new SelectWrapper(s"${s.startYear}/${s.endYear}", s.id )))    
+  
+  watch("seasonId")((c:facade, newValue:js.Any) => if(newValue != js.undefined) SeasonService.get(c.seasonId).subscribe(s => c.season.next(s)))
+  data("seasonId","")
   
   
 }

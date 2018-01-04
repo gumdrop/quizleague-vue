@@ -132,24 +132,17 @@ object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteC
 
   def teams() = SelectUtils.model[Team](TeamService)(_.name)
 
-  override def methods = super.methods ++ Map(
-      "unusedTeams" -> ({unusedTeams _ }:js.ThisFunction),
-      "addRow" -> ({addRow _ }:js.ThisFunction),
-      "removeRow" -> ({removeRow _ }:js.ThisFunction),
-      "sort" -> ({sort _ }:js.ThisFunction),
-  )
+  method("unusedTeams")({unusedTeams _ }:js.ThisFunction)
+  method("addRow")({addRow _ }:js.ThisFunction)
+  method("removeRow")({removeRow _ }:js.ThisFunction)
+  method("sort")({sort _ }:js.ThisFunction)  
+
       
-    override def data = c => super.data(c) ++ Map(
-      "teamManager" -> null,
-      "team" -> null) 
+  data("teamManager",null)
+  data("team", null) 
   
-  override def subscriptions = super.subscriptions ++ Map(
-      "teams" -> ((c:facade) => teams()),
-      "competition" -> ((c:facade) => obsFromParam(c,"competitionId",CompetitionService)
-          
-      )
-      
-  )
+  subscription("teams")(c => teams())
+  subscription("competition")(c => obsFromParam(c,"competitionId",CompetitionService))
   
 }
     
