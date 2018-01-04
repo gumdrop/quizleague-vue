@@ -77,10 +77,9 @@ object SiteComponent extends Component {
     </v-content>
   </v-app>"""
   
-  override val data = c => Map("menu" -> true)
-  override val subscriptions = Map(
-      "appData" -> (c => ApplicationContextService.get()),
-      "drawer" -> (c => SiteService.sidemenu))
+  data("menu",true)
+  subscription("appData")(c => ApplicationContextService.get())
+  subscription("drawer")(c => SiteService.sidemenu)
 
 }
 
