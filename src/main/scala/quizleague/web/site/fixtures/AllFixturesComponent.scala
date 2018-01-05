@@ -67,9 +67,9 @@ import scalajs.js
 //)
 
 object AllFixturesPage extends RouteComponent{
-  val template = """<div>
+  val template = """
                       <ql-all-fixtures v-if="appData" :seasonId="appData.currentSeason.id"></ql-all-fixtures>
-                    </div>"""
+                    """
     subscription("appData")(c => ApplicationContextService.get)
 }
 
@@ -97,7 +97,8 @@ object AllFixturesComponent extends Component{
 }
 
 object AllFixturesTitleComponent extends RouteComponent{
-  val template = """<v-toolbar      
+  val template = """
+    <v-toolbar      
       color="red darken-3"
       dark
       clipped-left>
