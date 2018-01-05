@@ -21,9 +21,9 @@ object TeamFixturesPage extends RouteComponent {
         </v-layout>
       </v-container>
 """
-  override val subscriptions = Map("appData" -> (c => ApplicationContextService.get))
+  subscription("appData")(c => ApplicationContextService.get)
   
-  override val components = @@(TeamFixturesComponent)
+  components(TeamFixturesComponent)
 }
 
   
@@ -32,7 +32,7 @@ object TeamFixturesComponent extends Component {
   type facade = SeasonIdComponent with IdComponent
   val name = "ql-all-team-fixtures"
   val template = """<ql-fixtures-simple :fixtures="fixtures(id,seasonId)" :inlineDetails="true"></ql-fixtures-simple>"""
-  override val methods = Map("fixtures" -> ((teamId:String,seasonId:String) => FixtureService.teamFixtures(teamId, seasonId)))
-  override val props = @@("id","seasonId")
+  method("fixtures")((teamId:String,seasonId:String) => FixtureService.teamFixtures(teamId, seasonId))
+  props("id","seasonId")
   
 }

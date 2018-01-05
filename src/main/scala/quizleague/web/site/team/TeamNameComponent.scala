@@ -17,8 +17,8 @@ object TeamNameComponent extends Component{
   type facade = TeamNameComponent
   val name = "ql-team-name"
   val template = """<span v-if="t">{{short ? t.shortName : t.name}}</span>"""
-  override val props = @@("team","short","id")
-  override val subscriptions = Map("t" -> (c => if(c.team != null) c.team.obs else TeamService.get(c.id)))
-  override val subParams = List("team"->"t", "id" -> "t")
+  props("team","short","id")
+  subscription("t","team", "id")(c => if(c.team != null) c.team.obs else TeamService.get(c.id))
+
   
 }

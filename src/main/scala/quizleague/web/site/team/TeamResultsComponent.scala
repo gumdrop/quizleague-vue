@@ -21,7 +21,7 @@ object TeamResultsPage extends RouteComponent {
                       <div></div>
                       </v-layout>
                     </v-container>"""
-  override val subscriptions = Map("season" -> (c => TeamViewService.season))
+  subscription("season")(c => TeamViewService.season)
   
   
 }
@@ -31,14 +31,14 @@ object TeamResultsComponent extends Component {
   type facade = SeasonIdComponent with IdComponent
   val name = "ql-all-team-results"
   val template = """<ql-results-simple :results="fixtures(id,seasonId)" :inlineDetails="true"></ql-results-simple>"""
-  override val methods = Map("fixtures" -> ((teamId:String,seasonId:String) => FixtureService.teamResults(teamId, seasonId)))
-  override val props = @@("id","seasonId")
+  method("fixtures")((teamId:String,seasonId:String) => FixtureService.teamResults(teamId, seasonId))
+  props("id","seasonId")
   
 }
 
 object TeamResultsTitle extends RouteComponent{
   val template = """<results-title :id="$route.params.id"></results-title>"""
-  override val components = @@(TeamResultsTitleComponent)
+ components(TeamResultsTitleComponent)
 }
 
 object TeamResultsTitleComponent extends Component{
@@ -56,8 +56,7 @@ object TeamResultsTitleComponent extends Component{
       <ql-season-select :season="season"></ql-season-select>
     </v-toolbar>"""
   
-  override val props = @@("id")
-  override val subParams = List("id" -> "team")
-  override val data = c => Map("season" -> TeamViewService.season)
-  override val subscriptions  = Map("team" -> (c => TeamService.get(c.id)))
+  props("id")
+  data("season", TeamViewService.season)
+  subscription("team","id")(c => TeamService.get(c.id))
 }

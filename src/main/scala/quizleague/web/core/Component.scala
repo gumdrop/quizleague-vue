@@ -28,7 +28,7 @@ trait Component {
   
   val name: String
   def template: String
-  def props: js.Array[String] = @@()
+  private def props: js.Array[String] = @@()
   def subParams: List[((String, String))] = List()
   def subscriptions: Map[String, facade => Observable[Any]] = Map()
   private var addedSubs: Map[String, facade => Observable[Any]] = Map()

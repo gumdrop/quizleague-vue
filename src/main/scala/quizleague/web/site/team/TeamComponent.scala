@@ -40,7 +40,7 @@ object TeamComponent extends Component{
                 <ql-fixtures-simple :fixtures="results(id, appConfig.currentSeason.id)" :inlineDetails="true"></ql-fixtures-simple>
               </v-card-text>
               <v-card-actions>
-                <v-btn flat :to="id + '/results'" primary>Show All</v-btn>
+                <v-btn flat :to="id + '/results'" color="primary">Show All</v-btn>
                 <v-btn flat><v-icon>insert_chart</v-icon>Graphs & Stats</v-btn>
               </v-card-actions>
             </v-card>
@@ -52,7 +52,7 @@ object TeamComponent extends Component{
                 <ql-fixtures-simple :fixtures="fixtures(id, appConfig.currentSeason.id)" :inlineDetails="true"></ql-fixtures-simple>
               </v-card-text>
               <v-card-actions>
-                <v-btn flat :to="id + '/fixtures'" primary>Show All</v-btn>
+                <v-btn flat :to="id + '/fixtures'" color="primary">Show All</v-btn>
                 <v-btn flat ><v-icon>content_copy</v-icon>Calendar URL</v-btn>
                 <v-btn flat><v-icon>file_download</v-icon>Download Calendar</v-btn>
               </v-card-actions>
@@ -60,13 +60,13 @@ object TeamComponent extends Component{
             </v-flex>
           </v-layout>
           </v-container>"""
-  override val props = @@("id")
+  props("id")
   override val subParams = List("id"->"team")
-  override val subscriptions = Map("team" -> (v => TeamService.get(v.id)), "appConfig" -> (c => ApplicationContextService.get))
-  override val methods = Map(
-      "fixtures" -> ((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,seasonId,5)),
-      "results" ->  ((teamId:String, seasonId:String) => FixtureService.teamResults(teamId,seasonId,5))   
-  )
+  subscription("team")(v => TeamService.get(v.id))
+  subscription("appConfig")(c => ApplicationContextService.get)
+  method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,seasonId,5))
+  method("results")((teamId:String, seasonId:String) => FixtureService.teamResults(teamId,seasonId,5))   
+
 }
 
 object TeamTitleComponent extends RouteComponent {
@@ -92,9 +92,8 @@ object TeamTitle extends Component {
       <v-tooltip top><v-btn icon :to="'/venue/' + team.venue.id" slot="activator"><v-icon>location_on</v-icon></v-btn><span>Venue</span></v-tooltip>
     </v-toolbar>"""
   
-   override val props = @@("id")
-   override val subParams = List("id"->"team")
-   override val subscriptions = Map("team" -> (v => TeamService.get(v.id)))
+   props("id")
+   subscription("team","id")(v => TeamService.get(v.id))
 
 }
 
@@ -106,8 +105,7 @@ object TeamMenuComponent extends RouteComponent {
         <v-btn :to="'/team/' + team.id" flat >{{team.name}}</v-btn>
        </v-list-tile>
      </v-list>"""
-    override val subscriptions = Map("teams" -> (c => TeamService.list))
-    override val methods = Map(
-        "sort" -> ((teams:js.Array[Team]) => teams.sortBy(_.shortName))
+    subscription("teams")(c => TeamService.list)
+    method("sort")((teams:js.Array[Team]) => teams.sortBy(_.shortName)
     )
 }

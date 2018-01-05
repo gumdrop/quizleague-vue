@@ -101,9 +101,8 @@ object VenueTitle extends Component {
   
 
   
-   override val props = @@("id")
-   override val subParams = List("id"->"venue")
-   override val subscriptions = Map("venue" -> (v => VenueService.get(v.id)))
+   props("id")
+   subscription("venue","id")(v => VenueService.get(v.id))
 
 }
 
@@ -116,6 +115,6 @@ object VenueMenuComponent extends Component {
                     <v-btn :to="'/venue/' + venue.id" flat style="text-transform: none;">{{venue.name}}</v-btn>
                     </v-list-tile>
                    </v-list>"""
-    override val subscriptions = Map("venues" -> (v => VenueService.list))
-    override val methods = Map("sort" -> ((venues:js.Array[Venue]) => venues.sortBy(_.name)))
+    subscription("venues")(v => VenueService.list)
+    method("sort")((venues:js.Array[Venue]) => venues.sortBy(_.name))
 }
