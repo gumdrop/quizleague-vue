@@ -1,7 +1,7 @@
 package quizleague.web.site.team
 
 import quizleague.web.core._
-import com.felstar.scalajs.vue.RouteConfig
+import quizleague.web.core.RouteConfig
 import scalajs.js
 import quizleague.web.service.team.TeamGetService
 import quizleague.web.site.text.TextService
@@ -17,13 +17,13 @@ object TeamModule extends Module{
   
   override val routes = @@(      
       RouteConfig(path = "/team", 
-          components = Map("default" -> TeamsComponent(), "title" -> TeamsTitleComponent(),"sidenav" -> TeamMenuComponent())),
+          components = Map("default" -> TeamsComponent, "title" -> TeamsTitleComponent,"sidenav" -> TeamMenuComponent)),
       RouteConfig(path = "/team/:id", 
-          components = Map("default" -> TeamPage(), "title" -> TeamTitleComponent(),"sidenav" -> TeamMenuComponent())),
+          components = Map("default" -> TeamPage, "title" -> TeamTitleComponent,"sidenav" -> TeamMenuComponent)),
       RouteConfig(path = "/team/:id/fixtures", 
-          components = Map("default" -> TeamFixturesPage(), "title" -> TeamTitleComponent(),"sidenav" -> TeamMenuComponent())),
+          components = Map("default" -> TeamFixturesPage, "title" -> TeamTitleComponent,"sidenav" -> TeamMenuComponent)),
       RouteConfig(path = "/team/:id/results", 
-          components = Map("default" -> TeamResultsPage(), "title" -> TeamResultsTitle(),"sidenav" -> TeamMenuComponent()))
+          components = Map("default" -> TeamResultsPage, "title" -> TeamResultsTitle,"sidenav" -> TeamMenuComponent))
 
   )
 

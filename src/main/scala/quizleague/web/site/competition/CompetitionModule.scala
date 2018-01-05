@@ -11,7 +11,7 @@ import rxscalajs.Observable
 import quizleague.web.model.CompetitionType
 import quizleague.web.core._
 import com.felstar.scalajs.vue.Router
-import com.felstar.scalajs.vue.RouteConfig
+import quizleague.web.core.RouteConfig
 import quizleague.web.model.Competition
 import scalajs.js
 import js.JSConverters._
@@ -76,14 +76,14 @@ import quizleague.web.site.season.SeasonService
 object CompetitionModule extends Module {
   
   override val routes = @@(
-        RouteConfig(path="/competition/:id/league", components=Map("default" -> LeagueCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
-        RouteConfig(path="/competition/:id/subsidiary", components=Map("default" -> BeerCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
-        RouteConfig(path="/competition/:id/cup", components=Map("default" -> CupCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
-        RouteConfig(path="/competition/:id/singleton", components=Map("default" -> SingletonCompetitionPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
-        RouteConfig(path="/competition/:id/results", components=Map("default" -> ResultsPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
-        RouteConfig(path="/competition/:id/fixtures", components=Map("default" -> FixturesPage(), "title" -> CompetitionTitle(), "sidenav" -> CompetitionMenu())),
+        RouteConfig(path="/competition/:id/league", components=Map("default" -> LeagueCompetitionPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
+        RouteConfig(path="/competition/:id/subsidiary", components=Map("default" -> BeerCompetitionPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
+        RouteConfig(path="/competition/:id/cup", components=Map("default" -> CupCompetitionPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
+        RouteConfig(path="/competition/:id/singleton", components=Map("default" -> SingletonCompetitionPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
+        RouteConfig(path="/competition/:id/results", components=Map("default" -> ResultsPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
+        RouteConfig(path="/competition/:id/fixtures", components=Map("default" -> FixturesPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
 
-        RouteConfig(path="/competition", components=Map(/*"default" -> CompetitionsComponent(), */"title" -> CompetitionsTitleComponent(), "sidenav" -> CompetitionMenu())
+        RouteConfig(path="/competition", components=Map(/*"default" -> CompetitionsComponent, */"title" -> CompetitionsTitleComponent, "sidenav" -> CompetitionMenu)
   ))
 }
 

@@ -13,7 +13,7 @@ import quizleague.web.service.venue.VenueGetService
 import quizleague.web.site._
 import quizleague.web.site.text.TextModule
 import quizleague.web.core.Module
-import com.felstar.scalajs.vue.RouteConfig
+import quizleague.web.core.RouteConfig
 import quizleague.web.core._
 
 
@@ -23,9 +23,9 @@ object VenueModule extends Module{
 
   override val routes = @@(
       RouteConfig(path = "/venue", 
-          components = Map("default" -> VenuesComponent(), "title" -> VenuesTitleComponent(),"sidenav" -> VenueMenuComponent())),
+          components = Map("default" -> VenuesComponent, "title" -> VenuesTitleComponent,"sidenav" -> VenueMenuComponent)),
       RouteConfig(path = "/venue/:id", 
-          components = Map("default" -> VenuePage(), "title" -> VenueTitleComponent(),"sidenav" -> VenueMenuComponent())))
+          components = Map("default" -> VenuePage, "title" -> VenueTitleComponent,"sidenav" -> VenueMenuComponent)))
 
       
    

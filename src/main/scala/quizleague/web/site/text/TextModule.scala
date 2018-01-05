@@ -20,10 +20,3 @@ object TextService extends TextGetService
 object GlobalTextService extends GlobalTextGetService{
   override val textService = TextService
 }
-
-//@Injectable
-//@classModeScala
-//class GlobalTextService(
-//    override val http:Http, 
-//    override val textService:TextService
-//    ) extends GlobalTextGetService with ServiceRoot

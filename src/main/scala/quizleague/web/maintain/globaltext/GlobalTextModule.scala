@@ -5,12 +5,12 @@ import quizleague.web.service.globaltext.GlobalTextPutService
 import quizleague.web.maintain.text.TextService
 import quizleague.web.core._
 import quizleague.web.maintain.MaintainMenuComponent
-import com.felstar.scalajs.vue.RouteConfig
+import quizleague.web.core.RouteConfig
 
 object GlobalTextModule extends Module {
     override val routes = @@(
-      RouteConfig(path = "/maintain/globaltext", components = Map("default" -> GlobalTextListComponent(), "sidenav" -> MaintainMenuComponent())),
-      RouteConfig(path="/maintain/globaltext/:id", components = Map("default" -> GlobalTextComponent(), "sidenav" -> MaintainMenuComponent()))
+      RouteConfig(path = "/maintain/globaltext", components = Map("default" -> GlobalTextListComponent, "sidenav" -> MaintainMenuComponent)),
+      RouteConfig(path="/maintain/globaltext/:id", components = Map("default" -> GlobalTextComponent, "sidenav" -> MaintainMenuComponent))
        )
 
 }

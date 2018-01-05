@@ -41,13 +41,13 @@ import quizleague.web.util.rx._
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.competition._
 import quizleague.web.core._
-import com.felstar.scalajs.vue.RouteConfig
+import quizleague.web.core.RouteConfig
 
 
 import quizleague.web.util.Logging._
 
 object CalendarModule extends Module{
-  override val routes = @@(RouteConfig(path="/calendar" , components=Map("default"->CalendarPage(), "title"->CalendarTitleComponent())))
+  override val routes = @@(RouteConfig(path="/calendar" , components=Map("default"->CalendarPage, "title"->CalendarTitleComponent)))
 }
 
 object CalendarViewService extends SeasonWatchService{

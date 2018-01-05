@@ -6,7 +6,7 @@ import quizleague.web.maintain.competition.CompetitionService
 import quizleague.web.maintain.text.TextService
 import quizleague.web.maintain.venue.VenueService
 import quizleague.web.core._
-import com.felstar.scalajs.vue.RouteConfig
+import quizleague.web.core.RouteConfig
 import quizleague.web.maintain.MaintainMenuComponent
 import quizleague.web.maintain.competition.CompetitionModule
 
@@ -17,15 +17,15 @@ object SeasonModule extends Module {
   override val routes = @@(     
       RouteConfig(
         path = "/maintain/season/:id/calendar",
-        components = Map("default" -> CalendarComponent(), "sidenav" -> MaintainMenuComponent())
+        components = Map("default" -> CalendarComponent, "sidenav" -> MaintainMenuComponent)
       ),
       RouteConfig(
         path = "/maintain/season/:id",
-        components = Map("default" -> SeasonComponent(), "sidenav" -> MaintainMenuComponent())
+        components = Map("default" -> SeasonComponent, "sidenav" -> MaintainMenuComponent)
       ),
       RouteConfig(
         path = "/maintain/season",
-        components = Map("default" -> SeasonListComponent(), "sidenav" -> MaintainMenuComponent())
+        components = Map("default" -> SeasonListComponent, "sidenav" -> MaintainMenuComponent)
       ))
 }
 

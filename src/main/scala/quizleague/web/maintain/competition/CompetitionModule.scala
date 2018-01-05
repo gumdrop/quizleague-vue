@@ -7,7 +7,7 @@ import quizleague.web.maintain.venue.VenueService
 import quizleague.web.maintain.text.TextService
 import quizleague.web.maintain.leaguetable.LeagueTableService
 import quizleague.web.core._
-import com.felstar.scalajs.vue.RouteConfig
+import quizleague.web.core.RouteConfig
 import quizleague.web.maintain.MaintainMenuComponent
 import quizleague.web.maintain.fixtures.FixturesModule
 import quizleague.web.maintain.leaguetable.LeagueTableModule
@@ -19,19 +19,19 @@ object CompetitionModule extends Module{
   override val routes = @@(     
       RouteConfig(
         path = "/maintain/season/:seasonId/competition/:id/league",
-        components = Map("default" -> LeagueCompetitionComponent(), "sidenav" -> MaintainMenuComponent())
+        components = Map("default" -> LeagueCompetitionComponent, "sidenav" -> MaintainMenuComponent)
       ),
       RouteConfig(
         path = "/maintain/season/:seasonId/competition/:id/cup",
-        components = Map("default" -> CupCompetitionComponent(), "sidenav" -> MaintainMenuComponent())
+        components = Map("default" -> CupCompetitionComponent, "sidenav" -> MaintainMenuComponent)
       ),
       RouteConfig(
         path = "/maintain/season/:seasonId/competition/:id/subsidiary",
-        components = Map("default" -> SubsidiaryCompetitionComponent(), "sidenav" -> MaintainMenuComponent())
+        components = Map("default" -> SubsidiaryCompetitionComponent, "sidenav" -> MaintainMenuComponent)
       ),
       RouteConfig(
         path = "/maintain/season/:seasonId/competition/:id/singleton",
-        components = Map("default" -> SingletonCompetitionComponent(), "sidenav" -> MaintainMenuComponent())
+        components = Map("default" -> SingletonCompetitionComponent, "sidenav" -> MaintainMenuComponent)
       ),
  )
 }

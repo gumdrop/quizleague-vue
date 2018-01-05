@@ -58,27 +58,7 @@ trait RouterInstance extends js.Object{
 }
 
 
-object RouteConfig{
-  def apply(
-   path: String,
-   component: js.Any = null,
-   name: String = null,
-   components: Map[String,js.Any]= null,
-   redirect: js.Any= null,
-   props: js.Any = null,
-   alias: js.Any = null,
-   children: js.Array[js.Any] = js.Array()
-  ) = literal(
-      path = path,
-      component = component,
-      name = name,
-      components = if(components == null) null else components.toJSDictionary,
-      redirect = redirect,
-      props = props,
-      //alias = alias,
-      children = children
-  )
-}
+
 
 
 

@@ -1,7 +1,7 @@
 package quizleague.web.maintain
 
 import quizleague.web.core._
-import com.felstar.scalajs.vue.RouteConfig
+import quizleague.web.core.RouteConfig
 import quizleague.web.maintain.user.UserModule
 import quizleague.web.maintain.venue.VenueModule
 import quizleague.web.maintain.text.TextModule
@@ -15,6 +15,6 @@ object MaintainModule extends Module{
   override val modules = @@(UserModule, VenueModule, TextModule, TeamModule, ApplicationContextModule, GlobalTextModule, SeasonModule)
   
   override val routes = @@(
-    RouteConfig(path = "/maintain", components = Map("sidenav"->MaintainMenuComponent()))    
+    RouteConfig(path = "/maintain", components = Map("sidenav"->MaintainMenuComponent))    
   )
 }

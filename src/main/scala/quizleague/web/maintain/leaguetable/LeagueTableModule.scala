@@ -8,14 +8,14 @@ import quizleague.web.model._
 import quizleague.domain.{LeagueTable => Dom}
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.web.core._
-import com.felstar.scalajs.vue.RouteConfig
+import quizleague.web.core.RouteConfig
 import quizleague.web.maintain.MaintainMenuComponent
 
 object LeagueTableModule extends Module{
     override val routes = @@(     
       RouteConfig(
         path = "/maintain/season/:seasonId/competition/:competitionId/leaguetable/:id",
-        components = Map("default" -> LeagueTableComponent(), "sidenav" -> MaintainMenuComponent())
+        components = Map("default" -> LeagueTableComponent, "sidenav" -> MaintainMenuComponent)
       ),
       
   )

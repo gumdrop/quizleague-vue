@@ -38,8 +38,8 @@ object SiteModule extends Module {
   override val modules = @@(HomeModule, TeamModule, TextModule, VenueModule, FixturesModule, ResultsModule, LeagueTableModule, CompetitionModule, SeasonModule, CalendarModule, MaintainModule)
   
   override val routes = @@(
-      RouteConfig(path="/links", components = Map("default" -> LinksComponent())),
-      RouteConfig(path="/rules", components = Map("default" -> RulesComponent())),
+      RouteConfig(path="/links", components = Map("default" -> LinksComponent)),
+      RouteConfig(path="/rules", components = Map("default" -> RulesComponent)),
       RouteConfig(path = "",redirect = "/home")
       )
   
