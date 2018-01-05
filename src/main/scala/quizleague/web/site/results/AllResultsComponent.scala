@@ -13,7 +13,7 @@ object AllResultsPage extends RouteComponent{
                       <ql-all-results></ql-all-results>
                     </div>"""
   
-  override val components = @@(AllResultsComponent)
+  components(AllResultsComponent)
 }
 
 
@@ -21,8 +21,8 @@ object AllResultsComponent extends Component{
   val name = "ql-all-results"
   type facade = SeasonIdComponent
   val template = """
-    <v-container v-if="fixtures" grid-list-lg fluid>
-    <v-layout column>
+    <v-container grid-list-lg fluid>
+    <v-layout column  v-if="fixtures">
       <v-flex v-for="fixs in fixtures" :key="fixs.id">
         <v-card>
           <v-card-title primary-title><h3 class="headline mb-0">{{fixs.date | date('d MMM yyyy')}} {{fixs.description}}</h3></v-card-title>
@@ -33,6 +33,7 @@ object AllResultsComponent extends Component{
       </v-flex>
     </v-layout>
     </v-container>"""
+  
   subscription("fixtures")(c => ResultsViewService.results)
   
 }
