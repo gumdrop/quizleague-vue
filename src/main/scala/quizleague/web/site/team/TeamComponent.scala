@@ -61,8 +61,7 @@ object TeamComponent extends Component{
           </v-layout>
           </v-container>"""
   props("id")
-  override val subParams = List("id"->"team")
-  subscription("team")(v => TeamService.get(v.id))
+  subscription("team","id")(v => TeamService.get(v.id))
   subscription("appConfig")(c => ApplicationContextService.get)
   method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,seasonId,5))
   method("results")((teamId:String, seasonId:String) => FixtureService.teamResults(teamId,seasonId,5))   

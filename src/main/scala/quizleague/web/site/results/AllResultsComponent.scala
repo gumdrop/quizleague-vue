@@ -27,7 +27,7 @@ object AllResultsComponent extends Component{
         <v-card>
           <v-card-title primary-title><h3 class="headline mb-0">{{fixs.date | date('d MMM yyyy')}} {{fixs.description}}</h3></v-card-title>
           <v-card-text>
-            <ql-results-simple :results="fixs.fixtures | combine"></ql-results-simple>
+            <ql-fixtures-simple :fixtures="fixs.fixtures | combine"></ql-fixtures-simple>
           </v-card-text>
         </v-card>
       </v-flex>

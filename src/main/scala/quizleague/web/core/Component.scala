@@ -29,8 +29,7 @@ trait Component {
   val name: String
   def template: String
   private def props: js.Array[String] = @@()
-  def subParams: List[((String, String))] = List()
-  def subscriptions: Map[String, facade => Observable[Any]] = Map()
+  private def subscriptions: Map[String, facade => Observable[Any]] = Map()
   private var addedSubs: Map[String, facade => Observable[Any]] = Map()
   private var addedSubParams: List[((String, String))] = List()
   private var addedProps:List[String] = List()
@@ -40,9 +39,9 @@ trait Component {
   private var addedData:Map[String,Any] = Map()
   private var addedComponents:List[Component] = List()
   private var addedWatch: Map[String, ((facade,js.Any) => Unit)] = Map()
-  def data: facade => Map[String, Any] = c => Map()
-  def methods: Map[String, js.Function] = Map()
-  def components: js.Array[Component] = @@()
+  private def data: facade => Map[String, Any] = c => Map()
+  private def methods: Map[String, js.Function] = Map()
+  def components: js.Array[Component] = addedComponents.toJSArray
   def mounted: js.Function = null
   def activated:js.Function = null
   def created:js.Function = null
@@ -75,10 +74,7 @@ trait Component {
   
   protected final def subscription(name:String,linkedProps:String*)(fn:facade => Observable[Any]) {
     addedSubs  = addedSubs + ((name, fn))
-
-    linkedProps.foreach{s => {
-      addedSubParams = addedSubParams :+ (s,name)
-      }}
+    addedSubParams = addedSubParams ++ linkedProps.map((_,name))
   }
   
   
@@ -133,8 +129,8 @@ trait Component {
     
     def makeSubscriptions(c:facade) = {
 
-      val subscriptions = this.subscriptions ++ addedSubs
-      val subParams = this.subParams ++ addedSubParams
+      val subscriptions = addedSubs
+      val subParams = addedSubParams
       
       val watchSubs = subParams.toMap.map{case (k, v) => {
         val subject = ReplaySubject[Any]()
@@ -158,14 +154,14 @@ trait Component {
     
     val retval = literal(
       template = template,
-      props = props ++ addedProps,
-      data = ((v: facade) => (data(v) ++ addedData ++ addedDataFn.map{case(k,fn) => (k,fn(v))}).toJSDictionary): js.ThisFunction,
+      props = addedProps.toJSArray,
+      data = ((v: facade) => (addedData ++ addedDataFn.map{case(k,fn) => (k,fn(v))}).toJSDictionary): js.ThisFunction,
       watch = (addedWatch.map { case (k, v) => (k, v: js.ThisFunction) }).toJSDictionary,
       subscriptions = ((c: facade) => makeSubscriptions(c).map { case (k, v) => (k, v(c)) }.toJSDictionary): js.ThisFunction,
 
-      methods = (commonMethods ++ methods ++ addedMethods).toJSDictionary,
+      methods = (commonMethods ++ addedMethods).toJSDictionary,
       computed = addedComputed.toJSDictionary,
-      components = (components ++ addedComponents).map(c => ((c.name, c()))).toMap.toJSDictionary,
+      components = addedComponents.map(c => ((c.name, c()))).toMap.toJSDictionary,
       mounted = mounted,
       activated = activated,
       created = created,

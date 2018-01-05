@@ -27,10 +27,8 @@ object LeagueCompetitionComponent extends Component{
 """
   
   props("id")
-  override val subParams = List("id" -> "item")
- 
   
-  subscription("item")(c => CompetitionService.get(c.id))
+  subscription("item","id")(c => CompetitionService.get(c.id))
       
   components(LatestResults,NextFixtures, LeagueTables)
 }

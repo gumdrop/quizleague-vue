@@ -101,27 +101,19 @@ object FixturesComponent extends CompetitionComponentConfig{
   def teams() = SelectUtils.model[Team](TeamService)(_.name)
   override def save(c:facade) = {FixturesService.save(c.fxs);super.save(c)}
   
-  override def methods = super.methods ++ Map(
-      "addFixture" -> ({addFixture _ }:js.ThisFunction),
-      "setVenue" -> ({setVenue _ }:js.ThisFunction),
-      "unusedTeams" -> ({unusedTeams _ }:js.ThisFunction),
-      "save" -> ({save _ }:js.ThisFunction),
-  )
-      
+  method("addFixture")({addFixture _ }:js.ThisFunction)
+  method("setVenue")({setVenue _ }:js.ThisFunction)
+  method("unusedTeams")({unusedTeams _ }:js.ThisFunction)
+  method("save")({save _ }:js.ThisFunction)
   
+  subscription("fxs")(c => obsFromParam(c,"fixturesId", FixturesService))
+  subscription("venues")(c => venues())
+  subscription("teams")(c => teams())
   
-  override def subscriptions = super.subscriptions ++ Map(
-      "fxs" -> ((c:facade) => obsFromParam(c,"fixturesId", FixturesService)),
-      "venues" -> ((c:facade) => venues()),
-      "teams" -> ((c:facade) => teams()),
-      
-  )
-  
-  override def data = c => super.data(c) ++ Map(
-      "teamManager" -> null, 
-      "venue" -> null, 
-      "homeTeam" -> null, 
-      "awayTeam" -> null)
+  data("teamManager", null) 
+  data("venue", null) 
+  data("homeTeam", null) 
+  data("awayTeam", null) 
 
 }
 
