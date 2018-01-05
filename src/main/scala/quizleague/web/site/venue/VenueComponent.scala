@@ -111,9 +111,22 @@ object VenueMenuComponent extends Component {
   override val name = ""  
   
   override val template = """<v-list dense v-if="venues">
+     <v-list-group no-action :value="true">
+            <v-list-tile slot="item" @click="">
+              <v-list-tile-action>
+                <v-icon>location_on</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>Venues</v-list-tile-title>
+              </v-list-tile-content>
+              <v-list-tile-action>
+                <v-icon>keyboard_arrow_down</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
                     <v-list-tile v-for="venue in sort(venues) " :key="venue.id">
                     <v-btn :to="'/venue/' + venue.id" flat style="text-transform: none;">{{venue.name}}</v-btn>
                     </v-list-tile>
+          </v-list-group>
                    </v-list>"""
     subscription("venues")(v => VenueService.list)
     method("sort")((venues:js.Array[Venue]) => venues.sortBy(_.name))

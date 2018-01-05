@@ -6,7 +6,7 @@ import quizleague.web.core.IdComponent
 
 object CupCompetitionPage extends RouteComponent{
   val template = """<competition :id="$route.params.id" text-name="cup-comp"></competition>"""
-  override val components = @@(KnockoutCompetitionComponent)
+  components(KnockoutCompetitionComponent)
 }
 
 

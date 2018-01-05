@@ -6,7 +6,7 @@ import quizleague.web.core.IdComponent
 
 object SingletonCompetitionPage extends RouteComponent{
   val template = """<competition :id="$route.params.id" ></competition>"""
-  override val components = @@(SingletonCompetitionComponent)
+  components(SingletonCompetitionComponent)
 }
 
 

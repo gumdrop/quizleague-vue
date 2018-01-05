@@ -38,9 +38,22 @@ object CompetitionMenuComponent extends Component{
   val name = "ql-competition-menu"
   val template = """
     <v-list dense v-if="competitions">
+     <v-list-group no-action :value="true">
+            <v-list-tile slot="item" @click="">
+              <v-list-tile-action>
+                <v-icon>mdi-trophy</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>Competitions</v-list-tile-title>
+              </v-list-tile-content>
+              <v-list-tile-action>
+                <v-icon>keyboard_arrow_down</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
        <v-list-tile v-for="competition in sort(competitions)" :key="competition.id" left>
           <v-btn :to="'/competition/' + competition.id +'/' + competition.typeName" flat left>{{competition.name}}</v-btn>
       </v-list-tile>
+    </v-list-group>
     </v-list>
     """
 

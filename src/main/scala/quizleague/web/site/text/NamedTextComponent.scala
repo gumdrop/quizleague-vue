@@ -53,7 +53,7 @@ object NamedTextComponent extends Component{
     """
   props("name")
   
-  subscription("textId, name")(c => ApplicationContextService.get.switchMap(ac => ac.textSet.obs).map(t => get(c.name,t).map(e => e.text.id).getOrElse(null)))
+  subscription("textId","name")(c => ApplicationContextService.get.flatMap(ac => ac.textSet.obs).map(t => get(c.name,t).map(e => e.text.id).getOrElse(null)))
   
   def get(name:String, globalText:GlobalText):Option[TextEntry] = globalText.text.find(e => e.name == name)
 }
