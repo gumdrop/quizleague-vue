@@ -25,7 +25,7 @@ object VenuesComponent extends RouteComponent{
      <v-container grid-list-lg fluid>
        <v-layout>
          <v-flex><ql-named-text name="venues-front-page"></ql-named-text></v-flex>
-       </layout>
+       </v-layout>
      </v-container>
        """
 
