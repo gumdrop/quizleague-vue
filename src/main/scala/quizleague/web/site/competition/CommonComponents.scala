@@ -32,7 +32,7 @@ object LatestResults extends Component{
       <v-card-text  v-if="latestResults">
         <div v-for="results in latestResults" :key="results.id">
           <div><h3 class="headline mb-0">{{results.date | date("d MMMM yyyy")}}</h3></div>
-          <ql-results-simple :results="results.fixtures | combine" ></ql-results-simple>
+          <ql-fixtures-simple :fixtures="results.fixtures | combine" ></ql-fixtures-simple>
         </div>
       </v-card-text>
       <v-card-actions>
@@ -118,7 +118,7 @@ object AllResults extends ResultsComponent{
       <v-card>
         <v-card-title primary-title><h3 class="headline mb-0">{{results.date | date("d MMMM yyyy")}}</h3></v-card-title>
         <v-card-text>
-            <ql-results-simple :results="results.fixtures | combine" ></ql-results-simple>
+            <ql-fixtures-simple :fixtures="results.fixtures | combine" ></ql-fixtures-simple>
           </div>
         </v-card-text>
       </v-card>

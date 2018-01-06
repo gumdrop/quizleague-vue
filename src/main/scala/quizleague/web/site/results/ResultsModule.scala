@@ -19,8 +19,6 @@ import quizleague.web.site.fixtures.FixturesService
 
 object ResultsModule extends Module {
 
-  override val components = @@(SimpleResultsComponent)
-
   override val routes = @@(
     RouteConfig(
       path = "/results/all",
