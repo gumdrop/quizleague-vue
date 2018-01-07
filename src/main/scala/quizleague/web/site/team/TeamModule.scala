@@ -10,6 +10,7 @@ import quizleague.web.site.user.UserService
 import quizleague.web.site.season.SeasonWatchService
 import quizleague.web.service._
 import quizleague.web.model._
+import rxscalajs.Observable
 
 object TeamModule extends Module{
   
@@ -35,6 +36,12 @@ object TeamService extends TeamGetService with RetiredFilter[Team]{
   override val textService = TextService
   override val userService = UserService
   override val venueService = VenueService
+  
+  def teamForEmail(email:String):Observable[js.Array[Team]] = {
+    userService.userForEmail(email).combineLatestWith(list())((u,teams) => u.fold(js.Array[Team]())(user => teams.filter(_.users.exists(_.id == user.id))))
+    
+
+  }
   
 }
 

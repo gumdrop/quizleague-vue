@@ -4,5 +4,11 @@ import quizleague.web.service.user._
 import quizleague.web.core._
 
 
-object UserService extends UserGetService
+object UserService extends UserGetService{
+  
+  def userForEmail(email:String) = {
+    list().map(_.filter(_.email == email).headOption)
+  }
+  
+}
 
