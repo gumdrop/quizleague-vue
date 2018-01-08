@@ -11,7 +11,7 @@ import quizleague.web.core.IdComponent
 import com.felstar.scalajs.vue.VueComponent
 import com.felstar.scalajs.vue._
 import quizleague.web.site.results.TableUtils
-import quizleague.web.site.results.ReportsService
+import rxscalajs.Observable
 
 
 @js.native
@@ -26,9 +26,9 @@ object SimpleFixturesComponent extends Component {
   val name = "ql-fixtures-simple"
 
   val template = """
-   <div v-if="fixts" class="ql-fixtures-simple">
+   <div v-if="list" class="ql-fixtures-simple">
       <table>
-        <ql-fixture-line v-for="fixture in fixts" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
+        <ql-fixture-line v-for="fixture in list" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
       </table>
    </div>
 
@@ -37,7 +37,7 @@ object SimpleFixturesComponent extends Component {
   prop("fixtures")
   prop("list")
   prop("inlineDetails")
-  subscription("fixts","fixtures")(c => c.fixtures)
+  subscription("list","fixtures")(_.fixtures)
   components(FixtureLineComponent)
 
 

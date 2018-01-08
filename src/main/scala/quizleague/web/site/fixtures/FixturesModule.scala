@@ -17,8 +17,12 @@ import quizleague.web.util.Logging._
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.competition.CompetitionService
 import quizleague.web.site.user.UserService
-import quizleague.web.site.results.ReportsService
 import quizleague.util.collection._
+import quizleague.web.site.text.TextService
+import quizleague.web.service.results.ReportsGetService
+import quizleague.web.service.PostService
+import quizleague.domain.command.ResultsSubmitCommand
+import quizleague.domain.command.ResultValues
 
 object FixturesModule extends Module {
 
@@ -53,7 +57,7 @@ object FixturesService extends FixturesGetService {
 
 }
 
-object FixtureService extends FixtureGetService {
+object FixtureService extends FixtureGetService with PostService{
   override val venueService = VenueService
   override val teamService = TeamService
   override val userService = UserService
@@ -104,5 +108,18 @@ object FixtureService extends FixtureGetService {
   }
   
 
+  def submitResult(fixtures:js.Array[Fixture], reportText:String, email:String) = {
+    import quizleague.util.json.codecs.DomainCodecs._
+    
+    val cmd = ResultsSubmitCommand(fixtures.map(f => ResultValues(f.id, f.result.homeScore, f.result.awayScore)).toList, Option(reportText), email)
+    
+    val ret:String = command[String,ResultsSubmitCommand](List("results","submit"),Some(cmd))
+  }
+  
+}
+
+object ReportsService extends ReportsGetService {
+  val textService = TextService
+  val teamService = TeamService
 }
 

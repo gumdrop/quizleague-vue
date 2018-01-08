@@ -34,10 +34,7 @@ object ResultsModule extends Module {
 
 }
 
-object ReportsService extends ReportsGetService {
-  val textService = TextService
-  val teamService = TeamService
-}
+
 
 object ResultsViewService extends SeasonWatchService{
   def results = season.flatMap(s => FixturesService.spentFixtures(s.id))

@@ -22,7 +22,7 @@ object LeagueTableModule extends Module{
   
 }
 
-object LeagueTableService extends LeagueTableGetService with LeagueTablePutService with PostService[LeagueTable]{
+object LeagueTableService extends LeagueTableGetService with LeagueTablePutService with PostService{
   
   override val teamService = TeamService
   

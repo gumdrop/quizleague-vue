@@ -52,7 +52,7 @@ object Fixture{
   
   def addBlankResult(f:Fixture) = {
     new Fixture(f.id,f.description,f.parentDescription, f.venue, f.home, f.away, f.date, f.time, f.duration, 
-        Result(0,0,null,null,null))
+        Result(null.asInstanceOf[Integer],null.asInstanceOf[Integer],null,null,null))
   }
 }
 

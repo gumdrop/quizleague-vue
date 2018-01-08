@@ -14,6 +14,8 @@ trait SubmitResultsComponent extends com.felstar.scalajs.vue.VueRxComponent{
   var fixtures:js.Array[Fixture]
   val appData:ApplicationContext
   var hasResults:Boolean
+  val reportText:String
+  var confirm:Boolean
 }
 object SubmitResultsComponent extends RouteComponent{
   
@@ -31,7 +33,20 @@ object SubmitResultsComponent extends RouteComponent{
         <v-text-field v-model="fixture.result.homeScore" :label="async(fixture.home).name" type="number" :disabled="hasResults"></v-text-field>
         <v-text-field v-model="fixture.result.awayScore" :label="async(fixture.away).name" type="number" :disabled="hasResults"></v-text-field>
       </div>
-       
+      <div v-if="fixtures.length > 0">
+        <v-text-field v-model="reportText" textarea auto-grow label="Match Report"></v-text-field>
+        <div><v-btn v-on:click="preSubmit" flat color="primary">Submit&nbsp;<v-icon>send</v-icon></v-btn></div>
+      </div>
+     <v-dialog v-model="confirm" persistent fullscreen lazy >
+        <v-card>
+          <v-card-title>Check Results</v-card-title>
+          <v-card-text>
+            <ql-fixtures-simple :list="fixtures" :inlineDetails="true"></ql-fixtures-simple>
+          </v-card-text>
+          </v-card-actions><v-btn flat color="primary" v-on:click="submit"><v-icon>check</v-icon>Ok</v-btn><v-btn flat v-on:click="cancel"><v-icon>cancel</v-icon>Cancel</v-btn></v-card-actions>
+        </v-card>
+     </v-dialog>
+
       </v-layout>
     </v-form>
     </v-container>"""
@@ -44,13 +59,31 @@ object SubmitResultsComponent extends RouteComponent{
   
   def handleFixtures(c:facade)(fixtures:js.Array[Fixture]) = {
     c.hasResults = fixtures.forall(_.result != null)
-    c.fixtures = fixtures//if(c.hasResults) fixtures else fixtures.map(Fixture.addBlankResult(_))
+    c.fixtures = if(c.hasResults) fixtures else fixtures.map(Fixture.addBlankResult _)
+  }
+  
+  def preSubmit(c:facade) {
+    c.confirm = true
+  }
+  
+  def cancel(c:facade) {
+    c.confirm = false
+  }
+  
+  def submit(c:facade){
+    c.confirm = false
+    FixtureService.submitResult(c.fixtures, c.reportText, c.email)
   }
   
   
   subscription("appData")(c => ApplicationContextService.get)
+  method("submit")({submit _}:js.ThisFunction)
+  method("preSubmit")({preSubmit _}:js.ThisFunction)
+  method("cancel")({cancel _}:js.ThisFunction)
   data("email","")
   data("hasResults",false)
   data("fixtures", js.Array())
+  data("reportText",null)
+  data("confirm", false)
   watch("email")(handleEmail _)
 }

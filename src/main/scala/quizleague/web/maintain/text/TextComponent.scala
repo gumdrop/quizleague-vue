@@ -23,7 +23,6 @@ object TextComponent extends ItemComponentConfig[Text] with RouteComponent {
         <v-text-field
           label="Text"
           v-model="item.text"
-          type="email"
           :rules=${valRequired("Text")}
           required
           textarea
