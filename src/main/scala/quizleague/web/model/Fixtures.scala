@@ -49,6 +49,11 @@ object Fixture{
   time: String,
   duration : Float,
   result:Result) = new Fixture(id,description,parentDescription, venue, home, away,date,time,duration, result)
+  
+  def addBlankResult(f:Fixture) = {
+    new Fixture(f.id,f.description,f.parentDescription, f.venue, f.home, f.away, f.date, f.time, f.duration, 
+        Result(0,0,null,null,null))
+  }
 }
 
 class Result(

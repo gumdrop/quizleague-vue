@@ -82,16 +82,27 @@ object FixtureService extends FixtureGetService {
       
     tf.map(_.take(take).toJSArray)
   }
-  
-  def fixturesForResultSubmission(email:String, seasonId:String):Observable[js.Array[Fixture]] = {
-    teamService.teamForEmail(email).map(
-        t => t.map(
-            team => fixturesFrom(FixturesService.competitionFixtures(CompetitionService.competitions(seasonId)),team.id,1, Desc[String]))
-    ).map(f => Observable.combineLatest(f.toSeq).map(_.flatMap(x => x).toJSArray)).flatten
+
+  def fixturesForResultSubmission(email: String, seasonId: String): Observable[js.Array[Fixture]] = {
+
+    val today = LocalDate.now.toString()
+
+    teamService.teamForEmail(email)
+      .map(
+        _.map(
+          team => fixturesFrom(FixturesService.competitionFixtures(CompetitionService.competitions(seasonId)), team.id, Integer.MAX_VALUE, Desc))).map(f => Observable.combineLatest(f.toSeq)
+          .map(
+            _.flatMap(x => x)
+              .filter(_.date <= today)
+              .groupBy(_.date)
+              .toList
+              .sortBy(_._1)(Desc)
+              .take(1)
+              .map { case (k, v) => v }
+              .flatMap(x => x)
+              .toJSArray)).flatten
   }
   
-  def addResult(fixture:Fixture) = {
-    //val f = Fixture(fixture.id, fixture.)
-  }
+
 }
 
