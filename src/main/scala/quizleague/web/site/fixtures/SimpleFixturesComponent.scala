@@ -35,7 +35,7 @@ object SimpleFixturesComponent extends Component {
 """
 
   prop("fixtures")
-  prop("list")
+  //prop("list")
   prop("inlineDetails")
   subscription("list","fixtures")(_.fixtures)
   components(FixtureLineComponent)

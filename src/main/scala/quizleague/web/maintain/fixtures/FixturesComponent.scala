@@ -41,7 +41,7 @@ object FixturesComponent extends CompetitionComponentConfig{
 
   override type facade = FixturesComponent
   val fixtureService = FixtureService
-  override val components = @@(FixtureComponent)
+  components(FixtureComponent)
   
   val template = s"""
   <v-container v-if="item && season && fxs">

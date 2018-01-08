@@ -7,6 +7,7 @@ import quizleague.web.model.{Fixtures => Model}
 import quizleague.domain.{Fixtures => Dom}
 import quizleague.domain.Ref
 import quizleague.web.names.ComponentNames
+import quizleague.util.collection._
 import scala.scalajs.js
 import org.threeten.bp.Year
 import quizleague.web.util.DateTimeConverters._
@@ -45,7 +46,7 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
   def instance(competition:Competition, fixtures:js.Array[Fixtures]) = {
     
     def findNextDate(c:LeagueCompetition) = {
-      fixtures.sort((a:Model,b:Model) => b.date compareTo a.date).headOption.map(x => LocalDate parse(x.date).plusWeeks(1)).getOrElse(dateToLocalDate(new Date(Date.now())))
+      (fixtures.sortBy(_.date)(Desc)).headOption.map(x => LocalDate parse(x.date).plusWeeks(1)).getOrElse(dateToLocalDate(new Date(Date.now())))
     }
     
     add(

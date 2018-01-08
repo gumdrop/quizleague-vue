@@ -18,7 +18,7 @@ import quizleague.web.maintain.component.ItemComponentConfig._
 
 @js.native
 trait FixturesListComponent extends CompetitionComponent{
-  val fixtures:js.Array[Fixtures]
+  val fs:js.Array[Fixtures]
 }
 
 object FixturesListComponent extends CompetitionComponentConfig with FixturesNames{
@@ -39,13 +39,13 @@ object FixturesListComponent extends CompetitionComponentConfig with FixturesNam
   """    
   
   def add(c:facade):Unit = {
-    val fixs = FixturesService.instance(c.item, c.fixtures)
+    val fixs = FixturesService.instance(c.item, c.fs)
     c.item.fixtures +++= (fixs.id, fixs)
     service.cache(c.item)
     c.$router.push(s"fixtures/${fixs.id}")
   }
   
- subscription("fs")((c:facade) => FixturesService.fixturesForCompetition(c.$route.params("id").toString).map(_.sortBy(_.date)))
+ subscription("fs")(c => FixturesService.fixturesForCompetition(c.$route.params("id").toString).map(_.sortBy(_.date)))
   
  method("add")({add _}:js.ThisFunction)
 
