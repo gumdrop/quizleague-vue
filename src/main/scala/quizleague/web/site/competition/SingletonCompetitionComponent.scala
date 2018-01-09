@@ -17,16 +17,20 @@ object SingletonCompetitionComponent extends Component{
   val name = "competition"
   
   val template = """ 
-<div v-if="item">
-    <ql-named-text :name="item.textName"></ql-named-text>
-    <v-card>
-     <v-card-text>
-      <div><b>This season's competition will take place at <a :to="'/venue/' + item.event.venue.id">{{async(item.event.venue).name}}</a> on {{item.event.date | date("d MMMM yyyy")}} starting at {{item.event.time}}</b> </div>
-      <br>
-      <ql-text :id="item.text.id"></ql-text>
-      </v-card-text>
-    </v-card> 
-  </div>"""
+<v-container grid-list-lg fluid v-if="item">
+    <v-layout column >
+    <v-flex><ql-named-text :name="item.textName"></ql-named-text></v-flex>
+    <v-flex>
+      <v-card>
+       <v-card-text>
+        <div><b>This season's competition will take place at <a :to="'/venue/' + item.event.venue.id">{{async(item.event.venue).name}}</a> on {{item.event.date | date("d MMMM yyyy")}} starting at {{item.event.time}}</b> </div>
+        <br>
+        <ql-text :id="item.text.id"></ql-text>
+        </v-card-text>
+      </v-card> 
+    </v-flex>
+  </v-layout>
+</v-container>"""
   
  props("id")
   
