@@ -23,6 +23,7 @@ sealed trait Competition extends js.Object with Model{
   val tables: js.Array[RefObservable[LeagueTable]]
   val text: RefObservable[Text]
   val textName:String
+  val icon:String
 }
 
 class LeagueCompetition(
@@ -34,7 +35,8 @@ class LeagueCompetition(
   override val tables: js.Array[RefObservable[LeagueTable]],
   override val text: RefObservable[Text],
   override val textName:String,
-  val subsidiary: RefObservable[Competition]) extends Competition {
+  val subsidiary: RefObservable[Competition],
+  val icon:String) extends Competition {
   override val typeName = league.toString()
 }
 
@@ -45,7 +47,9 @@ class CupCompetition(
   val duration: Float,
   override val fixtures: js.Array[RefObservable[Fixtures]],
   override val text: RefObservable[Text],  
-  override val textName:String) extends Competition {
+  override val textName:String,
+  val icon:String
+  )  extends Competition {
   override val typeName = cup.toString()
   override val tables = js.Array[RefObservable[LeagueTable]]()
 }
@@ -55,7 +59,8 @@ class SubsidiaryLeagueCompetition(
   override val name: String,
   override val tables: js.Array[RefObservable[LeagueTable]],
   override val text: RefObservable[Text],
-  override val textName:String) extends Competition {
+  override val textName:String,
+  val icon:String) extends Competition {
   override val typeName = subsidiary.toString()
   override val fixtures = js.Array[RefObservable[Fixtures]]()
 }
@@ -65,7 +70,8 @@ class SingletonCompetition(
   override val name: String,
   override val text: RefObservable[Text],
   val textName: String,
-  val event: Event) extends Competition {
+  val event: Event,
+  val icon:String) extends Competition {
   override val typeName = singleton.toString()
   override val fixtures = js.Array[RefObservable[Fixtures]]()
   override val tables = js.Array[RefObservable[LeagueTable]]()

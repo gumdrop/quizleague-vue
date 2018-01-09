@@ -34,7 +34,7 @@ object CompetitionMenuComponent extends Component{
               </v-list-tile-action>
             </v-list-tile>
        <v-list-tile v-for="competition in sort(competitions)" :key="competition.id" left>
-          <v-btn :to="'/competition/' + competition.id +'/' + competition.typeName" flat left>{{competition.name}}</v-btn>
+          <v-btn :to="'/competition/' + competition.id +'/' + competition.typeName" flat left><v-icon v-id="competition.icon" left>{{competition.icon}}</v-icon><span>{{competition.name}}</span></v-btn>
       </v-list-tile>
     </v-list-group>
     </v-list>

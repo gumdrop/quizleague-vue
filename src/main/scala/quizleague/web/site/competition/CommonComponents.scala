@@ -83,13 +83,13 @@ object CompetitionTitleComponent extends Component{
       dark
       clipped-left>
       <v-toolbar-title class="white--text" v-if="item && season" >
-        {{item.name}} {{season.startYear}}/{{season.endYear}}
+       <v-icon v-if="item.icon" style="position:relative;top:-2px">{{item.icon}}</v-icon>&nbsp;&nbsp;<span>{{item.name}} {{season.startYear}}/{{season.endYear}}</span>
       </v-toolbar-title>
     </v-toolbar>"""
   
   props("id")
   subscription("item","id")(c => CompetitionService.get(c.id))
-  subscription("season","id" )(c => CompetitionViewService.parentSeason(c.id))
+  subscription("season")(c => CompetitionViewService.parentSeason(c.id))
 }
 
 object ResultsPage extends RouteComponent{

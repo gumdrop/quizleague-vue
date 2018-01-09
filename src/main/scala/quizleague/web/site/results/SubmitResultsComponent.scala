@@ -56,14 +56,14 @@ object SubmitResultsComponent extends RouteComponent{
     </v-form>
     </v-container>"""
   
-  def handleEmail(c:facade, e:js.Any) = {
+  def handleEmail(c:facade) = {
     if(c.email.toLowerCase.matches(emailRegex)) {
       FixtureService.fixturesForResultSubmission(c.email, c.appData.currentSeason.id).subscribe(handleFixtures(c) _)
     }
   }
   
   def handleFixtures(c:facade)(fixtures:js.Array[Fixture]) = {
-    c.hasResults = fixtures.forall(_.result != null)
+    c.hasResults = fixtures.exists(_.result != null)
     c.fixtures = if(c.hasResults) fixtures else fixtures.map(Fixture.addBlankResult _)
   }
   
@@ -89,6 +89,8 @@ object SubmitResultsComponent extends RouteComponent{
     c.hasResults = false
   }
   
+  def mounted(c:facade) = c.$subscribeTo(c.$watchAsObservable("email").debounceTime(100),(x:js.Any) => handleEmail(c))
+  
   
   subscription("appData")(c => ApplicationContextService.get)
   method("submit")({submit _}:js.ThisFunction)
@@ -99,5 +101,6 @@ object SubmitResultsComponent extends RouteComponent{
   data("fixtures", js.Array())
   data("reportText",null)
   data("confirm", false)
-  watch("email")(handleEmail _)
+  
+  override val mounted = {(c:facade) => mounted(c)} :js.ThisFunction
 }

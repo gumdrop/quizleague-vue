@@ -23,6 +23,7 @@ import quizleague.web.service.results.ReportsGetService
 import quizleague.web.service.PostService
 import quizleague.domain.command.ResultsSubmitCommand
 import quizleague.domain.command.ResultValues
+import java.time.LocalTime
 
 object FixturesModule extends Module {
 
@@ -90,6 +91,7 @@ object FixtureService extends FixtureGetService with PostService{
   def fixturesForResultSubmission(email: String, seasonId: String): Observable[js.Array[Fixture]] = {
 
     val today = LocalDate.now.toString()
+    val now = today + LocalTime.now().toString()
 
     teamService.teamForEmail(email)
       .map(
@@ -97,7 +99,7 @@ object FixtureService extends FixtureGetService with PostService{
           team => fixturesFrom(FixturesService.competitionFixtures(CompetitionService.competitions(seasonId)), team.id, Integer.MAX_VALUE, Desc))).map(f => Observable.combineLatest(f.toSeq)
           .map(
             _.flatMap(x => x)
-              .filter(_.date <= today)
+              .filter(f => (f.date + f.time) <= now)
               .groupBy(_.date)
               .toList
               .sortBy(_._1)(Desc)
@@ -113,7 +115,7 @@ object FixtureService extends FixtureGetService with PostService{
     
     val cmd = ResultsSubmitCommand(fixtures.map(f => ResultValues(f.id, f.result.homeScore, f.result.awayScore)).toList, Option(reportText), email)
     
-    val ret:String = command[String,ResultsSubmitCommand](List("results","submit"),Some(cmd))
+    command[String,ResultsSubmitCommand](List("results","submit"),Some(cmd)).subscribe(x => Unit)
   }
   
 }

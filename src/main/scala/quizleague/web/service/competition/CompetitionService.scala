@@ -56,6 +56,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
     import quizleague.domain
     import quizleague.web.util.DateTimeConverters._  
    
+    def unwrapOption[V](opt:Option[V]):V = opt.fold(null.asInstanceOf[V])(x => x)
 
     def doMapOutSparse(dom: Dom):Competition = {
       if (dom == null) return null
@@ -69,7 +70,8 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           refObsList(c.tables, leagueTableService),
           refObs(c.text, textService),
           c.textName,          
-          refObs(c.subsidiary))
+          refObs(c.subsidiary),
+          unwrapOption(c.icon))
         case c: DCC => new CupCompetition(
           c.id,
           c.name,
@@ -77,19 +79,22 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           c.duration,
           refObsList(c.fixtures,fixturesService),
           refObs(c.text, textService),
-          c.textName)
+          c.textName,
+          unwrapOption(c.icon))
         case c: DSC => new SubsidiaryLeagueCompetition(
           c.id,
           c.name,
           refObsList(c.tables, leagueTableService),
           refObs(c.text, textService),
-          c.textName)
+          c.textName,
+          unwrapOption(c.icon))
         case c : DSiC => new SingletonCompetition(
           c.id,
           c.name,
           refObs(c.text, textService),
           c.textName,
-          c.event.fold[Event](null)(e => Event(refObs(e.venue,venueService),e.date,e.time,e.duration))
+          c.event.fold[Event](null)(e => Event(refObs(e.venue,venueService),e.date,e.time,e.duration)),
+          unwrapOption(c.icon)
         )
       }
     }
@@ -174,7 +179,8 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
           l.tables.map(leagueTableService.ref(_)).toList,
           textService.ref(l.text),
           if (l.subsidiary == null) None else Option(ref(l.subsidiary)),
-          l.textName)
+          l.textName,
+          Option(l.icon))
 
         case c: CupCompetition => DCC(
           c.id,
@@ -183,21 +189,24 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
           c.duration,
           c.fixtures.map(fixturesService.ref(_)).toList,
           textService.ref(c.text),
-          c.textName)
+          c.textName,
+          Option(c.icon))
 
         case s: SubsidiaryLeagueCompetition => DSC(
           s.id,
           s.name,
           s.tables.map(leagueTableService.ref(_)).toList,
           textService.ref(s.text),
-          s.textName)
+          s.textName,
+          Option(s.icon))
         
         case s: SingletonCompetition => DSiC(
           s.id,
           s.name,
           if(s.event == null) None else Some(DomEvent(venueService.ref(s.event.venue), s.event.date, s.event.time, s.event.duration)),
           s.textName,
-          textService.ref(s.text))
+          textService.ref(s.text),
+          Option(s.icon))
       }
 
     }

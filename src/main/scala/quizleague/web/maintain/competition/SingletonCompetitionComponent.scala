@@ -21,6 +21,7 @@ object SingletonCompetitionComponent extends CompetitionComponentConfig{
       <v-layout column>
         <v-text-field label="Name" required v-model="item.name" :rules=${valRequired("Name")}></v-text-field>
         <v-text-field label="Text Name" required v-model="item.textName" :rules=${valRequired("Text Name")}></v-text-field>
+        <v-text-field label="Icon Name" v-model="item.icon" :append-icon="item.icon" ></v-text-field>
          <v-layout column v-if="item.event">
           <v-layout row>
             <v-text-field label="Date" required v-model="item.event.date" type="date" :rules=${valRequired("Date")}></v-text-field>

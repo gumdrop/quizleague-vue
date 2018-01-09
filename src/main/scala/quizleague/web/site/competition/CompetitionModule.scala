@@ -25,54 +25,6 @@ import quizleague.web.model.Fixtures
 import quizleague.util.collection._
 import quizleague.web.site.season.SeasonService
 
-//@Routes(
-//    root = false,
-//    Route(
-//        path = "competition",
-//        children = @@@(
-//          Route(
-//            path = ":id",
-//            children = @@@(
-//              Route("", children = @@@(
-//               Route("league", component = %%[LeagueCompetitionComponent]),
-//               Route("cup", component = %%[CupCompetitionComponent]),
-//               Route("plate", component = %%[PlateCompetitionComponent]),
-//               Route("subsidiary", component = %%[BeerCompetitionComponent]),
-//               Route("singleton", component = %%[SingletonCompetitionComponent]),
-//               Route("", component = %%[CompetitionTitleComponent], outlet = "title")
-//               )
-//              ),
-//              Route(":name", children = @@@(
-//                Route("results", children = @@@(
-//                    Route("", component = %%[CompetitionResultsComponent]),
-//                    Route("", component = %%[CompetitionResultsTitleComponent], outlet = "title")
-//                    )
-//                ),
-//                Route("fixtures", children = @@@(
-//                    Route("", component = %%[CompetitionFixturesComponent]),
-//                    Route("", component = %%[CompetitionFixturesTitleComponent], outlet = "title"))
-//                )
-//               )
-//              )
-//            )
-//          ) ,
-//          Route(path = "", children = @@@(
-//            Route(path = "", component = %%[CompetitionsComponent]),
-//            Route(path = "", component = %%[CompetitionsTitleComponent], outlet = "title")
-//          )
-//         ),
-//         Route(path = "", component = %%[CompetitionMenuComponent], outlet = "sidemenu")
-//        )
-//        
-//   )
-// )
-
-
-
-
-
-
-
 object CompetitionModule extends Module {
   
   override val routes = @@(

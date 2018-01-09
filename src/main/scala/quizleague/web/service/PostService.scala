@@ -6,22 +6,25 @@ import io.circe._, io.circe.parser._
 import quizleague.web.names.ComponentNames
 import quizleague.web.util.Logging._
 import quizleague.web.model.Model
+import rxscalajs._
+import rxscalajs.dom.Request
 
 trait PostService {
 
 
   
-  protected def command[R,V](pathParts:List[String],i:Option[V])(implicit decoder:Decoder[R],encoder:Encoder[V]):R = {
+  protected def command[R,V](pathParts:List[String],i:Option[V])(implicit decoder:Decoder[R],encoder:Encoder[V]):Observable[R] = {
     
     val path = pathParts.mkString("/")
     
+    val request = Request(
+        path,
+        headers = Map("Content-Type" -> "application/json", "Accept-Content" -> "application/json"),
+        data = i.fold("")(encoder(_).noSpaces),
+        method = "POST")
     
-    
-//    http.post(s"$uriRoot/$path", i.fold("")(encoder(_).noSpaces))
-//    .map((r, i) => decode[R](r.asInstanceOf[js.Dynamic]._body.toString).merge.asInstanceOf[R])
-//      .onError((x, t) => { log(s"error in POST for path $uriRoot/$path"); Observable.of(null).asInstanceOf[Observable[U]] })
-
-    null.asInstanceOf[R]
+    Observable.ajax(request).map(response => decode[R](response.body).fold(e => {throw e}, u => u))
+      .onErrorResumeNext(x => { log(s"error in ${request.method} for $path : n$x");null })
   }
   
  }

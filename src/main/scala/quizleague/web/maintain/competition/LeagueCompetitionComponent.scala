@@ -37,6 +37,7 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
           <v-text-field  label="Duration" type="number" v-model.number="item.duration"
              required step="0.5" :rules=${valRequired("Duration")}></v-text-field>
           <v-text-field label="Text Name" required v-model="item.textName" :rules=${valRequired("Text Name")}></v-text-field>
+          <v-text-field label="Icon Name" v-model="item.icon" :append-icon="item.icon" ></v-text-field>
           <v-select label="Subsidiary" :items="subsidiaries" v-model="item.subsidiary"></v-select>
 
       <div><v-btn flat v-on:click="editText(item.text.id)"  type="button" ><v-icon>description</v-icon>Text...</v-btn></div>
