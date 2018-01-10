@@ -107,6 +107,9 @@ trait ContactDialog extends VueRxComponent{
   var show:Boolean
 }
 object ContactDialog extends Component{
+  
+  import quizleague.web.util.validation.Functions._
+  
   type facade = ContactDialog
   val name = "ql-team-contact-dialog"
   val template = """
@@ -114,14 +117,16 @@ object ContactDialog extends Component{
             <v-card>
               <v-card-title>Contact {{team.name}}</v-card-title>
               <v-card-text>
+                <v-form v-model="valid">
                 <v-container>
                   <v-layout column>
-                    <v-text-field label="Your email address" v-model="email" type="email"></v-text-field>
-                    <v-text-field label="Message" v-model="text" textarea grow></v-text-field>
+                    <v-text-field required label="Your email address" v-model="email" type="email" :rules="[required('Your email address'), isEmail('Your email address')]"></v-text-field>
+                    <v-text-field label="Message" v-model="text" textarea grow :rules="[required('Message')]" required></v-text-field>
                   </v-layout>
                 </v-container>
+                </v-form>
               </v-card-text>
-              </v-card-actions><v-btn flat v-on:click="show=false"><v-icon left>cancel</v-icon>Cancel</v-btn><v-btn flat color="primary" v-on:click="submit">Send<v-icon right>send</v-icon></v-btn></v-card-actions>
+              </v-card-actions><v-btn flat v-on:click="show=false"><v-icon left>cancel</v-icon>Cancel</v-btn><v-btn flat color="primary" :disabled="!valid" v-on:click="submit">Send<v-icon right>send</v-icon></v-btn></v-card-actions>
             </v-card>
          </v-dialog>"""
   
@@ -135,7 +140,10 @@ object ContactDialog extends Component{
   props("team", "show")
   data("email","")
   data("text","")
+  data("valid",false)
   method("submit")({submit _}:js.ThisFunction)
+  method("required")(required _)
+  method("isEmail")(isEmail _)
 }
 
 object TeamMenuComponent extends RouteComponent {
