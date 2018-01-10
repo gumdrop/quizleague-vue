@@ -13,6 +13,7 @@ import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.model.ApplicationContext
 import quizleague.web.site.fixtures.FixtureService
 import quizleague.web.site._
+import com.felstar.scalajs.vue.VueRxComponent
 
 object TeamPage extends RouteComponent{
   override val template = """<ql-team :id="$route.params.id"></ql-team>"""
@@ -64,7 +65,7 @@ object TeamComponent extends Component{
   subscription("team","id")(v => TeamService.get(v.id))
   subscription("appConfig")(c => ApplicationContextService.get)
   method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,seasonId,5))
-  method("results")((teamId:String, seasonId:String) => FixtureService.teamResults(teamId,seasonId,5))   
+  method("results")((teamId:String, seasonId:String) => FixtureService.teamResults(teamId,seasonId,5))  
 
 }
 
@@ -87,13 +88,54 @@ object TeamTitle extends Component {
         {{team.name}}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-tooltip top><v-btn icon slot="activator"><v-icon>email</v-icon></v-btn><span>Contact Us</span></v-tooltip>
+      <v-tooltip top><v-btn icon slot="activator" v-on:click="contact=!contact"><v-icon>email</v-icon></v-btn><span>Contact Us</span></v-tooltip>
       <v-tooltip top><v-btn icon :to="'/venue/' + team.venue.id" slot="activator"><v-icon>location_on</v-icon></v-btn><span>Venue</span></v-tooltip>
+      <ql-team-contact-dialog :show="contact" :team="team"></ql-team-contact-dialog> 
     </v-toolbar>"""
-  
+   components(ContactDialog)
    props("id")
+   data("contact",false)
    subscription("team","id")(v => TeamService.get(v.id))
 
+}
+
+@js.native
+trait ContactDialog extends VueRxComponent{
+  var email:String
+  var text:String
+  val team:Team
+  var show:Boolean
+}
+object ContactDialog extends Component{
+  type facade = ContactDialog
+  val name = "ql-team-contact-dialog"
+  val template = """
+          <v-dialog v-model="show" max-width="500" lazy persistent>
+            <v-card>
+              <v-card-title>Contact {{team.name}}</v-card-title>
+              <v-card-text>
+                <v-container>
+                  <v-layout column>
+                    <v-text-field label="Your email address" v-model="email" type="email"></v-text-field>
+                    <v-text-field label="Message" v-model="text" textarea grow></v-text-field>
+                  </v-layout>
+                </v-container>
+              </v-card-text>
+              </v-card-actions><v-btn flat v-on:click="show=false"><v-icon left>cancel</v-icon>Cancel</v-btn><v-btn flat color="primary" v-on:click="submit">Send<v-icon right>send</v-icon></v-btn></v-card-actions>
+            </v-card>
+         </v-dialog>"""
+  
+  def submit(c:facade){
+    TeamService.sendEmailToTeam(c.email, c.text, c.team)
+    c.show = false
+    c.text=""
+    }
+  
+  
+  props("team", "show")
+  data("email","")
+  data("text","")
+  method("submit")({submit _}:js.ThisFunction)
 }
 
 object TeamMenuComponent extends RouteComponent {

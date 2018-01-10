@@ -2,7 +2,6 @@ package quizleague.util.json.codecs
 
 import quizleague.domain._
 import ScalaTimeCodecs._
-import quizleague.domain.command.ResultsSubmitCommand
 
 object DomainCodecs{
   import io.circe._, io.circe.generic.semiauto._,io.circe.generic.auto._
@@ -46,7 +45,7 @@ object DomainCodecs{
   implicit val textEncoder: Encoder[Text] = deriveEncoder
   implicit val userDecoder: Decoder[User] = deriveDecoder
   implicit val userEncoder: Encoder[User] = deriveEncoder
-  implicit val resultsSubmitEncoder:Encoder[ResultsSubmitCommand] = deriveEncoder
+
   
   
   

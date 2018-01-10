@@ -11,6 +11,8 @@ import quizleague.web.site.season.SeasonWatchService
 import quizleague.web.service._
 import quizleague.web.model._
 import rxscalajs.Observable
+import quizleague.web.service.PostService
+import quizleague.domain.command.TeamEmailCommand
 
 object TeamModule extends Module{
   
@@ -31,7 +33,7 @@ object TeamModule extends Module{
       
 }
 
-object TeamService extends TeamGetService with RetiredFilter[Team]{
+object TeamService extends TeamGetService with RetiredFilter[Team] with PostService{
   
   override val textService = TextService
   override val userService = UserService
@@ -41,6 +43,13 @@ object TeamService extends TeamGetService with RetiredFilter[Team]{
     userService.userForEmail(email).combineLatestWith(list())((u,teams) => u.fold(js.Array[Team]())(user => teams.filter(_.users.exists(_.id == user.id))))
     
 
+  }
+  
+  def sendEmailToTeam(sender:String, text:String, team:Team){
+    import quizleague.util.json.codecs.CommandCodecs._
+    
+    val cmd = TeamEmailCommand(sender,text,team.id)
+    command[String,TeamEmailCommand](List("email","team"),Some(cmd)).subscribe(x => Unit)
   }
   
 }

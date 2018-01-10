@@ -24,7 +24,7 @@ trait PostService {
         method = "POST")
     
     Observable.ajax(request).map(response => decode[R](response.body).fold(e => {throw e}, u => u))
-      .onErrorResumeNext(x => { log(s"error in ${request.method} for $path : n$x");null })
+      .onErrorResumeNext(x => { log(request,s"error in ${request.method} for $path : $x ");null })
   }
   
  }

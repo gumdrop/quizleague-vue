@@ -111,7 +111,7 @@ object FixtureService extends FixtureGetService with PostService{
   
 
   def submitResult(fixtures:js.Array[Fixture], reportText:String, email:String) = {
-    import quizleague.util.json.codecs.DomainCodecs._
+    import quizleague.util.json.codecs.CommandCodecs._
     
     val cmd = ResultsSubmitCommand(fixtures.map(f => ResultValues(f.id, f.result.homeScore, f.result.awayScore)).toList, Option(reportText), email)
     
