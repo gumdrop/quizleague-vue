@@ -7,6 +7,7 @@ import scalajs.js
 import js.JSConverters._
 import quizleague.web.site._
 import quizleague.web.model._
+import quizleague.web.util.validation.Functions
 
 @js.native
 trait SubmitResultsComponent extends com.felstar.scalajs.vue.VueRxComponent{
@@ -25,23 +26,23 @@ object SubmitResultsComponent extends RouteComponent{
   
   val template ="""
     <v-container>
-      <v-form>
+      <v-form v-model="valid">
       <v-layout column v-if="appData">
        <v-text-field v-model="email" label="Enter your mail address" prepend-icon="email"></v-text-field>
       <div v-if="hasResults">This result has already been submitted, but you can add a match report.</div>
       <p></p>
-      <div v-for="fixture in fixtures" v-if="!hasResults">
+      <v-flex v-for="fixture in fixtures" v-if="!hasResults">
           {{fixture.description}} - {{fixture.date | date("dd MMM yyyy")}}
-          <v-text-field v-model.number="fixture.result.homeScore" :label="async(fixture.home).name" type="number" :disabled="hasResults"></v-text-field>
-          <v-text-field v-model.number="fixture.result.awayScore" :label="async(fixture.away).name" type="number" :disabled="hasResults"></v-text-field>
-      </div>
-      <div v-else>
+          <v-text-field v-model.number="fixture.result.homeScore"  :rules="[required('Home Score')]" :label="async(fixture.home).name" type="number" ></v-text-field>
+          <v-text-field v-model.number="fixture.result.awayScore"  :rules="[required('Away Score')]" :label="async(fixture.away).name" type="number" ></v-text-field>
+      </v-flex>
+      <v-flex v-else>
         <ql-fixtures-simple :fixtures="fixtures | wrap" :inlineDetails="true"></ql-fixtures-simple>
-      </div>
-      <div v-if="fixtures.length > 0">
+      </v-flex>
+      <v-flex v-if="fixtures.length > 0">
         <v-text-field v-model="reportText" textarea auto-grow label="Match Report"></v-text-field>
-        <div><v-btn v-on:click="preSubmit" flat color="primary">Submit&nbsp;<v-icon>send</v-icon></v-btn></div>
-      </div>
+        <div><v-btn v-on:click="preSubmit" flat color="primary" :disabled="!valid">Submit<v-icon right>send</v-icon></v-btn></div>
+      </v-flex>
      <v-dialog v-model="confirm" persistent lazy >
         <v-card>
           <v-card-title>Check Results</v-card-title>
@@ -96,11 +97,13 @@ object SubmitResultsComponent extends RouteComponent{
   method("submit")({submit _}:js.ThisFunction)
   method("preSubmit")({preSubmit _}:js.ThisFunction)
   method("cancel")({cancel _}:js.ThisFunction)
+  method("required")(Functions.required _)
   data("email","")
   data("hasResults",false)
   data("fixtures", js.Array())
   data("reportText",null)
   data("confirm", false)
+  data("valid", false)
   
   override val mounted = {(c:facade) => mounted(c)} :js.ThisFunction
 }
