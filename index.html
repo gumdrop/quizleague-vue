@@ -9,12 +9,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
  <link rel="stylesheet" href="//cdn.materialdesignicons.com/2.1.19/css/materialdesignicons.min.css">
- <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+ <link href="https://unpkg.com/vuetify@0.17.6/dist/vuetify.min.css" rel="stylesheet">
 </head>
 <body>
-<style>
-	v-btn * {text-transform: none;}
-</style>
  <div id="app">
  	<ql-app></ql-app>
  </div>
@@ -22,8 +19,7 @@
       <style>
       	.tabs__item{text-transform:none;}
       
-      	button.btn{text-transform:none;}
-      	a.btn{text-transform:none;}
+      	.btn{text-transform:none;}
         .ql-league-table {
             border : 1px solid rgba(0,0,0,.25);
             font-size:14px;
@@ -37,6 +33,7 @@
           .ql-league-table td{
             border-bottom: 0.5px solid rgba(0,0,0,.25);
             border-right: 0.5px solid rgba(0,0,0,.25);
+            padding-right:2px;
           }
           .ql-league-table th{
             border-bottom: 0.5px solid rgba(0,0,0,.25);

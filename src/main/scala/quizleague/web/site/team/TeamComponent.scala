@@ -14,6 +14,9 @@ import quizleague.web.model.ApplicationContext
 import quizleague.web.site.fixtures.FixtureService
 import quizleague.web.site._
 import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.core.IdComponent
+import com.felstar.scalajs.vue.VuetifyComponent
+import quizleague.web.core.DialogComponentConfig
 
 object TeamPage extends RouteComponent{
   override val template = """<ql-team :id="$route.params.id"></ql-team>"""
@@ -73,9 +76,14 @@ object TeamTitleComponent extends RouteComponent {
   override val template = """<ql-team-title :id="$route.params.id"></ql-team-title>"""
 }
 
+@js.native
+trait TeamTitle extends IdComponent{
+  var contact:Boolean
+}
+
 object TeamTitle extends Component {
   
-  type facade = IdComponent
+  type facade = TeamTitle
   
   override val name = "ql-team-title"
   override val template = """
@@ -88,32 +96,33 @@ object TeamTitle extends Component {
         {{team.name}}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-tooltip top><v-btn icon slot="activator" v-on:click="contact=!contact"><v-icon>email</v-icon></v-btn><span>Contact Us</span></v-tooltip>
+      <v-tooltip top><v-btn icon slot="activator" v-on:click="contact=true"><v-icon>email</v-icon></v-btn><span>Contact Us</span></v-tooltip>
       <v-tooltip top><v-btn icon :to="'/venue/' + team.venue.id" slot="activator"><v-icon>location_on</v-icon></v-btn><span>Venue</span></v-tooltip>
-      <ql-team-contact-dialog :show="contact" :team="team"></ql-team-contact-dialog> 
+      <ql-team-contact-dialog :show="contact" :team="team" v-on:show="handleShow"></ql-team-contact-dialog> 
     </v-toolbar>"""
    components(ContactDialog)
    props("id")
    data("contact",false)
    subscription("team","id")(v => TeamService.get(v.id))
+   method("handleShow")({(c:facade,show:Boolean) => c.contact = show}:js.ThisFunction)
 
 }
 
 @js.native
-trait ContactDialog extends VueRxComponent{
+trait ContactDialog extends DialogComponent{
   var email:String
   var text:String
   val team:Team
   var show:Boolean
 }
-object ContactDialog extends Component{
+object ContactDialog extends Component with DialogComponentConfig{
   
   import quizleague.web.util.validation.Functions._
   
   type facade = ContactDialog
   val name = "ql-team-contact-dialog"
   val template = """
-          <v-dialog v-model="show" max-width="500" lazy persistent>
+          <v-dialog v-model="show" max-width="60%" v-bind="dialogSize" lazy persistent>
             <v-card>
               <v-card-title>Contact {{team.name}}</v-card-title>
               <v-card-text>
@@ -121,12 +130,12 @@ object ContactDialog extends Component{
                 <v-container>
                   <v-layout column>
                     <v-text-field required label="Your email address" v-model="email" type="email" :rules="[required('Your email address'), isEmail('Your email address')]"></v-text-field>
-                    <v-text-field label="Message" v-model="text" textarea grow :rules="[required('Message')]" required></v-text-field>
+                    <v-text-field label="Message" v-model="text" textarea auto-grow :rules="[required('Message')]" required></v-text-field>
                   </v-layout>
                 </v-container>
                 </v-form>
               </v-card-text>
-              </v-card-actions><v-btn flat v-on:click="show=false"><v-icon left>cancel</v-icon>Cancel</v-btn><v-btn flat color="primary" :disabled="!valid" v-on:click="submit">Send<v-icon right>send</v-icon></v-btn></v-card-actions>
+              </v-card-actions><v-btn flat v-on:click="close"><v-icon left>cancel</v-icon>Cancel</v-btn><v-btn flat color="primary" :disabled="!valid" v-on:click="submit">Send<v-icon right>send</v-icon></v-btn></v-card-actions>
             </v-card>
          </v-dialog>"""
   
@@ -137,13 +146,14 @@ object ContactDialog extends Component{
     }
   
   
-  props("team", "show")
+  props("team")
   data("email","")
   data("text","")
   data("valid",false)
   method("submit")({submit _}:js.ThisFunction)
   method("required")(required _)
   method("isEmail")(isEmail _)
+
 }
 
 object TeamMenuComponent extends RouteComponent {

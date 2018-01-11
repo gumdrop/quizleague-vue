@@ -8,9 +8,11 @@ import js.JSConverters._
 import quizleague.web.site._
 import quizleague.web.model._
 import quizleague.web.util.validation.Functions
+import quizleague.web.core.DialogComponentConfig
+import quizleague.web.core.DialogComponent
 
 @js.native
-trait SubmitResultsComponent extends com.felstar.scalajs.vue.VueRxComponent{
+trait SubmitResultsComponent extends com.felstar.scalajs.vue.VueRxComponent with DialogComponent{
   var email:String
   var fixtures:js.Array[Fixture]
   val appData:ApplicationContext
@@ -18,9 +20,9 @@ trait SubmitResultsComponent extends com.felstar.scalajs.vue.VueRxComponent{
   val reportText:String
   var confirm:Boolean
 }
-object SubmitResultsComponent extends RouteComponent{
+object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
   
-  type facade = SubmitResultsComponent
+  type facade = SubmitResultsComponent 
   
   val emailRegex = """^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"""
   
@@ -43,7 +45,7 @@ object SubmitResultsComponent extends RouteComponent{
         <v-text-field v-model="reportText" textarea auto-grow label="Match Report"></v-text-field>
         <div><v-btn v-on:click="preSubmit" flat color="primary" :disabled="!valid">Submit<v-icon right>send</v-icon></v-btn></div>
       </v-flex>
-     <v-dialog v-model="confirm" persistent lazy >
+     <v-dialog v-model="confirm" persistent lazy max-width="60%" v-bind="dialogSize" >
         <v-card>
           <v-card-title>Check Results</v-card-title>
           <v-card-text>

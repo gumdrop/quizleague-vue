@@ -12,6 +12,7 @@ import com.felstar.scalajs.vue.VueComponent
 import com.felstar.scalajs.vue._
 import quizleague.web.site.results.TableUtils
 import rxscalajs.Observable
+import quizleague.web.core.DialogComponentConfig
 
 
 @js.native
@@ -44,8 +45,8 @@ object SimpleFixturesComponent extends Component {
 }
 
 
-object FixtureLineComponent extends Component with TableUtils{
-  type facade = VueRxComponent with VuetifyComponent
+object FixtureLineComponent extends Component with TableUtils with DialogComponentConfig{
+  type facade = VueRxComponent with VuetifyComponent with DialogComponent
   val name = "ql-fixture-line"
   val template = """
       <tr>
@@ -62,9 +63,20 @@ object FixtureLineComponent extends Component with TableUtils{
               <v-icon style="transform:scale(0.75)">description</v-icon>
             </v-btn>
             <span>Match Reports</span></v-tooltip></div>
-          <v-dialog v-model="showReports" max-width="500" lazy v-if="fixture.result.reports">
+          <v-dialog v-model="showReports" max-width="60%" v-bind="dialogSize" lazy v-if="fixture.result.reports">
             <v-card>
-              <v-card-title>Reports ::&nbsp;<ql-team-name :short="short" :team="fixture.home"></ql-team-name>&nbsp;{{fixture.result.homeScore}} - {{fixture.result.awayScore}}&nbsp;<ql-team-name :short="short" :team="fixture.away"></ql-team-name></v-card-title>
+              <v-card-title>Reports ::&nbsp;
+                <ql-team-name :short="short" :team="fixture.home"></ql-team-name>
+                &nbsp;{{fixture.result.homeScore}} - {{fixture.result.awayScore}}&nbsp;
+                <ql-team-name :short="short" :team="fixture.away"></ql-team-name>
+                <v-spacer></v-spacer>
+                 <v-tooltip top>
+                   <v-btn icon slot="activator" v-on:click="showReports=false">
+                     <v-icon>close</v-icon>
+                   </v-btn>
+                   <span>Close</span>
+                 </v-tooltip>
+               </v-card-title>
               <ql-reports :id="fixture.result.reports.id"></ql-reports>
             </v-card>
          </v-dialog>

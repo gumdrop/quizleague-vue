@@ -49,7 +49,7 @@ object HomeComponent extends RouteComponent with NoSideMenu{
       </v-tabs>
       </div-->  
 
-<v-carousel light style="min-height:35em"  :cycle="true">
+      <v-carousel light style="min-height:35em"  :cycle="true">
           <v-carousel-item src="" style="align-item:start;">
             <ql-home-page-table :seasonId="appData.currentSeason.id"></ql-home-page-table>
           </v-carousel-item>
