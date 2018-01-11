@@ -11,7 +11,7 @@ trait GridSizeComponentConfig extends Component{
   
   type facade <: VueRxComponent with VuetifyComponent
   
-  def gridSize(c:facade) = js.Dictionary("grid-layout-xs" -> c.$vuetify.breakpoint.smAndDown, "grid-layout-lg" -> c.$vuetify.breakpoint.mdAndUp)
+  def gridSize(c:facade) = js.Dictionary("grid-list-xs" -> c.$vuetify.breakpoint.xsOnly, "grid-list-lg" -> c.$vuetify.breakpoint.mdAndUp)
   computed("gridSize")({gridSize _}:js.ThisFunction)
 
 }
