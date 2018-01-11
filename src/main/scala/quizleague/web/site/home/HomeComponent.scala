@@ -13,17 +13,18 @@ import quizleague.web.site.season.SeasonService
 import quizleague.web.site.leaguetable.LeagueTableService
 import com.felstar.scalajs.vue.VuetifyComponent
 import quizleague.web.site._
+import quizleague.web.core.GridSizeComponentConfig
 
 
 
-object HomeComponent extends RouteComponent with NoSideMenu{
+object HomeComponent extends RouteComponent with NoSideMenu with GridSizeComponentConfig{
 
   type facade = VueRxComponent with VuetifyComponent
   
   subscription("appData")(c => ApplicationContextService.get()
   )
   override val template="""
-   <v-container grid-list-lg v-if="appData">
+   <v-container v-bind="gridSize" v-if="appData">
      <v-layout v-bind="align">
       <v-flex xs12 smAndUp5>
       <!--div>

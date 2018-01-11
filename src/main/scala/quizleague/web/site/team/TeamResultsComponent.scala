@@ -9,9 +9,10 @@ import quizleague.web.site.ApplicationContextService
 import quizleague.web.site.season.SeasonIdComponent
 import quizleague.web.core.IdComponent
 import quizleague.web.core.IdComponent
+import quizleague.web.core.GridSizeComponentConfig
 
-object TeamResultsPage extends RouteComponent {
-  val template = """<v-container v-if="season" grid-list-lg fluid>
+object TeamResultsPage extends RouteComponent with GridSizeComponentConfig {
+  val template = """<v-container v-if="season" v-bind="gridSize" fluid>
                       <v-layout column>
                       <v-flex><v-card>
                         <v-card-text>

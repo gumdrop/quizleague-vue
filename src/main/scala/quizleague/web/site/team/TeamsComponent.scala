@@ -1,27 +1,10 @@
 package quizleague.web.site.team
 
 import quizleague.web.core.RouteComponent
+import quizleague.web.core.GridSizeComponentConfig
 
-//@Component(
-//  template = """<ql-named-text name="venues-front-page"></ql-named-text>"""    
-//)
-//@classModeScala
-//class VenuesComponent(
-//    override val titleService:TitleService,
-//    override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent with TitledComponent{
-//  
-//    setTitle("Venues")
-//}
-//
-//@Component(
-//  template = """<ql-section-title><span>Venues</span></ql-section-title>"""    
-//)
-//class VenuesTitleComponent {
-//  
-//}
-
-object TeamsComponent extends RouteComponent{
-    val template="""<v-container grid-list-lg fluid>
+object TeamsComponent extends RouteComponent with GridSizeComponentConfig{
+    val template="""<v-container v-bind="gridSize" fluid>
         <v-layout>
           <v-flex><ql-named-text name="teams-header"></ql-named-text></v-flex>
         </v-layout>

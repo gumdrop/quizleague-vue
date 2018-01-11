@@ -1,6 +1,7 @@
 package quizleague.web.site.venue
 
 import quizleague.web.core.RouteComponent
+import quizleague.web.core.GridSizeComponentConfig
 
 //@Component(
 //  template = """<ql-named-text name="venues-front-page"></ql-named-text>"""    
@@ -20,9 +21,9 @@ import quizleague.web.core.RouteComponent
 //  
 //}
 
-object VenuesComponent extends RouteComponent{
+object VenuesComponent extends RouteComponent with GridSizeComponentConfig{
    override val template="""
-     <v-container grid-list-lg fluid>
+     <v-container v-bind="gridSize" fluid>
        <v-layout>
          <v-flex><ql-named-text name="venues-front-page"></ql-named-text></v-flex>
        </v-layout>

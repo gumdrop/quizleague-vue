@@ -9,6 +9,8 @@ import com.felstar.scalajs.vue.VuetifyComponent
 import com.felstar.scalajs.vue.VueComponent
 import quizleague.web.core.GridSizeComponentConfig
 import com.felstar.scalajs.vue.VuetifyComponent
+import quizleague.web.core.GridSizeComponentConfig
+import quizleague.web.core.GridSizeComponentConfig
 
 object LeagueTables extends Component{
   type facade = IdComponent
@@ -33,7 +35,7 @@ object LatestResults extends Component{
       <v-card-title primary-title><h3 class="headline mb-0">Results</h3></v-card-title>
       <v-card-title><span class="mb-0">Latest results</span></v-card-title>
       <v-card-text  v-if="latestResults">
-        <v-container grid-layout-sm v-for="results in latestResults" :key="results.id">
+        <v-container grid-list-sm v-for="results in latestResults" :key="results.id">
           <v-layout column>
             <v-flex><h3 class="headline mb-0">{{results.date | date("d MMMM yyyy")}}</h3></v-flex>
             <v-flex><ql-fixtures-simple :fixtures="results.fixtures | combine" ></ql-fixtures-simple></v-flex>
@@ -58,7 +60,7 @@ object NextFixtures extends Component{
       <v-card-title primary-title><h3 class="headline mb-0">Fixtures</h3></v-card-title>
       <v-card-title><span class="mb-0">Next fixtures</span></v-card-title>
       <v-card-text  v-if="nextFixtures">
-        <v-container grid-layout-sm fluid v-for="fixtures in nextFixtures" :key="fixtures.id">
+        <v-container grid-list-sm fluid v-for="fixtures in nextFixtures" :key="fixtures.id">
           <v-layout column>
             <v-flex><h3 class="headline mb-0">{{fixtures.date | date("d MMMM yyyy")}}</h3></v-flex>
             <v-flex><ql-fixtures-simple :fixtures="fixtures.fixtures | combine" ></ql-fixtures-simple></v-flex>
@@ -116,10 +118,10 @@ trait ResultsComponent extends Component {
 }
 
 
-object AllResults extends ResultsComponent{
+object AllResults extends ResultsComponent with GridSizeComponentConfig{
   val name = "all-results"
   val template = """
-    <v-container grid-list-lg fluid v-if="latestResults">
+    <v-container v-bind="gridSize" fluid v-if="latestResults">
     <v-layout column>
     <v-flex v-for="results in latestResults" :key="results.id">
       <v-card>
@@ -141,11 +143,11 @@ object FixturesPage extends RouteComponent{
   components(RemainingFixtures) 
 }
 
-object RemainingFixtures extends Component{
+object RemainingFixtures extends Component with GridSizeComponentConfig{
   type facade = IdComponent
   val name = "remaining-fixtures"
   val template = """
-    <v-container grid-list-lg fluid v-if="nextFixtures">
+    <v-container v-bind="gridSize" fluid v-if="nextFixtures">
       <v-layout column>
         <v-flex v-for="fixtures in nextFixtures" :key="fixtures.id">
           <v-card>

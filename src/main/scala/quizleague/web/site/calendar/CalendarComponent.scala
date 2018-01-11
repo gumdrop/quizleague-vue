@@ -20,7 +20,7 @@ object CalendarComponent extends Component{
   type facade = SeasonIdComponent
   val name = "ql-calendar" 
   val template = """
-  <v-container grid-list-lg  v-if="items" class="ql-calendar">
+  <v-container v-bind="gridSize"  v-if="items" class="ql-calendar">
     <v-layout column>
       <v-flex v-for="item in items" :key="item.date">
         <v-card>

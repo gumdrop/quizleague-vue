@@ -25,6 +25,10 @@ import quizleague.web.site.season.SeasonIdComponent
 import quizleague.web.site.ApplicationContextService
 import rxscalajs.Observable
 import scalajs.js
+import quizleague.web.core.GridSizeComponentConfig
+import quizleague.web.core.GridSizeComponentConfig
+import quizleague.web.core.GridSizeComponentConfig
+import com.felstar.scalajs.vue.VuetifyComponent
 
 
 //@Component(
@@ -74,11 +78,11 @@ object AllFixturesPage extends RouteComponent{
 }
 
 
-object AllFixturesComponent extends Component{
+object AllFixturesComponent extends Component with GridSizeComponentConfig{
   val name = "ql-all-fixtures"
-  type facade = SeasonIdComponent
+  type facade = SeasonIdComponent with VuetifyComponent
   val template = """
-    <v-container v-if="fixtures" grid-list-lg fluid>
+    <v-container v-if="fixtures" v-bind="gridSize" fluid>
     <v-layout column>
       <v-flex v-for="fixs in fixtures" :key="fixs.id">
         <v-card>

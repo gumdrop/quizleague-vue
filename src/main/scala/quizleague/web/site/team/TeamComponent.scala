@@ -26,13 +26,13 @@ object TeamPage extends RouteComponent{
 trait TeamComponent extends IdComponent{
   val appConfig:ApplicationContext
 }
-object TeamComponent extends Component{
+object TeamComponent extends Component with GridSizeComponentConfig{
 
   type facade = IdComponent
   
   override val name = "ql-team"
   override val template = """
-            <v-container v-if="team && appConfig" grid-list-lg fluid>
+            <v-container v-if="team && appConfig" v-bind="gridSize" fluid>
               <v-layout column>
 
            <v-flex><ql-text :id="team.text.id"></ql-text></v-flex>

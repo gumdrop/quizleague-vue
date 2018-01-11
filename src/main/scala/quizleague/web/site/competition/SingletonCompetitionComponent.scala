@@ -2,6 +2,7 @@ package quizleague.web.site.competition
 
 import quizleague.web.core._
 import quizleague.web.core.IdComponent
+import quizleague.web.core.GridSizeComponentConfig
 
 
 object SingletonCompetitionPage extends RouteComponent{
@@ -10,14 +11,14 @@ object SingletonCompetitionPage extends RouteComponent{
 }
 
 
-object SingletonCompetitionComponent extends Component{
+object SingletonCompetitionComponent extends Component with GridSizeComponentConfig{
   
   type facade = IdComponent
   
   val name = "competition"
   
   val template = """ 
-<v-container grid-list-lg fluid v-if="item">
+<v-container v-bind="gridSize" fluid v-if="item">
     <v-layout column >
     <v-flex><ql-named-text :name="item.textName"></ql-named-text></v-flex>
     <v-flex>

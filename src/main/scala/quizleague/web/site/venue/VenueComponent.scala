@@ -16,6 +16,7 @@ import rxscalajs.facade.ObservableFacade
 import scala.scalajs.js.ThisFunction0
 import quizleague.web.core.Component
 import quizleague.web.core.IdComponent
+import quizleague.web.core.GridSizeComponentConfig
 
 
 
@@ -23,13 +24,13 @@ object VenuePage extends RouteComponent {
   override val template = """<ql-venue :id="$route.params.id"></ql-venue>"""
 }
 
-object VenueComponent extends Component {
+object VenueComponent extends Component with GridSizeComponentConfig{
 
   override type facade = IdComponent
   
   override val name = "ql-venue"
   override val template = """
-          <v-container grid-list-lg fluid v-if="venue">
+          <v-container v-bind="gridSize" fluid v-if="venue">
           <v-layout column>
            <v-flex>
              <v-card>
