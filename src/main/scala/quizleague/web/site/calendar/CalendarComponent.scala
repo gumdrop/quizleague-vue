@@ -5,7 +5,7 @@ import scala.scalajs.js.annotation.JSExport
 import quizleague.web.core._
 import quizleague.web.site._
 import quizleague.web.site.season.SeasonIdComponent
-import com.felstar.scalajs.vue.VueRxComponent
+import com.felstar.scalajs.vue._
 
 object CalendarPage extends RouteComponent with NoSideMenu{
   
@@ -16,8 +16,8 @@ object CalendarPage extends RouteComponent with NoSideMenu{
 
 
 
-object CalendarComponent extends Component{
-  type facade = SeasonIdComponent
+object CalendarComponent extends Component with GridSizeComponentConfig{
+  type facade = SeasonIdComponent with VuetifyComponent
   val name = "ql-calendar" 
   val template = """
   <v-container v-bind="gridSize"  v-if="items" class="ql-calendar">
