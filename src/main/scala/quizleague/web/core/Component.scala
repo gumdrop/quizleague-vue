@@ -13,6 +13,8 @@ import scala.scalajs.js.UndefOr
 import com.felstar.scalajs.vue.VueComponent
 import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.util.Logging._
+import com.felstar.scalajs.vue.VuetifyComponent
+import com.felstar.scalajs.vue.VuetifyComponent
 
 
 trait RouteComponent extends Component{
@@ -175,6 +177,6 @@ trait Component {
 }
 
 @js.native
-trait IdComponent extends VueComponent with VueRxComponent{
+trait IdComponent extends VueComponent with VueRxComponent with VuetifyComponent{
   val id:String = js.native  
 }

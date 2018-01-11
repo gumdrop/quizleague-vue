@@ -7,6 +7,8 @@ import quizleague.web.core.IdComponent
 import quizleague.web.core.RouteComponent
 import com.felstar.scalajs.vue.VuetifyComponent
 import com.felstar.scalajs.vue.VueComponent
+import quizleague.web.core.GridSizeComponentConfig
+import com.felstar.scalajs.vue.VuetifyComponent
 
 object LeagueTables extends Component{
   type facade = IdComponent
@@ -26,14 +28,17 @@ object LeagueTables extends Component{
 object LatestResults extends Component{
   type facade = IdComponent
   val name = "latest-results"
-  val template = """<v-card class="mb-0">
+  val template = """
+    <v-card class="mb-0">
       <v-card-title primary-title><h3 class="headline mb-0">Results</h3></v-card-title>
       <v-card-title><span class="mb-0">Latest results</span></v-card-title>
       <v-card-text  v-if="latestResults">
-        <div v-for="results in latestResults" :key="results.id">
-          <div><h3 class="headline mb-0">{{results.date | date("d MMMM yyyy")}}</h3></div>
-          <ql-fixtures-simple :fixtures="results.fixtures | combine" ></ql-fixtures-simple>
-        </div>
+        <v-container grid-layout-sm v-for="results in latestResults" :key="results.id">
+          <v-layout column>
+            <v-flex><h3 class="headline mb-0">{{results.date | date("d MMMM yyyy")}}</h3></v-flex>
+            <v-flex><ql-fixtures-simple :fixtures="results.fixtures | combine" ></ql-fixtures-simple></v-flex>
+          </v-layout>
+        </v-container>
       </v-card-text>
       <v-card-actions>
         <v-btn color="primary" flat to="results">Show All</v-btn>
@@ -53,10 +58,12 @@ object NextFixtures extends Component{
       <v-card-title primary-title><h3 class="headline mb-0">Fixtures</h3></v-card-title>
       <v-card-title><span class="mb-0">Next fixtures</span></v-card-title>
       <v-card-text  v-if="nextFixtures">
-        <div v-for="fixtures in nextFixtures" :key="fixtures.id">
-          <div><h3 class="headline mb-0">{{fixtures.date | date("d MMMM yyyy")}}</h3></div>
-          <ql-fixtures-simple :fixtures="fixtures.fixtures | combine" ></ql-fixtures-simple>
-        </div>
+        <v-container grid-layout-sm fluid v-for="fixtures in nextFixtures" :key="fixtures.id">
+          <v-layout column>
+            <v-flex><h3 class="headline mb-0">{{fixtures.date | date("d MMMM yyyy")}}</h3></v-flex>
+            <v-flex><ql-fixtures-simple :fixtures="fixtures.fixtures | combine" ></ql-fixtures-simple></v-flex>
+          </v-layout>
+        </v-container>
       </v-card-text>
       <v-card-actions>
         <v-btn color="primary" flat to="fixtures">Show All</v-btn>

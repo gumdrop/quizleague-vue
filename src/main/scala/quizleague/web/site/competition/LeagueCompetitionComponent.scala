@@ -3,18 +3,19 @@ package quizleague.web.site.competition
 
 import quizleague.web.core._
 import quizleague.web.core.IdComponent
+import quizleague.web.core.GridSizeComponentConfig
 
 object LeagueCompetitionPage extends RouteComponent{
   val template = """<ql-league-competition :id="$route.params.id"></ql-league-competition>"""
   components(LeagueCompetitionComponent)
 }
 
-object LeagueCompetitionComponent extends Component{
+object LeagueCompetitionComponent extends Component with GridSizeComponentConfig{
   type facade = IdComponent
   val name = "ql-league-competition"
   val template = """
-  <v-container grid-list-lg fluid v-if="item">
-    <v-layout column grid-list-lg>
+  <v-container v-bind="gridSize" fluid v-if="item">
+    <v-layout column>
       <v-flex>      
         <ql-named-text :name="item.textName"></ql-named-text>
         <ql-text :id="item.text.id"></ql-text>
